@@ -662,7 +662,7 @@ async function apriSala(idIniziale = '') {
   radice.hidden = false;
   bloccaScorrimento(true);
   try {
-    const { creaSala } = await import('./galleria3d.js?v=2');
+    const { creaSala } = await import('./galleria3d.js?v=3');
     if (sala !== segnaposto) return; // chiusa durante il caricamento
     const elenco = opereSala().map((o) => ({ ...o, immagine: immagine(o.immagine) }));
     // Contratto: creaSala(radice, opere, opzioni) → Promise<{ chiudi(), vaiA(id) }>
