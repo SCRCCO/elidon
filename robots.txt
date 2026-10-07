@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /contenuti/backup/
+
+Sitemap: https://www.elidonmucaj.art/sitemap.xml

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elidon Mucaj — Pittore</title>
+  <meta name="description" content="Elidon Mucaj, pittore. Opere, mostre, testi critici e contatti.">
+  <meta name="theme-color" content="#0f0e0d">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Elidon Mucaj — Pittore">
+  <meta property="og:description" content="Elidon Mucaj, pittore. Opere, mostre, testi critici e contatti.">
+  <meta property="og:url" content="https://www.elidonmucaj.art/">
+  <link rel="canonical" href="https://www.elidonmucaj.art/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="contenuti/sito.json" as="fetch" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css?v=1">
+  <script type="importmap">
+    { "imports": { "three": "./assets/vendor/three/three.min.js" } }
+  </script>
+  <script type="module" src="assets/js/main.js?v=1"></script>
+</head>
+<body>
+  <a class="salta" href="#opere">Vai alle opere</a>
+
+  <header class="testata" data-testata>
+    <a class="testata__nome" href="#home" data-testo="sito.nome">Elidon Mucaj</a>
+    <button class="testata__menu" type="button" aria-expanded="false" aria-controls="navigazione" data-menu>
+      <span class="sr">Menu</span><span aria-hidden="true"></span>
+    </button>
+    <nav class="testata__nav" id="navigazione" aria-label="Sezioni">
+      <a href="#opere">Opere</a>
+      <a href="#galleria-3d">Galleria 3D</a>
+      <a href="#biografia">Biografia</a>
+      <a href="#mostre">Mostre</a>
+      <a href="#critica-articoli">Critica</a>
+      <a href="#contatti">Contatti</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="apertura" id="home" aria-label="Apertura">
+      <div class="apertura__scena" data-scena-apertura aria-hidden="true"></div>
+      <div class="apertura__testo">
+        <p class="apertura__professione" data-testo="sito.professione"></p>
+        <h1 class="apertura__nome" data-testo="sito.nome">Elidon Mucaj</h1>
+        <p class="apertura__frase" data-testo="sito.frase_apertura"></p>
+        <div class="apertura__azioni">
+          <a class="bottone bottone--chiaro" href="#opere">Scopri le opere</a>
+          <button class="bottone bottone--trasparente" type="button" data-apri-galleria>Entra nella galleria 3D</button>
+        </div>
+      </div>
+      <a class="apertura__scorri" href="#opere" aria-label="Scorri alle opere"><span></span></a>
+    </section>
+
+    <section class="sezione" id="opere">
+      <div class="contenitore">
+        <header class="sezione__testa">
+          <p class="sezione__numero">01</p>
+          <h2 class="sezione__titolo">Opere</h2>
+        </header>
+        <div class="filtri" role="group" aria-label="Filtra le opere" data-filtri></div>
+        <ul class="griglia" data-griglia-opere></ul>
+      </div>
+    </section>
+
+    <section class="sezione sezione--scura" id="galleria-3d">
+      <div class="contenitore invito-3d">
+        <div class="invito-3d__testo">
+          <p class="sezione__numero">02</p>
+          <h2 class="sezione__titolo">Galleria virtuale</h2>
+          <p class="invito-3d__descrizione">Cammina tra le opere esposte in una sala 3D, in scala reale. Trascina per guardarti intorno, tocca il pavimento per spostarti, tocca un quadro per avvicinarti.</p>
+          <button class="bottone bottone--chiaro" type="button" data-apri-galleria>Entra nella galleria</button>
+        </div>
+        <button class="invito-3d__anteprima" type="button" data-apri-galleria aria-label="Entra nella galleria 3D">
+          <span class="invito-3d__quadri" data-anteprima-3d></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="sezione" id="biografia">
+      <div class="contenitore biografia">
+        <header class="sezione__testa">
+          <p class="sezione__numero">03</p>
+          <h2 class="sezione__titolo">Biografia</h2>
+        </header>
+        <figure class="biografia__foto" data-foto-biografia></figure>
+        <div class="biografia__testo testo-lungo" data-paragrafi="biografia.testo"></div>
+        <blockquote class="citazione" data-citazione>
+          <p data-testo="biografia.citazione"></p>
+          <footer data-testo="biografia.autore_citazione"></footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="sezione sezione--tenue" id="mostre">
+      <div class="contenitore">
+        <header class="sezione__testa">
+          <p class="sezione__numero">04</p>
+          <h2 class="sezione__titolo">Mostre</h2>
+        </header>
+        <div class="mostre" data-mostre></div>
+      </div>
+    </section>
+
+    <section class="sezione" id="critica-articoli">
+      <div class="contenitore">
+        <header class="sezione__testa">
+          <p class="sezione__numero">05</p>
+          <h2 class="sezione__titolo">Critica e articoli</h2>
+        </header>
+        <ul class="critica" data-critica></ul>
+      </div>
+    </section>
+
+    <section class="sezione sezione--scura" id="contatti">
+      <div class="contenitore contatti">
+        <header class="sezione__testa">
+          <p class="sezione__numero">06</p>
+          <h2 class="sezione__titolo">Contatti</h2>
+        </header>
+        <p class="contatti__invito" data-testo="contatti.invito"></p>
+        <div class="contatti__voci" data-contatti></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="piede">
+    <p>© <span data-anno></span> <span data-testo="sito.nome">Elidon Mucaj</span>. Tutte le immagini delle opere sono protette da diritto d'autore.</p>
+  </footer>
+
+  <dialog class="visore" data-visore aria-label="Opera">
+    <div class="visore__corpo">
+      <figure class="visore__figura">
+        <img alt="" data-visore-img>
+      </figure>
+      <div class="visore__scheda">
+        <p class="visore__conta" data-visore-conta></p>
+        <h3 class="visore__titolo" data-visore-titolo></h3>
+        <dl class="visore__dati" data-visore-dati></dl>
+        <div class="visore__descrizione testo-lungo" data-visore-descrizione></div>
+        <a class="bottone bottone--scuro" data-visore-richiesta>Chiedi informazioni</a>
+      </div>
+    </div>
+    <button class="visore__chiudi" type="button" data-chiudi aria-label="Chiudi">×</button>
+    <button class="visore__freccia visore__freccia--prec" type="button" data-visore-prec aria-label="Opera precedente">‹</button>
+    <button class="visore__freccia visore__freccia--succ" type="button" data-visore-succ aria-label="Opera successiva">›</button>
+  </dialog>
+
+  <dialog class="lettore" data-lettore aria-label="Testo">
+    <article class="lettore__corpo">
+      <p class="lettore__tipo" data-lettore-tipo></p>
+      <h3 class="lettore__titolo" data-lettore-titolo></h3>
+      <p class="lettore__firma" data-lettore-firma></p>
+      <div class="testo-lungo" data-lettore-testo></div>
+      <a class="bottone bottone--scuro" target="_blank" rel="noopener" data-lettore-link>Leggi alla fonte</a>
+    </article>
+    <button class="visore__chiudi" type="button" data-chiudi aria-label="Chiudi">×</button>
+  </dialog>
+
+  <div class="sala" data-sala hidden>
+    <div class="sala__scena" data-sala-scena></div>
+    <div class="sala__caricamento" data-sala-caricamento>
+      <p>Allestimento della sala…</p>
+      <div class="sala__barra"><span data-sala-progresso></span></div>
+    </div>
+    <div class="sala__aiuto" data-sala-aiuto>
+      <p><strong>Trascina</strong> per guardarti intorno · <strong>tocca il pavimento</strong> per camminare · <strong>tocca un quadro</strong> per avvicinarti</p>
+      <p class="sala__aiuto-tasti">Da tastiera: frecce o W A S D per camminare, Esc per uscire</p>
+    </div>
+    <div class="sala__didascalia" data-sala-didascalia hidden>
+      <p class="sala__conta" data-sala-conta></p>
+      <h3 data-sala-titolo></h3>
+      <p data-sala-dati></p>
+      <button class="sala__dettagli" type="button" data-sala-dettagli>Dettagli</button>
+    </div>
+    <div class="sala__comandi">
+      <button type="button" data-sala-prec aria-label="Opera precedente">‹</button>
+      <button type="button" data-sala-giro>Visita guidata</button>
+      <button type="button" data-sala-succ aria-label="Opera successiva">›</button>
+    </div>
+    <button class="sala__esci" type="button" data-sala-esci>Esci ×</button>
+  </div>
+
+  <noscript><p class="avviso">Per vedere le opere attiva JavaScript nel browser.</p></noscript>
+</body>
+</html>

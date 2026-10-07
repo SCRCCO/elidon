@@ -1,0 +1,98 @@
+{
+  "_nota": "Descrive i campi modificabili dal pannello. Il pannello costruisce i moduli da qui e il server valida i dati salvati con le stesse regole.",
+  "sezioni": [
+    {
+      "chiave": "sito",
+      "titolo": "Generale",
+      "descrizione": "Nome, frase d'apertura e testo per i motori di ricerca.",
+      "tipo": "oggetto",
+      "campi": [
+        { "chiave": "nome", "etichetta": "Nome dell'artista", "tipo": "testo", "max": 120 },
+        { "chiave": "professione", "etichetta": "Sottotitolo", "tipo": "testo", "max": 160, "aiuto": "Es. «Pittore» oppure «Pittura · Scultura · Grafica»" },
+        { "chiave": "frase_apertura", "etichetta": "Frase in apertura", "tipo": "testo_lungo", "max": 400, "righe": 3, "aiuto": "Compare sopra le opere in movimento, nella prima schermata." },
+        { "chiave": "descrizione_seo", "etichetta": "Descrizione per Google", "tipo": "testo_lungo", "max": 300, "righe": 3, "aiuto": "Una o due frasi che riassumono chi sei. Google la mostra sotto il titolo del sito." },
+        { "chiave": "colore_pareti", "etichetta": "Colore delle pareti nella galleria 3D", "tipo": "scelta", "opzioni": ["Bianco", "Grigio chiaro", "Antracite", "Terracotta"] }
+      ]
+    },
+    {
+      "chiave": "biografia",
+      "titolo": "Biografia",
+      "descrizione": "Foto e testo della sezione Biografia.",
+      "tipo": "oggetto",
+      "campi": [
+        { "chiave": "foto", "etichetta": "Foto dell'artista", "tipo": "immagine" },
+        { "chiave": "testo", "etichetta": "Testo della biografia", "tipo": "testo_lungo", "max": 20000, "righe": 14, "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo." },
+        { "chiave": "citazione", "etichetta": "Citazione (facoltativa)", "tipo": "testo_lungo", "max": 600, "righe": 3 },
+        { "chiave": "autore_citazione", "etichetta": "Autore della citazione", "tipo": "testo", "max": 160 }
+      ]
+    },
+    {
+      "chiave": "opere",
+      "titolo": "Opere",
+      "descrizione": "Ogni opera compare nella galleria del sito e, se lo scegli, nella galleria 3D.",
+      "tipo": "lista",
+      "elemento": "opera",
+      "campo_titolo": "titolo",
+      "campo_immagine": "immagine",
+      "campi": [
+        { "chiave": "immagine", "etichetta": "Foto dell'opera", "tipo": "immagine" },
+        { "chiave": "titolo", "etichetta": "Titolo", "tipo": "testo", "max": 200 },
+        { "chiave": "anno", "etichetta": "Anno", "tipo": "testo", "max": 20 },
+        { "chiave": "tecnica", "etichetta": "Tecnica", "tipo": "testo", "max": 160, "aiuto": "Es. «Olio su tela». Le tecniche diventano i filtri della galleria." },
+        { "chiave": "dimensioni", "etichetta": "Dimensioni", "tipo": "testo", "max": 80, "aiuto": "Es. «100 × 70 cm». Servono anche a mostrare l'opera in scala reale nella galleria 3D." },
+        { "chiave": "descrizione", "etichetta": "Descrizione (facoltativa)", "tipo": "testo_lungo", "max": 4000, "righe": 4 },
+        { "chiave": "stato", "etichetta": "Stato", "tipo": "scelta", "opzioni": ["", "Disponibile", "Venduta", "Collezione privata", "Non in vendita"] },
+        { "chiave": "in_evidenza", "etichetta": "Mostra nella prima schermata", "tipo": "si_no" },
+        { "chiave": "in_galleria_3d", "etichetta": "Esponi nella galleria 3D", "tipo": "si_no", "predefinito": true }
+      ]
+    },
+    {
+      "chiave": "mostre",
+      "titolo": "Mostre",
+      "descrizione": "Mostre personali, collettive, premi. Il sito le ordina per anno, dalla più recente.",
+      "tipo": "lista",
+      "elemento": "mostra",
+      "campo_titolo": "titolo",
+      "campi": [
+        { "chiave": "anno", "etichetta": "Anno", "tipo": "testo", "max": 20 },
+        { "chiave": "titolo", "etichetta": "Titolo della mostra", "tipo": "testo", "max": 240 },
+        { "chiave": "luogo", "etichetta": "Luogo", "tipo": "testo", "max": 240, "aiuto": "Galleria, città" },
+        { "chiave": "tipo", "etichetta": "Tipo", "tipo": "scelta", "opzioni": ["Personale", "Collettiva", "Premio", "Fiera", "Altro"] },
+        { "chiave": "descrizione", "etichetta": "Note (facoltative)", "tipo": "testo_lungo", "max": 1000, "righe": 2 },
+        { "chiave": "link", "etichetta": "Link (facoltativo)", "tipo": "link" }
+      ]
+    },
+    {
+      "chiave": "critica",
+      "titolo": "Critica e articoli",
+      "descrizione": "Testi critici, articoli di giornale, interviste.",
+      "tipo": "lista",
+      "elemento": "testo",
+      "campo_titolo": "titolo",
+      "campi": [
+        { "chiave": "titolo", "etichetta": "Titolo", "tipo": "testo", "max": 240 },
+        { "chiave": "autore", "etichetta": "Autore", "tipo": "testo", "max": 160 },
+        { "chiave": "tipo", "etichetta": "Tipo", "tipo": "scelta", "opzioni": ["Testo critico", "Articolo", "Intervista", "Video", "Catalogo"] },
+        { "chiave": "fonte", "etichetta": "Fonte", "tipo": "testo", "max": 200, "aiuto": "Testata, catalogo o occasione" },
+        { "chiave": "data", "etichetta": "Data", "tipo": "testo", "max": 60 },
+        { "chiave": "testo", "etichetta": "Testo completo", "tipo": "testo_lungo", "max": 60000, "righe": 12, "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo. Se è solo un link a un articolo, puoi lasciarlo vuoto." },
+        { "chiave": "link", "etichetta": "Link all'articolo (facoltativo)", "tipo": "link" }
+      ]
+    },
+    {
+      "chiave": "contatti",
+      "titolo": "Contatti",
+      "descrizione": "Recapiti e profili social. I campi vuoti non compaiono sul sito.",
+      "tipo": "oggetto",
+      "campi": [
+        { "chiave": "invito", "etichetta": "Frase della sezione Contatti", "tipo": "testo_lungo", "max": 400, "righe": 2 },
+        { "chiave": "email", "etichetta": "Email", "tipo": "email" },
+        { "chiave": "telefono", "etichetta": "Telefono", "tipo": "testo", "max": 40 },
+        { "chiave": "studio", "etichetta": "Studio / indirizzo", "tipo": "testo", "max": 240 },
+        { "chiave": "instagram", "etichetta": "Instagram (link completo)", "tipo": "link" },
+        { "chiave": "facebook", "etichetta": "Facebook (link completo)", "tipo": "link" },
+        { "chiave": "youtube", "etichetta": "YouTube (link completo)", "tipo": "link" }
+      ]
+    }
+  ]
+}

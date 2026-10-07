@@ -1,0 +1,7 @@
+# Dati che nascono sul server e non vanno nel repository
+admin/privato/*.php
+contenuti/backup/*.json
+immagini/caricate/*
+!immagini/caricate/.htaccess
+.DS_Store
+Thumbs.db

@@ -1,0 +1,271 @@
+{
+  "sito": {
+    "nome": "Elidon Mucaj",
+    "professione": "Pittore",
+    "frase_apertura": "Frase d'apertura da sostituire: una riga che presenti la tua ricerca artistica.",
+    "descrizione_seo": "Elidon Mucaj, pittore. Opere, mostre, testi critici e contatti.",
+    "colore_pareti": "Bianco"
+  },
+  "biografia": {
+    "foto": {
+      "file": "immagini/esempi/ritratto-segnaposto.jpg",
+      "miniatura": "immagini/esempi/ritratto-segnaposto.jpg",
+      "larghezza": 900,
+      "altezza": 1100
+    },
+    "testo": "Questo è il testo segnaposto della biografia. Dal pannello di gestione (indirizzo del sito seguito da /admin) puoi sostituirlo con la biografia vera.\n\nLascia una riga vuota tra un paragrafo e l'altro: il sito li impagina da solo.",
+    "citazione": "Una citazione facoltativa, ad esempio da un testo critico o da un'intervista.",
+    "autore_citazione": "Nome dell'autore"
+  },
+  "opere": [
+    {
+      "id": "esempio-01",
+      "immagine": {
+        "file": "immagini/esempi/esempio-01.jpg",
+        "miniatura": "immagini/esempi/esempio-01-min.jpg",
+        "larghezza": 1200,
+        "altezza": 1500
+      },
+      "titolo": "Opera di esempio 1",
+      "anno": "2017",
+      "tecnica": "Acrilico su tela",
+      "dimensioni": "100 × 80 cm",
+      "descrizione": "Immagine segnaposto generata automaticamente: sostituiscila dal pannello con la foto di un'opera vera.",
+      "stato": "Disponibile",
+      "in_evidenza": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-02",
+      "immagine": {
+        "file": "immagini/esempi/esempio-02.jpg",
+        "miniatura": "immagini/esempi/esempio-02-min.jpg",
+        "larghezza": 1500,
+        "altezza": 1200
+      },
+      "titolo": "Opera di esempio 2",
+      "anno": "2018",
+      "tecnica": "Tecnica mista su tavola",
+      "dimensioni": "120 × 100 cm",
+      "descrizione": "",
+      "stato": "Collezione privata",
+      "in_evidenza": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-03",
+      "immagine": {
+        "file": "immagini/esempi/esempio-03.jpg",
+        "miniatura": "immagini/esempi/esempio-03-min.jpg",
+        "larghezza": 1200,
+        "altezza": 1200
+      },
+      "titolo": "Opera di esempio 3",
+      "anno": "2019",
+      "tecnica": "Olio su tela",
+      "dimensioni": "80 × 80 cm",
+      "descrizione": "",
+      "stato": "",
+      "in_evidenza": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-04",
+      "immagine": {
+        "file": "immagini/esempi/esempio-04.jpg",
+        "miniatura": "immagini/esempi/esempio-04-min.jpg",
+        "larghezza": 1000,
+        "altezza": 1500
+      },
+      "titolo": "Opera di esempio 4",
+      "anno": "2020",
+      "tecnica": "Acrilico su tela",
+      "dimensioni": "60 × 90 cm",
+      "descrizione": "",
+      "stato": "Disponibile",
+      "in_evidenza": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-05",
+      "immagine": {
+        "file": "immagini/esempi/esempio-05.jpg",
+        "miniatura": "immagini/esempi/esempio-05-min.jpg",
+        "larghezza": 1600,
+        "altezza": 1100
+      },
+      "titolo": "Opera di esempio 5",
+      "anno": "2021",
+      "tecnica": "Tecnica mista su tavola",
+      "dimensioni": "150 × 100 cm",
+      "descrizione": "",
+      "stato": "Collezione privata",
+      "in_evidenza": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-06",
+      "immagine": {
+        "file": "immagini/esempi/esempio-06.jpg",
+        "miniatura": "immagini/esempi/esempio-06-min.jpg",
+        "larghezza": 1200,
+        "altezza": 1600
+      },
+      "titolo": "Opera di esempio 6",
+      "anno": "2022",
+      "tecnica": "Olio su tela",
+      "dimensioni": "90 × 120 cm",
+      "descrizione": "",
+      "stato": "",
+      "in_evidenza": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-07",
+      "immagine": {
+        "file": "immagini/esempi/esempio-07.jpg",
+        "miniatura": "immagini/esempi/esempio-07-min.jpg",
+        "larghezza": 1400,
+        "altezza": 1400
+      },
+      "titolo": "Opera di esempio 7",
+      "anno": "2023",
+      "tecnica": "Acrilico su tela",
+      "dimensioni": "100 × 100 cm",
+      "descrizione": "",
+      "stato": "Disponibile",
+      "in_evidenza": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-08",
+      "immagine": {
+        "file": "immagini/esempi/esempio-08.jpg",
+        "miniatura": "immagini/esempi/esempio-08-min.jpg",
+        "larghezza": 1500,
+        "altezza": 1000
+      },
+      "titolo": "Opera di esempio 8",
+      "anno": "2024",
+      "tecnica": "Tecnica mista su tavola",
+      "dimensioni": "120 × 80 cm",
+      "descrizione": "",
+      "stato": "Collezione privata",
+      "in_evidenza": false,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-09",
+      "immagine": {
+        "file": "immagini/esempi/esempio-09.jpg",
+        "miniatura": "immagini/esempi/esempio-09-min.jpg",
+        "larghezza": 1100,
+        "altezza": 1400
+      },
+      "titolo": "Opera di esempio 9",
+      "anno": "2016",
+      "tecnica": "Olio su tela",
+      "dimensioni": "70 × 90 cm",
+      "descrizione": "",
+      "stato": "",
+      "in_evidenza": false,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "esempio-10",
+      "immagine": {
+        "file": "immagini/esempi/esempio-10.jpg",
+        "miniatura": "immagini/esempi/esempio-10-min.jpg",
+        "larghezza": 1600,
+        "altezza": 1200
+      },
+      "titolo": "Opera di esempio 10",
+      "anno": "2017",
+      "tecnica": "Acrilico su tela",
+      "dimensioni": "160 × 120 cm",
+      "descrizione": "",
+      "stato": "Disponibile",
+      "in_evidenza": false,
+      "in_galleria_3d": true
+    }
+  ],
+  "mostre": [
+    {
+      "id": "mostra-esempio-1",
+      "anno": "2025",
+      "titolo": "Titolo della mostra personale",
+      "luogo": "Galleria, Città",
+      "tipo": "Personale",
+      "descrizione": "",
+      "link": ""
+    },
+    {
+      "id": "mostra-esempio-2",
+      "anno": "2024",
+      "titolo": "Titolo della mostra collettiva",
+      "luogo": "Museo, Città",
+      "tipo": "Collettiva",
+      "descrizione": "",
+      "link": ""
+    },
+    {
+      "id": "mostra-esempio-3",
+      "anno": "2024",
+      "titolo": "Nome del premio",
+      "luogo": "Città",
+      "tipo": "Premio",
+      "descrizione": "Segnalazione della giuria.",
+      "link": ""
+    },
+    {
+      "id": "mostra-esempio-4",
+      "anno": "2022",
+      "titolo": "Titolo di un'altra mostra",
+      "luogo": "Spazio espositivo, Città",
+      "tipo": "Collettiva",
+      "descrizione": "",
+      "link": ""
+    }
+  ],
+  "critica": [
+    {
+      "id": "critica-esempio-1",
+      "titolo": "Titolo del testo critico",
+      "autore": "Nome del critico",
+      "tipo": "Testo critico",
+      "fonte": "Catalogo della mostra",
+      "data": "2025",
+      "testo": "Qui va il testo critico completo. Sul sito compare un'anteprima delle prime righe; cliccando si apre il testo intero in una finestra di lettura.\n\nOgni riga vuota separa due paragrafi, come in questo esempio.\n\nI testi possono essere lunghi quanto serve.",
+      "link": ""
+    },
+    {
+      "id": "critica-esempio-2",
+      "titolo": "Titolo di un articolo di giornale",
+      "autore": "Nome del giornalista",
+      "tipo": "Articolo",
+      "fonte": "Nome della testata",
+      "data": "Marzo 2024",
+      "testo": "Breve estratto dell'articolo. Se l'articolo è online, inserisci il link: sul sito comparirà il pulsante per leggerlo sulla testata.",
+      "link": ""
+    },
+    {
+      "id": "critica-esempio-3",
+      "titolo": "Titolo di un'intervista",
+      "autore": "Nome dell'intervistatore",
+      "tipo": "Intervista",
+      "fonte": "Rivista o programma",
+      "data": "2023",
+      "testo": "Domanda e risposta di esempio.\n\nAnche le interviste si leggono nella finestra di lettura.",
+      "link": ""
+    }
+  ],
+  "contatti": {
+    "invito": "Per informazioni sulle opere, acquisizioni e mostre, scrivimi.",
+    "email": "info@example.com",
+    "telefono": "",
+    "studio": "",
+    "instagram": "",
+    "facebook": "",
+    "youtube": ""
+  }
+}
