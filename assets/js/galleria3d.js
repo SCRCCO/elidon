@@ -1,6 +1,7 @@
 // Galleria virtuale: una sala con le opere appese alle pareti in scala reale.
 // Trascina per guardarti intorno, tocca il pavimento per camminare, tocca un quadro per avvicinarti.
 import * as THREE from 'three';
+import { misureOpera } from './misure.js?v=3';
 
 const COLORI_PARETI = {
   'Bianco': 0xf1efea,
@@ -15,21 +16,6 @@ const MARGINE = 1.4;         // distanza minima dagli angoli (m)
 
 const limita = (v, a, b) => Math.min(b, Math.max(a, v));
 const angoloTra = (a, b) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
-
-// Dimensioni reali dell'opera in metri, ricavate dal testo «100 × 70 cm» e dalle proporzioni della foto.
-export function misureOpera(opera, rapportoFoto) {
-  const img = opera.immagine || {};
-  const rapporto = rapportoFoto || (img.larghezza && img.altezza ? img.larghezza / img.altezza : 0.8);
-  const testo = String(opera.dimensioni || '');
-  const numeri = (testo.replace(/(\d),(\d)/g, '$1.$2').match(/\d+(\.\d+)?/g) || []).map(Number).filter((n) => n > 0).slice(0, 2);
-  let lato = numeri.length ? Math.max(...numeri) / 100 : 1;
-  if (/\bmm\b/i.test(testo)) lato /= 10;
-  else if (/\d\s*m\b/i.test(testo) && !/cm/i.test(testo)) lato *= 100;
-  lato = limita(lato, 0.25, 4.6);
-  const m = rapporto >= 1 ? { w: lato, h: lato / rapporto } : { w: lato * rapporto, h: lato };
-  if (m.h > 3.4) { m.w *= 3.4 / m.h; m.h = 3.4; }
-  return m;
-}
 
 // Carica una foto e, se è molto grande, la riduce: le schede grafiche dei telefoni hanno poca memoria.
 export function caricaImmagine(url, latoMassimo, attesa = 20000) {

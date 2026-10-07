@@ -14,11 +14,13 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=2">
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
+  <link rel="stylesheet" href="assets/css/apertura.css?v=3">
+  <link rel="stylesheet" href="assets/css/sala.css?v=3">
   <script type="importmap">
     { "imports": { "three": "./assets/vendor/three/three.min.js" } }
   </script>
-  <script type="module" src="assets/js/main.js?v=2"></script>
+  <script type="module" src="assets/js/main.js?v=3"></script>
 </head>
 <body>
   <a class="salta" href="#portfolio">Skip to the paintings</a>
@@ -42,7 +44,6 @@
 
   <main>
     <section class="apertura" id="hero" aria-label="Introduction">
-      <div class="apertura__scena" data-scena-apertura aria-hidden="true"></div>
       <div class="apertura__testo">
         <p class="apertura__professione" data-testo="sito.professione"></p>
         <h1 class="apertura__nome" data-testo="sito.nome">Elidon Muçaj</h1>
@@ -52,7 +53,7 @@
           <button class="bottone bottone--trasparente" type="button" data-apri-galleria>Enter the 3D gallery</button>
         </div>
       </div>
-      <a class="apertura__scorri" href="#portfolio" aria-label="Scroll to the paintings"><span></span></a>
+      <div class="apertura__palco" data-palco></div>
     </section>
 
     <section class="sezione" id="portfolio">

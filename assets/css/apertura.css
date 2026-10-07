@@ -1,0 +1,37 @@
+/* Prima schermata (hero). Usa le variabili di colore definite in style.css. */
+
+/* ---------- Apertura (prima schermata 3D) ---------- */
+.apertura {
+  position: relative; min-height: 100vh; min-height: 100svh;
+  display: flex; align-items: flex-end;
+  background: radial-gradient(120% 90% at 70% 40%, #2a2622 0%, var(--notte) 62%);
+  color: var(--notte-testo); overflow: hidden;
+}
+.apertura__scena { position: absolute; inset: 0; }
+.apertura__scena canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; opacity: 0; transition: opacity 1.6s var(--curva); }
+.apertura__scena canvas.pronta { opacity: 1; }
+.apertura__scena--statica { background-size: cover; background-position: center; opacity: .55; }
+.apertura::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(15, 14, 13, .9) 0%, rgba(15, 14, 13, .3) 36%, rgba(15, 14, 13, 0) 58%),
+    linear-gradient(to right, rgba(15, 14, 13, .7) 0%, rgba(15, 14, 13, .25) 42%, rgba(15, 14, 13, 0) 62%);
+}
+.apertura__testo {
+  position: relative; z-index: 2; width: 100%; max-width: var(--larghezza); margin: 0 auto;
+  padding: 0 var(--margine) clamp(72px, 12vh, 140px); pointer-events: none;
+}
+.apertura__testo a, .apertura__testo button { pointer-events: auto; }
+.apertura__professione { margin: 0 0 14px; font-size: 13px; letter-spacing: .3em; text-transform: uppercase; color: var(--notte-grigio); }
+.apertura__nome { font-size: clamp(56px, 11vw, 168px); font-weight: 400; letter-spacing: -.015em; line-height: .92; }
+.apertura__frase { max-width: 34em; margin: 22px 0 0; font: italic 400 clamp(20px, 2.2vw, 26px)/1.4 var(--serif); color: rgba(236, 231, 222, .86); }
+.apertura__frase:empty { display: none; }
+.apertura__azioni { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.apertura__scorri {
+  position: absolute; z-index: 2; right: var(--margine); bottom: clamp(72px, 12vh, 140px);
+  width: 1px; height: 72px; background: rgba(236, 231, 222, .25); overflow: hidden;
+}
+.apertura__scorri span { position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--notte-testo); animation: scorri 2.2s var(--curva) infinite; }
+@keyframes scorri { to { top: 100%; } }
+@media (max-width: 600px) { .apertura__scorri { display: none; } }
+

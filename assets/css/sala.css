@@ -1,0 +1,39 @@
+/* Galleria virtuale 3D a schermo intero. Usa le variabili di colore definite in style.css. */
+
+/* ---------- Sala 3D (schermo intero) ---------- */
+.sala { position: fixed; inset: 0; z-index: 200; background: #0b0a09; color: #f3f0ea; overscroll-behavior: contain; }
+.sala__scena { position: absolute; inset: 0; touch-action: none; }
+.sala__scena canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.sala__scena canvas:active { cursor: grabbing; }
+.sala__caricamento { position: absolute; inset: 0; display: grid; place-content: center; gap: 18px; text-align: center; background: #0b0a09; transition: opacity .8s; font: italic 400 24px/1 var(--serif); }
+.sala__caricamento--fine { opacity: 0; pointer-events: none; }
+.sala__barra { width: 220px; height: 1px; background: rgba(243, 240, 234, .2); }
+.sala__barra span { display: block; height: 100%; width: 0; background: #f3f0ea; transition: width .3s; }
+.sala__aiuto {
+  position: absolute; left: 50%; top: 22px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 140px);
+  padding: 10px 18px; border-radius: 12px; background: rgba(11, 10, 9, .62); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-size: 13px; text-align: center; transition: opacity 1s; pointer-events: none;
+}
+.sala__aiuto p { margin: 0; }
+.sala__aiuto-tasti { color: #a39d93; margin-top: 4px !important; }
+@media (hover: none) { .sala__aiuto-tasti { display: none; } }
+.sala__aiuto--nascosto { opacity: 0; }
+.sala__didascalia {
+  position: absolute; left: 20px; bottom: 96px; max-width: min(360px, calc(100% - 40px));
+  padding: 18px 22px; background: rgba(243, 240, 234, .94); color: #1c1a17; border-radius: 4px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .35);
+}
+.sala__didascalia h3 { font: italic 400 26px/1.15 var(--serif); }
+.sala__didascalia p { margin: 6px 0 0; font-size: 14px; color: #6b665e; }
+.sala__conta { margin: 0 0 6px !important; font-size: 11px !important; letter-spacing: .18em; }
+.sala__dettagli { margin-top: 12px; padding: 0; border: 0; background: none; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.sala__comandi { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; gap: 6px; padding: 6px; border-radius: 99px; background: rgba(11, 10, 9, .62); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.sala__comandi button { min-width: 48px; height: 48px; padding: 0 18px; white-space: nowrap; border: 0; border-radius: 99px; background: none; cursor: pointer; font-size: 14px; letter-spacing: .06em; }
+.sala__comandi button[aria-label] { font: 300 30px/1 var(--serif); padding: 0 12px; }
+.sala__comandi button:hover, .sala__comandi button[aria-pressed="true"] { background: rgba(243, 240, 234, .14); }
+.sala__esci { position: absolute; right: 16px; top: 16px; min-height: 44px; padding: 0 18px; border: 1px solid rgba(243, 240, 234, .3); border-radius: 99px; background: rgba(11, 10, 9, .5); cursor: pointer; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+@media (max-width: 600px) {
+  .sala__didascalia { left: 12px; right: 12px; bottom: 88px; max-width: none; }
+  .sala__aiuto { top: 72px; max-width: calc(100% - 24px); }
+}
+

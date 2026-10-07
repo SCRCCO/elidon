@@ -507,6 +507,10 @@ function chiudiPannello(sezione) {
   applicaIndirizzo();
 }
 
+function pannelloAperto() {
+  return !!($('[data-visore]')?.open || $('[data-lettore]')?.open || sala);
+}
+
 function applicaIndirizzo() {
   const hash = decodeURIComponent(location.hash.slice(1));
   const visore = $('[data-visore]');
@@ -524,10 +528,12 @@ function applicaIndirizzo() {
     if (!lettore.open) lettore.showModal();
   } else if (lettore.open) lettore.close();
 
-  if (hash === ROTTA_SALA) apriSala();
+  // #virtual-gallery oppure #virtual-gallery/<id opera> (apre la sala davanti a quell'opera)
+  if (hash === ROTTA_SALA || hash.startsWith(`${ROTTA_SALA}/`)) apriSala(hash.slice(ROTTA_SALA.length + 1));
   else if (sala) chiudiSala();
 
-  bloccaScorrimento(visore.open || lettore.open || !!sala);
+  bloccaScorrimento(pannelloAperto());
+  apertura?.sospendi(pannelloAperto()); // la prima schermata non disegna sotto visore, lettore o sala
 }
 
 function collegaPannelli() {
@@ -620,29 +626,31 @@ function webglDisponibile() {
   } catch { return false; }
 }
 
+// Prima schermata: la gestisce apertura.js (strato statico sempre presente + motore WebGL facoltativo).
+// Contratto: avvia({ radice, palco, opere, suApri }) → { sospendi(bool), ferma() }.
+let apertura = null;
+
 async function avviaApertura() {
-  const contenitore = $('[data-scena-apertura]');
   const scelte = opere().filter((o) => o.selezionata);
-  const elenco = (scelte.length >= 3 ? scelte : opere()).slice(0, 12);
-  const statica = () => {
-    const sfondo = immagine(dati.sito?.immagine_apertura) || (elenco[0] && immagine(elenco[0].immagine));
-    if (sfondo) { contenitore.classList.add('apertura__scena--statica'); contenitore.style.backgroundImage = `url("${sfondo.file}")`; }
-  };
-  if (!elenco.length) return statica();
-  if (!webglDisponibile() || matchMedia('(prefers-reduced-motion: reduce)').matches) return statica();
+  const elenco = (scelte.length ? scelte : opere()).slice(0, 12)
+    .map((o) => ({ ...o, immagine: immagine(o.immagine) }));
   try {
-    const { avvia } = await import('./apertura3d.js?v=2');
-    avvia(contenitore, elenco.map((o) => ({ ...o, immagine: immagine(o.immagine) })), {
-      suClic: (o) => { elencoVisore = opere(); sezioneVisore = 'portfolio'; apriOpera(o.id); },
+    const { avvia } = await import('./apertura.js?v=3');
+    apertura = avvia({
+      radice: $('#hero'),
+      palco: $('[data-palco]'),
+      opere: elenco,
+      immagineRiserva: immagine(dati.sito?.immagine_apertura),
+      suApri: (o) => { elencoVisore = opere(); sezioneVisore = 'hero'; apriOpera(o.id); },
     });
+    apertura?.sospendi(pannelloAperto());
   } catch (err) {
-    console.warn('3D scene not available:', err);
-    statica();
+    console.warn('Hero not available:', err);
   }
 }
 
-async function apriSala() {
-  if (sala) return;
+async function apriSala(idIniziale = '') {
+  if (sala) { if (idIniziale) sala.vaiA?.(idIniziale); return; }
   const radice = $('[data-sala]');
   if (!webglDisponibile()) {
     alert('The 3D gallery needs a more recent browser. You can still see all the paintings in the Paintings section.');
@@ -657,10 +665,15 @@ async function apriSala() {
     const { creaSala } = await import('./galleria3d.js?v=2');
     if (sala !== segnaposto) return; // chiusa durante il caricamento
     const elenco = opereSala().map((o) => ({ ...o, immagine: immagine(o.immagine) }));
+    // Contratto: creaSala(radice, opere, opzioni) → Promise<{ chiudi(), vaiA(id) }>
     const pronta = await creaSala(radice, elenco, {
       colorePareti: testo(dati.sito?.colore_pareti),
       nome: testo(dati.sito?.nome),
+      citazione: testo(dati.ricerca?.citazione),
+      autoreCitazione: testo(dati.ricerca?.autore_citazione),
+      idIniziale,
       suDettagli: (o) => { elencoVisore = opereSala(); sezioneVisore = 'gallery-3d'; apriOpera(o.id); },
+      suTutteLeOpere: () => chiudiPannello('portfolio'),
     });
     if (sala !== segnaposto) { pronta.chiudi(); return; }
     sala = pronta;
@@ -720,8 +733,7 @@ async function avvio() {
   // se l'indirizzo puntava a una sezione, ci si arriva dopo che il contenuto è stato costruito
   const ancora = location.hash && !location.hash.includes('/') && location.hash !== `#${ROTTA_SALA}` && document.getElementById(location.hash.slice(1));
   if (ancora) { ancora.scrollIntoView({ behavior: 'instant' }); mantieniAncora(ancora); }
-  if (window.requestIdleCallback) requestIdleCallback(() => avviaApertura(), { timeout: 1200 });
-  else setTimeout(avviaApertura, 200);
+  avviaApertura(); // subito: la prima opera della prima schermata è l'immagine principale della pagina
 }
 
 avvio();
