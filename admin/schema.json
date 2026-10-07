@@ -10,7 +10,7 @@
         { "chiave": "nome", "etichetta": "Nome dell'artista", "tipo": "testo", "max": 120 },
         { "chiave": "professione", "etichetta": "Sottotitolo", "tipo": "testo", "max": 160, "aiuto": "Es. «Painter · Visual Artist · Storyteller»" },
         { "chiave": "frase_apertura", "etichetta": "Frase in apertura (facoltativa)", "tipo": "testo_lungo", "max": 400, "righe": 2, "aiuto": "Compare sotto il nome, nella prima schermata." },
-        { "chiave": "immagine_apertura", "etichetta": "Immagine della prima schermata", "tipo": "immagine", "aiuto": "Si vede al posto delle opere in movimento quando il dispositivo non supporta il 3D, e nelle anteprime sui social." },
+        { "chiave": "immagine_apertura", "etichetta": "Immagine della prima schermata", "tipo": "immagine", "aiuto": "Usata per le anteprime sui social e come ripiego." },
         { "chiave": "descrizione_seo", "etichetta": "Descrizione per Google", "tipo": "testo_lungo", "max": 300, "righe": 3, "aiuto": "Una o due frasi che riassumono chi sei. Google la mostra sotto il titolo del sito." },
         { "chiave": "nota_piede", "etichetta": "Testo a piè di pagina", "tipo": "testo_lungo", "max": 1200, "righe": 4, "aiuto": "Diritti d'autore, nota sui cookie. Ogni riga va a capo." },
         { "chiave": "colore_pareti", "etichetta": "Colore delle pareti nella galleria 3D", "tipo": "scelta", "opzioni": ["Bianco", "Grigio chiaro", "Antracite", "Terracotta"] }
@@ -35,7 +35,9 @@
       "campi": [
         { "chiave": "testo", "etichetta": "Testo", "tipo": "testo_lungo", "max": 30000, "righe": 16, "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo." },
         { "chiave": "citazione", "etichetta": "Citazione (facoltativa)", "tipo": "testo_lungo", "max": 600, "righe": 3 },
-        { "chiave": "autore_citazione", "etichetta": "Firma della citazione", "tipo": "testo", "max": 160 }
+        { "chiave": "autore_citazione", "etichetta": "Firma della citazione", "tipo": "testo", "max": 160 },
+        { "chiave": "dettaglio", "etichetta": "Foto di un dettaglio (facoltativa)", "tipo": "immagine", "aiuto": "Un particolare della superficie di un quadro (spatola, materia). Compare a tutta larghezza dopo il testo; se manca, la fascia non c'è." },
+        { "chiave": "didascalia_dettaglio", "etichetta": "Didascalia del dettaglio", "tipo": "testo", "max": 200, "aiuto": "Es. «Seme Lasciato Cadere, 2026». Il sito la fa precedere da «Detail»; scrivila in inglese, come il sito." }
       ]
     },
     {
@@ -54,8 +56,9 @@
         { "chiave": "dimensioni", "etichetta": "Dimensioni", "tipo": "testo", "max": 80, "aiuto": "Es. «200 × 150 cm». Servono anche a mostrare l'opera in scala reale nella galleria 3D." },
         { "chiave": "descrizione", "etichetta": "Descrizione (facoltativa)", "tipo": "testo_lungo", "max": 4000, "righe": 4 },
         { "chiave": "stato", "etichetta": "Stato", "tipo": "scelta", "opzioni": ["", "Available", "Sold", "Private collection", "Not for sale"] },
-        { "chiave": "selezionata", "etichetta": "Opera scelta («Selected works»)", "tipo": "si_no", "aiuto": "Le opere scelte sono la prima cosa che si vede nella galleria e girano nell'anello 3D della prima schermata (le prime 12)." },
-        { "chiave": "in_galleria_3d", "etichetta": "Esponi nella galleria 3D", "tipo": "si_no", "predefinito": true }
+        { "chiave": "selezionata", "etichetta": "Opera scelta («Selected works»)", "tipo": "si_no", "aiuto": "Le opere scelte sono la prima cosa che si vede nella galleria: la prima opera scelta è la prima immagine del sito; le prime 12 scorrono nella prima schermata." },
+        { "chiave": "in_galleria_3d", "etichetta": "Esponi nella galleria 3D", "tipo": "si_no", "predefinito": true },
+        { "chiave": "rilievo", "etichetta": "Rilievo nella luce radente", "tipo": "scelta", "opzioni": ["", "Leggero", "Nessuno"], "aiuto": "Lascialo vuoto. Scegli «Leggero» o «Nessuno» per le opere su carta, le velature lisce o le foto con riflessi: la luce radente della prima schermata e della galleria 3D inventerebbe un rilievo che non c'è." }
       ]
     },
     {
@@ -87,6 +90,7 @@
       "campi": [
         { "chiave": "immagine", "etichetta": "Immagine (facoltativa)", "tipo": "immagine" },
         { "chiave": "titolo", "etichetta": "Titolo", "tipo": "testo", "max": 240 },
+        { "chiave": "frase", "etichetta": "Frase in evidenza (facoltativa)", "tipo": "testo_lungo", "max": 300, "righe": 2, "aiuto": "Una frase del testo, in inglese, da mostrare in grande (senza virgolette: le aggiunge il sito). Se è vuota, il testo compare come scheda." },
         { "chiave": "autore", "etichetta": "Autore", "tipo": "testo", "max": 160 },
         { "chiave": "tipo", "etichetta": "Tipo", "tipo": "scelta", "opzioni": ["Critical text", "Article", "Interview", "Video", "Catalogue"] },
         { "chiave": "fonte", "etichetta": "Fonte", "tipo": "testo", "max": 200, "aiuto": "Testata, catalogo o occasione" },

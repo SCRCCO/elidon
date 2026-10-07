@@ -53,14 +53,42 @@
           <button class="bottone bottone--trasparente" type="button" data-apri-galleria>Enter the 3D gallery</button>
         </div>
       </div>
-      <div class="apertura__palco" data-palco></div>
+      <div class="apertura__palco" data-palco>
+        <div class="apertura__riquadro" data-riquadro></div>
+        <div class="apertura__cartellino" data-cartellino>
+          <div class="apertura__didascalia" aria-live="off" aria-atomic="true" data-didascalia>
+            <p class="apertura__titolo" data-cartellino-titolo></p>
+            <p class="apertura__dati" data-cartellino-dati></p>
+          </div>
+          <div class="apertura__comandi" role="group" aria-label="Selected works" data-comandi>
+            <p class="apertura__conta" data-cartellino-conta></p>
+            <button class="apertura__tasto" type="button" aria-label="Previous painting" data-prec>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 6 8.5 12l6 6"/></svg>
+            </button>
+            <button class="apertura__tasto" type="button" aria-label="Pause the slideshow" aria-pressed="false" data-pausa>
+              <svg class="apertura__icona-pausa" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 7v10M14.5 7v10"/></svg>
+              <svg class="apertura__icona-avvia" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 7v10l8-5z"/></svg>
+            </button>
+            <button class="apertura__tasto" type="button" aria-label="Next painting" data-succ>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9.5 6 6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="epigrafe" aria-label="Artist statement" data-epigrafe hidden>
+      <figure class="epigrafe__corpo">
+        <blockquote class="epigrafe__citazione"><p data-testo="ricerca.citazione"></p></blockquote>
+        <figcaption class="epigrafe__firma" data-testo="ricerca.autore_citazione"></figcaption>
+      </figure>
     </section>
 
     <section class="sezione" id="portfolio">
       <div class="contenitore">
         <header class="sezione__testa">
-          <p class="sezione__numero">01</p>
           <h2 class="sezione__titolo">Paintings</h2>
+          <p class="sezione__meta" data-meta-opere></p>
         </header>
         <div class="filtri" role="group" aria-label="Filter the paintings" data-filtri></div>
         <div class="griglia" data-griglia-opere></div>
@@ -68,23 +96,27 @@
     </section>
 
     <section class="sezione sezione--scura" id="gallery-3d">
-      <div class="contenitore invito-3d">
-        <div class="invito-3d__testo">
-          <p class="sezione__numero">02</p>
+      <div class="contenitore">
+        <header class="sezione__testa">
           <h2 class="sezione__titolo">Virtual gallery</h2>
-          <p class="invito-3d__descrizione">Walk among the paintings, hung at their real size in a 3D exhibition room. Drag to look around, tap the floor to walk, tap a painting to get closer.</p>
-          <button class="bottone bottone--chiaro" type="button" data-apri-galleria>Enter the gallery</button>
+          <p class="sezione__meta" data-meta-sala></p>
+        </header>
+        <div class="invito-3d">
+          <div class="invito-3d__testo">
+            <p class="invito-3d__descrizione">Walk among the paintings, hung at their real size in a 3D exhibition room. Drag to look around, tap the floor to walk, tap a painting to get closer.</p>
+            <button class="bottone bottone--chiaro" type="button" data-apri-galleria>Enter the gallery</button>
+          </div>
+          <button class="invito-3d__parete" type="button" data-apri-galleria aria-label="Enter the 3D gallery">
+            <span class="invito-3d__quadri" data-anteprima-3d></span>
+            <span class="invito-3d__entra" aria-hidden="true">Enter ›</span>
+          </button>
         </div>
-        <button class="invito-3d__anteprima" type="button" data-apri-galleria aria-label="Enter the 3D gallery">
-          <span class="invito-3d__quadri" data-anteprima-3d></span>
-        </button>
       </div>
     </section>
 
     <section class="sezione" id="about">
       <div class="contenitore biografia" data-biografia>
         <header class="sezione__testa">
-          <p class="sezione__numero">03</p>
           <h2 class="sezione__titolo">About</h2>
         </header>
         <div class="biografia__lato">
@@ -95,38 +127,37 @@
       </div>
     </section>
 
-    <section class="sezione sezione--tenue" id="research">
+    <section class="sezione" id="research">
       <span class="ancora" id="resume"></span>
       <div class="contenitore ricerca">
         <header class="sezione__testa">
-          <p class="sezione__numero">04</p>
           <h2 class="sezione__titolo">Artistic research</h2>
         </header>
         <div class="ricerca__testo testo-lungo" data-paragrafi="ricerca.testo"></div>
-        <blockquote class="citazione" data-citazione>
-          <p data-testo="ricerca.citazione"></p>
-          <footer data-testo="ricerca.autore_citazione"></footer>
-        </blockquote>
       </div>
+      <figure class="dettaglio" data-dettaglio hidden>
+        <div class="dettaglio__immagine" data-dettaglio-immagine></div>
+        <figcaption class="contenitore dettaglio__didascalia"><span class="dettaglio__etichetta">Detail</span><span data-testo="ricerca.didascalia_dettaglio"></span></figcaption>
+      </figure>
     </section>
 
     <section class="sezione" id="curriculum">
       <span class="ancora" id="pricing"></span>
       <div class="contenitore">
         <header class="sezione__testa">
-          <p class="sezione__numero">05</p>
           <h2 class="sezione__titolo">Curriculum</h2>
+          <p class="sezione__meta" data-meta-mostre></p>
         </header>
         <p class="sezione__sottotitolo">Exhibitions, publications and awards</p>
         <div class="mostre" data-mostre></div>
       </div>
     </section>
 
-    <section class="sezione sezione--tenue" id="critica-articoli">
+    <section class="sezione" id="critica-articoli">
       <div class="contenitore">
         <header class="sezione__testa">
-          <p class="sezione__numero">06</p>
           <h2 class="sezione__titolo">Reviews and articles</h2>
+          <p class="sezione__meta" data-meta-critica></p>
         </header>
         <ul class="critica" data-critica></ul>
       </div>
@@ -136,12 +167,15 @@
       <span class="ancora" id="services"></span>
       <div class="contenitore">
         <header class="sezione__testa">
-          <p class="sezione__numero">07</p>
           <h2 class="sezione__titolo">Events</h2>
         </header>
         <div class="consenso" data-consenso hidden>
-          <p>Posts are loaded from Instagram (Meta), which may set its own cookies.</p>
-          <button class="bottone bottone--scuro" type="button" data-consenso-si>Show Instagram posts</button>
+          <p class="consenso__frase">Exhibitions and events are announced on Instagram.</p>
+          <div class="consenso__azioni">
+            <button class="bottone bottone--scuro" type="button" data-consenso-si>Show the latest posts</button>
+            <a class="collegamento" target="_blank" rel="noopener" data-consenso-profilo hidden>Open the Instagram profile ↗</a>
+          </div>
+          <p class="consenso__nota">The posts are loaded from Instagram (Meta), which may set its own cookies.</p>
         </div>
         <ul class="eventi" data-eventi></ul>
       </div>
@@ -150,7 +184,6 @@
     <section class="sezione sezione--scura" id="contact">
       <div class="contenitore contatti">
         <header class="sezione__testa">
-          <p class="sezione__numero">08</p>
           <h2 class="sezione__titolo">Contact</h2>
         </header>
         <p class="contatti__invito" data-testo="contatti.invito"></p>
@@ -172,8 +205,12 @@
         <p class="visore__conta" data-visore-conta></p>
         <h3 class="visore__titolo" data-visore-titolo></h3>
         <dl class="visore__dati" data-visore-dati></dl>
+        <figure class="visore__scala" data-visore-scala hidden></figure>
         <div class="visore__descrizione testo-lungo" data-visore-descrizione></div>
-        <a class="bottone bottone--scuro" data-visore-richiesta>Ask about this work</a>
+        <div class="visore__azioni">
+          <a class="bottone bottone--trasparente" data-visore-richiesta>Ask about this work</a>
+          <a class="collegamento" data-visore-sala hidden>View in the room →</a>
+        </div>
       </div>
     </div>
     <button class="visore__chiudi" type="button" data-chiudi aria-label="Close">×</button>
@@ -196,28 +233,45 @@
     <button class="visore__chiudi" type="button" data-chiudi aria-label="Close">×</button>
   </dialog>
 
-  <div class="sala" data-sala hidden>
+  <div class="sala" data-sala hidden role="dialog" aria-modal="true" aria-label="Virtual gallery" tabindex="-1">
     <div class="sala__scena" data-sala-scena></div>
+    <div class="sala__velo" data-sala-velo aria-hidden="true"></div>
     <div class="sala__caricamento" data-sala-caricamento>
-      <p>Setting up the room…</p>
-      <div class="sala__barra"><span data-sala-progresso></span></div>
+      <figure class="sala__soglia">
+        <blockquote class="sala__citazione"><p data-sala-citazione>Preparing the exhibition</p></blockquote>
+        <figcaption class="sala__autore" data-sala-autore hidden></figcaption>
+      </figure>
+      <div class="sala__barra" data-sala-barra role="progressbar" aria-label="Preparing the room" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-sala-progresso></span></div>
     </div>
-    <div class="sala__aiuto" data-sala-aiuto>
-      <p><strong>Drag</strong> to look around · <strong>tap the floor</strong> to walk · <strong>tap a painting</strong> to get closer</p>
+    <div class="sala__aiuto sala__aiuto--nascosto" data-sala-aiuto>
+      <p><strong>Drag</strong> to look around · <strong><span class="sala__tocco">tap</span><span class="sala__clic">click</span> the floor</strong> to walk · <strong><span class="sala__tocco">tap</span><span class="sala__clic">click</span> a painting</strong> to get closer</p>
       <p class="sala__aiuto-tasti">Keyboard: arrows or W A S D to walk, Esc to exit</p>
     </div>
-    <div class="sala__didascalia" data-sala-didascalia hidden>
+    <div class="sala__didascalia" data-sala-didascalia hidden aria-live="polite">
+      <span class="sala__sosta" data-sala-sosta aria-hidden="true"></span>
       <p class="sala__conta" data-sala-conta></p>
-      <h3 data-sala-titolo></h3>
-      <p data-sala-dati></p>
+      <h2 class="sala__titolo" data-sala-titolo></h2>
+      <p class="sala__dati" data-sala-dati></p>
       <button class="sala__dettagli" type="button" data-sala-dettagli>Details</button>
     </div>
-    <div class="sala__comandi">
+    <div class="sala__comandi" role="group" aria-label="Visit">
       <button type="button" data-sala-prec aria-label="Previous painting">‹</button>
-      <button type="button" data-sala-giro>Guided tour</button>
+      <button type="button" data-sala-giro aria-pressed="false">Guided tour</button>
       <button type="button" data-sala-succ aria-label="Next painting">›</button>
     </div>
-    <button class="sala__esci" type="button" data-sala-esci>Exit ×</button>
+    <section class="sala__fine" data-sala-fine hidden aria-labelledby="sala-fine-titolo">
+      <h2 class="sala__fine-titolo" id="sala-fine-titolo">End of the exhibition</h2>
+      <p class="sala__fine-testo" data-sala-fine-testo></p>
+      <div class="sala__fine-azioni">
+        <button type="button" data-sala-ricomincia>Start again</button>
+        <button type="button" data-sala-tutte>See all paintings</button>
+      </div>
+    </section>
+    <div class="sala__messaggio" data-sala-messaggio hidden role="alert">
+      <p data-sala-messaggio-testo></p>
+      <button type="button" data-sala-torna>Back to the site</button>
+    </div>
+    <button class="sala__esci" type="button" data-sala-esci>Exit</button>
   </div>
 
   <noscript><p class="avviso">Please enable JavaScript to see the paintings.</p></noscript>

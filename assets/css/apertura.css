@@ -1,37 +1,153 @@
-/* Prima schermata (hero). Usa le variabili di colore definite in style.css. */
+/* Prima schermata (hero): una parete scura e calda, il nome nella sua colonna, un'opera alla volta.
+   L'impaginazione sta tutta qui: apertura.js legge il riquadro (.apertura__riquadro) e vi adatta l'opera
+   come «contain», poi scrive il rettangolo del quadro in --qx --qy --qw --qh (px, rispetto al riquadro).
+   Il nome e il quadro stanno in zone diverse e non si sovrappongono mai. */
 
-/* ---------- Apertura (prima schermata 3D) ---------- */
 .apertura {
-  position: relative; min-height: 100vh; min-height: 100svh;
-  display: flex; align-items: flex-end;
-  background: radial-gradient(120% 90% at 70% 40%, #2a2622 0%, var(--notte) 62%);
-  color: var(--notte-testo); overflow: hidden;
+  --muro: #121010;                            /* la parete WebGL (apertura3d.js) legge questo colore: devono coincidere */
+  --ap-testo: #ece7de;
+  --ap-grigio: #aaa398;
+  --ap-filo: rgba(236, 231, 222, .26);
+  --ap-alto: 76px;                            /* spazio lasciato alla testata */
+  --ap-curva: cubic-bezier(.4, 0, .2, 1);
+  --ap-fuoco: var(--fuoco-notte, #ece7de);     /* anello di fuoco chiaro sul buio (dal foglio del sito, se c'è) */
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr); align-content: start;
+  min-height: 100vh; min-height: 100svh;
+  padding: var(--ap-alto) 0 44px;
+  background: var(--muro); color: var(--ap-testo);
 }
-.apertura__scena { position: absolute; inset: 0; }
-.apertura__scena canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; opacity: 0; transition: opacity 1.6s var(--curva); }
-.apertura__scena canvas.pronta { opacity: 1; }
-.apertura__scena--statica { background-size: cover; background-position: center; opacity: .55; }
-.apertura::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background:
-    linear-gradient(to top, rgba(15, 14, 13, .9) 0%, rgba(15, 14, 13, .3) 36%, rgba(15, 14, 13, 0) 58%),
-    linear-gradient(to right, rgba(15, 14, 13, .7) 0%, rgba(15, 14, 13, .25) 42%, rgba(15, 14, 13, 0) 62%);
-}
-.apertura__testo {
-  position: relative; z-index: 2; width: 100%; max-width: var(--larghezza); margin: 0 auto;
-  padding: 0 var(--margine) clamp(72px, 12vh, 140px); pointer-events: none;
-}
-.apertura__testo a, .apertura__testo button { pointer-events: auto; }
-.apertura__professione { margin: 0 0 14px; font-size: 13px; letter-spacing: .3em; text-transform: uppercase; color: var(--notte-grigio); }
-.apertura__nome { font-size: clamp(56px, 11vw, 168px); font-weight: 400; letter-spacing: -.015em; line-height: .92; }
-.apertura__frase { max-width: 34em; margin: 22px 0 0; font: italic 400 clamp(20px, 2.2vw, 26px)/1.4 var(--serif); color: rgba(236, 231, 222, .86); }
-.apertura__frase:empty { display: none; }
-.apertura__azioni { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
-.apertura__scorri {
-  position: absolute; z-index: 2; right: var(--margine); bottom: clamp(72px, 12vh, 140px);
-  width: 1px; height: 72px; background: rgba(236, 231, 222, .25); overflow: hidden;
-}
-.apertura__scorri span { position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--notte-testo); animation: scorri 2.2s var(--curva) infinite; }
-@keyframes scorri { to { top: 100%; } }
-@media (max-width: 600px) { .apertura__scorri { display: none; } }
 
+/* ---------- Il quadro: riquadro, strato statico (due <img> A/B), bottone trasparente ---------- */
+.apertura__palco { position: relative; grid-row: 1; min-width: 0; margin: 0 16px; }
+.apertura__palco[hidden] { display: none; }
+.apertura__riquadro {
+  position: relative;
+  height: calc(46vh - var(--ap-alto)); height: calc(46svh - var(--ap-alto)); min-height: 200px;
+  touch-action: pan-y;                        /* lo scorrimento verticale resta alla pagina, quello orizzontale cambia opera */
+}
+/* luce calda appena percettibile dietro il quadro, solo per lo strato statico (il canvas la copre) */
+.apertura__riquadro::before {
+  content: ""; position: absolute; inset: -16% -12%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 228, 196, .05), rgba(255, 228, 196, 0));
+}
+.apertura__quadro {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; object-position: 50% 100%;   /* apertura.js legge object-position: quadro in basso, al centro */
+  opacity: 0; transition: opacity .5s var(--ap-curva);
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, .55));
+  pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+/* cambio senza WebGL: l'opera uscente sparisce nel muro, poi entra la nuova (mai due opere sovrapposte) */
+.apertura__quadro.attiva { opacity: 1; transition: opacity .7s var(--ap-curva) .5s; }
+.apertura--subito .apertura__quadro { transition: none; }
+.apertura__bersaglio {
+  position: absolute; z-index: 2;
+  left: var(--qx, 0px); top: var(--qy, 0px); width: var(--qw, 100%); height: var(--qh, 100%);
+  margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent;
+  cursor: pointer; touch-action: pan-y; -webkit-tap-highlight-color: transparent;
+}
+.apertura__bersaglio:focus-visible { outline: 2px solid var(--ap-fuoco); outline-offset: 6px; }
+
+/* Il canvas WebGL copre tutta la sezione e compare solo quando il primo fotogramma illuminato è pronto. */
+.apertura__tela {
+  position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%;
+  pointer-events: none; opacity: 0; transition: opacity .9s ease;
+}
+.apertura__tela.accesa { opacity: 1; }
+
+/* ---------- Cartellino: titolo, anno · tecnica · misure, contatore e comandi ---------- */
+.apertura__cartellino {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: 10px; column-gap: 16px; align-items: center;
+  width: min(100%, max(var(--qw, 100%), 360px)); margin: 14px auto 0;   /* sotto il quadro, centrato come lui */
+  visibility: hidden;
+}
+.apertura--pronta .apertura__cartellino { visibility: visible; }
+.apertura__cartellino[hidden] { display: none; }
+.apertura__didascalia { grid-column: 1 / -1; min-width: 0; transition: opacity .35s ease; }
+.apertura__titolo { margin: 0; font: italic 500 20px/1.25 var(--serif); color: var(--ap-testo); }
+.apertura__dati { margin: 3px 0 0; font: 400 13px/1.45 var(--sans); letter-spacing: .02em; color: var(--ap-grigio); }
+.apertura__dati:empty { display: none; }
+.apertura__comandi { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; }
+.apertura__comandi[hidden] { display: none; }
+.apertura__conta {
+  margin: 0 auto 0 0; font: 500 12px/1 var(--sans); letter-spacing: .14em; color: var(--ap-grigio);
+  font-variant-numeric: tabular-nums; white-space: nowrap; transition: opacity .35s ease;
+}
+.apertura__cartellino.cambio .apertura__didascalia, .apertura__cartellino.cambio .apertura__conta { opacity: 0; }
+.apertura__tasto {
+  display: inline-grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0;
+  border: 1px solid var(--ap-filo); border-radius: 0; background: transparent; color: var(--ap-testo);
+  cursor: pointer; transition: border-color .2s ease, background-color .2s ease;
+}
+.apertura__tasto:hover { border-color: rgba(236, 231, 222, .62); background: rgba(236, 231, 222, .05); }
+.apertura__tasto:focus-visible { outline: 2px solid var(--ap-fuoco); outline-offset: 2px; }
+.apertura__tasto[hidden] { display: none; }
+.apertura__tasto svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.apertura__tasto .apertura__icona-avvia { fill: currentColor; stroke: none; }
+.apertura__tasto[aria-pressed="true"] .apertura__icona-pausa,
+.apertura__tasto:not([aria-pressed="true"]) .apertura__icona-avvia { display: none; }
+
+/* ---------- Testo: professione, nome, frase, pulsanti ---------- */
+.apertura__testo { position: relative; z-index: 2; grid-row: 2; min-width: 0; padding: 30px var(--margine) 0; }
+.apertura__professione {
+  margin: 0 0 12px; font: 500 11px/1.7 var(--sans); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ap-grigio); text-wrap: balance;
+}
+.apertura__professione:empty { display: none; }
+.apertura__gruppo { white-space: nowrap; }  /* «Painter ·» «Visual Artist ·» «Storyteller»: mai una parola orfana */
+.apertura__nome {
+  margin: 0; max-width: 5em;                 /* il nome va su due righe */
+  font: 400 clamp(46px, 13.5vw, 84px)/.94 var(--serif); letter-spacing: -.01em;
+  text-wrap: balance; overflow-wrap: break-word;
+}
+.apertura__frase {
+  max-width: 30em; margin: 18px 0 0; font: italic 400 clamp(19px, 2vw, 25px)/1.4 var(--serif);
+  color: rgba(236, 231, 222, .86); text-wrap: pretty;
+}
+.apertura__frase:empty { display: none; }
+.apertura__azioni { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.apertura__azioni .bottone { flex: 1 1 auto; }
+.apertura :focus-visible { outline-color: var(--ap-fuoco); }
+
+/* ---------- Schermi larghi (e telefoni in orizzontale): il nome a sinistra, il quadro a destra ---------- */
+@media (min-width: 900px) and (min-aspect-ratio: 5/4), (min-width: 640px) and (orientation: landscape) and (max-height: 520px) {
+  .apertura {
+    --ap-alto: 104px;
+    grid-template-columns: minmax(0, 1fr) 46vw; grid-template-rows: auto auto; column-gap: 4vw; align-content: center;
+    padding: var(--ap-alto) var(--margine) 48px;
+  }
+  /* riquadro e cartellino diventano celle della griglia: il testo si allinea al piede del quadro */
+  .apertura__palco { display: contents; }
+  .apertura__riquadro { grid-row: 1; grid-column: 2; align-self: end; height: min(64vh, calc(100vh - var(--ap-alto) - 150px)); min-height: 300px; }
+  /* il cartellino sta sotto il quadro, allineato al suo bordo sinistro; i comandi restano fermi a destra */
+  .apertura__cartellino { grid-row: 2; grid-column: 2; align-self: start; width: auto; margin: 18px 0 0; padding-left: var(--qx, 0px); }
+  .apertura__didascalia { grid-column: 1; grid-row: 1; }
+  .apertura__comandi { grid-column: 2; grid-row: 1; align-self: start; }
+  .apertura__conta { margin-right: 10px; }
+  .apertura__titolo { font-size: 22px; }
+  .apertura__testo { grid-row: 1; grid-column: 1; align-self: end; max-width: min(44vw, 640px); padding: 0; }
+  .apertura__nome { font-size: clamp(64px, 8vw, 150px); }
+  .apertura__professione { font-size: 13px; letter-spacing: .3em; margin-bottom: 18px; }
+  .apertura__azioni { margin-top: 34px; }
+  .apertura__azioni .bottone { flex: none; }
+}
+
+/* telefoni in orizzontale: poca altezza, si stringe tutto */
+@media (min-width: 640px) and (orientation: landscape) and (max-height: 520px) {
+  .apertura { --ap-alto: 76px; padding-bottom: 20px; }
+  .apertura__riquadro { height: calc(100vh - var(--ap-alto) - 110px); height: calc(100svh - var(--ap-alto) - 110px); min-height: 180px; }
+  .apertura__cartellino { margin-top: 10px; }
+  .apertura__didascalia, .apertura__comandi { grid-column: 1 / -1; }
+  .apertura__comandi { grid-row: 2; }
+  .apertura__conta { margin-right: auto; }
+  .apertura__titolo { font-size: 18px; }
+  .apertura__nome { font-size: clamp(40px, 6.4vw, 64px); }
+  .apertura__professione { font-size: 11px; letter-spacing: .16em; margin-bottom: 10px; }
+  .apertura__azioni { margin-top: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apertura__quadro, .apertura__didascalia, .apertura__conta, .apertura__tela { transition: none; }
+}
