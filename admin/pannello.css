@@ -191,3 +191,11 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .avviso--ok { background: var(--ok); color: #fff; }
 .avviso--errore { background: var(--errore); color: #fff; }
 .avviso--info { background: var(--testo); color: var(--fondo); }
+
+/* ---------- galleria di foto e documenti ---------- */
+.galleria-campo__foto { display: flex; flex-wrap: wrap; gap: 12px; margin: 4px 0 8px; }
+.galleria-campo__voce { display: grid; gap: 4px; width: 132px; }
+.galleria-campo__voce img { width: 132px; height: 100px; object-fit: cover; border-radius: 6px; background: var(--fondo); }
+.galleria-campo__azioni { display: flex; justify-content: space-between; }
+.galleria-campo__azioni .icona { width: 36px; height: 36px; }
+.documento__nome { flex-basis: 100%; overflow-wrap: anywhere; }

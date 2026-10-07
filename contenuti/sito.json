@@ -1,269 +1,1599 @@
 {
   "sito": {
-    "nome": "Elidon Mucaj",
-    "professione": "Pittore",
-    "frase_apertura": "Frase d'apertura da sostituire: una riga che presenti la tua ricerca artistica.",
-    "descrizione_seo": "Elidon Mucaj, pittore. Opere, mostre, testi critici e contatti.",
+    "nome": "Elidon Muçaj",
+    "professione": "Painter · Visual Artist · Storyteller",
+    "frase_apertura": "",
+    "immagine_apertura": {
+      "file": "assets/img/hero-img.jpg",
+      "miniatura": "assets/img/hero-img.jpg"
+    },
+    "descrizione_seo": "Elidon Muçaj (Vlorë, 1976) is a contemporary painter and visual artist living and working in Tuscany. Paintings, artistic research, exhibitions, reviews and contacts.",
+    "nota_piede": "© Elidon Muçaj. All rights reserved.\nThe artworks displayed on this website may not be downloaded, copied, or reproduced without written permission from the artist.\nThis website uses only technical cookies necessary for its proper functioning. No personal data is collected or stored.",
     "colore_pareti": "Bianco"
   },
   "biografia": {
-    "foto": {
-      "file": "immagini/esempi/ritratto-segnaposto.jpg",
-      "miniatura": "immagini/esempi/ritratto-segnaposto.jpg",
-      "larghezza": 900,
-      "altezza": 1100
-    },
-    "testo": "Questo è il testo segnaposto della biografia. Dal pannello di gestione (indirizzo del sito seguito da /admin) puoi sostituirlo con la biografia vera.\n\nLascia una riga vuota tra un paragrafo e l'altro: il sito li impagina da solo.",
-    "citazione": "Una citazione facoltativa, ad esempio da un testo critico o da un'intervista.",
-    "autore_citazione": "Nome dell'autore"
+    "sottotitolo": "My background",
+    "foto": null,
+    "testo": "Elidon Muçaj is a contemporary painter and visual artist whose work inhabits a chromatic and symbolic universe, exploring the depths of the human unconscious with striking intensity. Born in Vlorë, Albania, in 1976, he moved to Italy in 1990.\n\nA self-taught painter, he developed his artistic language between Tuscany and Milan, drawing on surrealist traditions and the expressive intensity of artists such as Francis Bacon and the Leipzig School.\n\nFree from academic constraints, Muçaj’s practice is a continuous experimentation with colour, form, matter, and emotion. His oil paintings depict figures caught in moments of crisis, fragility, and transformation, creating a visual language that moves between the figurative and the psychological.\n\nElidon Muçaj now lives and works in Tuscany, Italy, and continues to paint and exhibit his work in Italy, Albania, and Germany. His artistic practice is rooted in a continuous exploration of the human experience and the emotional tensions of the contemporary world."
+  },
+  "ricerca": {
+    "testo": "Elidon Muçaj’s current artistic research is centred on identity, roots, belonging, and the human condition. His experience of migration — having left Albania for Italy as a young man — is not represented through a literal narrative, but emerges in his work as a metaphor and as an emotional experience.\n\nFor Muçaj, roots extend beyond family and cultural origins. They also represent something more fundamental: the roots of being human — compassion, empathy, love for life, and the ability to recognise ourselves in others. In a contemporary world marked by war, displacement, and uncertainty, the search for roots becomes, for him, a search for our shared humanity.\n\nLiving between Albania and Italy has shaped a complex sense of belonging. He feels connected to both cultures, while also experiencing the sense that something is always missing: a word, a memory, an experience, a fragment of one world that cannot be completely recovered in the other. This condition of being between two worlds informs his exploration of psychological identity and the fragile relationship between who we are, where we come from, and who we become.\n\nMigration therefore enters his paintings not as a documentary subject, but through emotion, memory, and metaphor. His human figures can appear wounded, confused, isolated, searching, fighting, or undergoing transformation. They inhabit an unstable psychological space, suspended between inner and outer worlds, reflecting the uncertainty and emotional tensions of contemporary life.\n\nHis paintings emerge largely through an unconscious process, bringing together personal memories, everyday experiences, and impressions of the world around him. Muçaj remains immersed in life and allows the emotions of the contemporary world to enter his work. An initial mental image or intuition may develop through sketches, fragments, or directly on the canvas, while the painting gradually reveals unexpected forms and relationships.\n\nOil on canvas becomes a field of tension between instinct and construction, matter and vision. Muçaj works with intense colour, often using palette knives and thick brushstrokes to build a physical, almost three-dimensional surface. Forms are constructed and deconstructed, while figurative elements remain present without becoming strictly realistic.\n\nThrough this continuous dialogue between colour, matter, gesture, and the unconscious, Muçaj seeks to create an emotional connection between the painting and the viewer. His work does not aim to provide definitive answers, but to open a space for reflection on identity, memory, belonging, migration, and what it means to remain human in a changing world.",
+    "citazione": "To be a painter, one must observe, study, look, marvel, admire, erase, redo, doubt, analyze oneself, analyze…",
+    "autore_citazione": "Elidon Muçaj — November 2024"
   },
   "opere": [
     {
-      "id": "esempio-01",
+      "id": "seme-lasciato-cadere-2026",
       "immagine": {
-        "file": "immagini/esempi/esempio-01.jpg",
-        "miniatura": "immagini/esempi/esempio-01-min.jpg",
-        "larghezza": 1200,
-        "altezza": 1500
+        "file": "assets/img/2026/Seme Lasciato Cadere 200x200 cm Olio su tela small.jpg",
+        "miniatura": "assets/img/2026/Seme Lasciato Cadere 200x200 cm Olio su tela small.jpg"
       },
-      "titolo": "Opera di esempio 1",
-      "anno": "2017",
-      "tecnica": "Acrilico su tela",
-      "dimensioni": "100 × 80 cm",
-      "descrizione": "Immagine segnaposto generata automaticamente: sostituiscila dal pannello con la foto di un'opera vera.",
-      "stato": "Disponibile",
-      "in_evidenza": true,
-      "in_galleria_3d": true
-    },
-    {
-      "id": "esempio-02",
-      "immagine": {
-        "file": "immagini/esempi/esempio-02.jpg",
-        "miniatura": "immagini/esempi/esempio-02-min.jpg",
-        "larghezza": 1500,
-        "altezza": 1200
-      },
-      "titolo": "Opera di esempio 2",
-      "anno": "2018",
-      "tecnica": "Tecnica mista su tavola",
-      "dimensioni": "120 × 100 cm",
-      "descrizione": "",
-      "stato": "Collezione privata",
-      "in_evidenza": true,
-      "in_galleria_3d": true
-    },
-    {
-      "id": "esempio-03",
-      "immagine": {
-        "file": "immagini/esempi/esempio-03.jpg",
-        "miniatura": "immagini/esempi/esempio-03-min.jpg",
-        "larghezza": 1200,
-        "altezza": 1200
-      },
-      "titolo": "Opera di esempio 3",
-      "anno": "2019",
+      "titolo": "Seme Lasciato Cadere",
+      "anno": "2026",
       "tecnica": "Olio su tela",
-      "dimensioni": "80 × 80 cm",
+      "dimensioni": "200 × 200 cm",
       "descrizione": "",
       "stato": "",
-      "in_evidenza": true,
+      "selezionata": true,
       "in_galleria_3d": true
     },
     {
-      "id": "esempio-04",
+      "id": "sdradicato-2026",
       "immagine": {
-        "file": "immagini/esempi/esempio-04.jpg",
-        "miniatura": "immagini/esempi/esempio-04-min.jpg",
-        "larghezza": 1000,
-        "altezza": 1500
+        "file": "assets/img/2026/Sdradicato - Olio su tela - 200x120 cm - 2026 WEB.jpg",
+        "miniatura": "assets/img/2026/Sdradicato - Olio su tela - 200x120 cm - 2026 WEB.jpg"
       },
-      "titolo": "Opera di esempio 4",
-      "anno": "2020",
-      "tecnica": "Acrilico su tela",
-      "dimensioni": "60 × 90 cm",
+      "titolo": "Sdradicato",
+      "anno": "2026",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 120 cm",
       "descrizione": "",
-      "stato": "Disponibile",
-      "in_evidenza": true,
+      "stato": "",
+      "selezionata": true,
       "in_galleria_3d": true
     },
     {
-      "id": "esempio-05",
+      "id": "lotta-dei-tori-210-anni-2026",
       "immagine": {
-        "file": "immagini/esempi/esempio-05.jpg",
-        "miniatura": "immagini/esempi/esempio-05-min.jpg",
-        "larghezza": 1600,
-        "altezza": 1100
+        "file": "assets/img/2026/Lotta dei Tori - 210 anni - 200x200 cm -Olio su tela 2026 web.jpg",
+        "miniatura": "assets/img/2026/Lotta dei Tori - 210 anni - 200x200 cm -Olio su tela 2026 web.jpg"
       },
-      "titolo": "Opera di esempio 5",
-      "anno": "2021",
-      "tecnica": "Tecnica mista su tavola",
+      "titolo": "Lotta dei Tori - 210 anni",
+      "anno": "2026",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "il-ronzio-dei-calabroni-2026",
+      "immagine": {
+        "file": "assets/img/2026/Il ronzio dei calabroni - Olio su tela - 200x250cm - 2026 web.jpg",
+        "miniatura": "assets/img/2026/Il ronzio dei calabroni - Olio su tela - 200x250cm - 2026 web.jpg"
+      },
+      "titolo": "Il ronzio dei calabroni",
+      "anno": "2026",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 250 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "lo-sguardo-della-bandiera-bianca-2026",
+      "immagine": {
+        "file": "assets/img/2026/Lo sguardo della bandiera bianca - Olio su tela - 200x116 cm 2026 web.jpg",
+        "miniatura": "assets/img/2026/Lo sguardo della bandiera bianca - Olio su tela - 200x116 cm 2026 web.jpg"
+      },
+      "titolo": "Lo sguardo della bandiera bianca",
+      "anno": "2026",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 116 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "incertezze-2025",
+      "immagine": {
+        "file": "assets/img/2025/Incertezze-Olio-su-tela-200x200cm.jpg",
+        "miniatura": "assets/img/2025/Incertezze-Olio-su-tela-200x200cm.jpg"
+      },
+      "titolo": "Incertezze",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "identita-frammentata-1-2025",
+      "immagine": {
+        "file": "assets/img/2025/Identita-frammentata-1-Olio-su-tela-200x250cm.jpg",
+        "miniatura": "assets/img/2025/Identita-frammentata-1-Olio-su-tela-200x250cm.jpg"
+      },
+      "titolo": "Identità frammentata 1",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 250 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "identita-frammentata-2-2025",
+      "immagine": {
+        "file": "assets/img/2025/Identita-frammentata-2-Olio-su-tela-200x250cm.jpg",
+        "miniatura": "assets/img/2025/Identita-frammentata-2-Olio-su-tela-200x250cm.jpg"
+      },
+      "titolo": "Identità frammentata 2",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 250 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "estraneita-2025",
+      "immagine": {
+        "file": "assets/img/2025/Estraneita-Olio-su-tela-200x200cm.jpg",
+        "miniatura": "assets/img/2025/Estraneita-Olio-su-tela-200x200cm.jpg"
+      },
+      "titolo": "Estraneità",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "gravita-2025",
+      "immagine": {
+        "file": "assets/img/2025/Gravita-Olio-su-tela-122x98-cm.jpg",
+        "miniatura": "assets/img/2025/Gravita-Olio-su-tela-122x98-cm.jpg"
+      },
+      "titolo": "Gravità",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "122 × 98 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "radici-1-2025",
+      "immagine": {
+        "file": "assets/img/2025/Radici-1.jpg",
+        "miniatura": "assets/img/2025/Radici-1.jpg"
+      },
+      "titolo": "Radici 1",
+      "anno": "2025",
+      "tecnica": "",
+      "dimensioni": "",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "radici-2-2025",
+      "immagine": {
+        "file": "assets/img/2025/Radici-2-Olio-su-tela-40x51-cm.jpg",
+        "miniatura": "assets/img/2025/Radici-2-Olio-su-tela-40x51-cm.jpg"
+      },
+      "titolo": "Radici 2",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "40 × 51 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "autoritratto-2025",
+      "immagine": {
+        "file": "assets/img/2025/Autoritratto-Olio-su-Mdf-44,5x58-cm.jpg",
+        "miniatura": "assets/img/2025/Autoritratto-Olio-su-Mdf-44,5x58-cm.jpg"
+      },
+      "titolo": "Autoritratto",
+      "anno": "2025",
+      "tecnica": "Olio su MDF",
+      "dimensioni": "44,5 × 58 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "lui-06-2025",
+      "immagine": {
+        "file": "assets/img/2025/Lui-06-Olio-su-Mdf-48x50,5-cm.jpg",
+        "miniatura": "assets/img/2025/Lui-06-Olio-su-Mdf-48x50,5-cm.jpg"
+      },
+      "titolo": "Lui 06",
+      "anno": "2025",
+      "tecnica": "Olio su MDF",
+      "dimensioni": "48 × 50,5 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "albergano-tensioni-2025",
+      "immagine": {
+        "file": "assets/img/2025/Albergano-tensioni-olio-su-tela-200x250cm.jpg",
+        "miniatura": "assets/img/2025/Albergano-tensioni-olio-su-tela-200x250cm.jpg"
+      },
+      "titolo": "Albergano tensioni",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 250 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "trinomio-2025",
+      "immagine": {
+        "file": "assets/img/portfolio/Trinomio - Olio su Tela 200x210.jpg",
+        "miniatura": "assets/img/portfolio/Trinomio - Olio su Tela 200x210.jpg"
+      },
+      "titolo": "Trinomio",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 210 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "i-m-an-artist-2025",
+      "immagine": {
+        "file": "assets/img/2025/I'm an artist,olio su tela224X200cm.jpg",
+        "miniatura": "assets/img/2025/I'm an artist,olio su tela224X200cm.jpg"
+      },
+      "titolo": "I'm an artist",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "224 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "vietato-fumare-2025",
+      "immagine": {
+        "file": "assets/img/2025/Vietato-Fumare-Olio-su-Tela-200x150-cm.jpg",
+        "miniatura": "assets/img/2025/Vietato-Fumare-Olio-su-Tela-200x150-cm.jpg"
+      },
+      "titolo": "Vietato Fumare",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "i-m-an-artist-two-2025",
+      "immagine": {
+        "file": "assets/img/2025/I'm-an-Artist-two-200x150-cm.jpg",
+        "miniatura": "assets/img/2025/I'm-an-Artist-two-200x150-cm.jpg"
+      },
+      "titolo": "I'm an Artist two",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-2025",
+      "immagine": {
+        "file": "assets/img/2025/Senza-Titolo-80x135-com-Olio-su-tela.jpg",
+        "miniatura": "assets/img/2025/Senza-Titolo-80x135-com-Olio-su-tela.jpg"
+      },
+      "titolo": "Senza Titolo",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "80 × 135 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-2025-2",
+      "immagine": {
+        "file": "assets/img/2025/Senza-Titolo-Olio-su-tela-150x150-cm.jpg",
+        "miniatura": "assets/img/2025/Senza-Titolo-Olio-su-tela-150x150-cm.jpg"
+      },
+      "titolo": "Senza Titolo",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "150 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-senza-parole-2025",
+      "immagine": {
+        "file": "assets/img/2025/Senza-Titolo-Senza-Parole-225x200-cm-Olio-su-tela.jpg",
+        "miniatura": "assets/img/2025/Senza-Titolo-Senza-Parole-225x200-cm-Olio-su-tela.jpg"
+      },
+      "titolo": "Senza Titolo - Senza Parole",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "225 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "studio-per-radici-2025",
+      "immagine": {
+        "file": "assets/img/2025/Studio-per-Radici-Olio-su-tela-50x50-cm.jpg",
+        "miniatura": "assets/img/2025/Studio-per-Radici-Olio-su-tela-50x50-cm.jpg"
+      },
+      "titolo": "Studio per Radici",
+      "anno": "2025",
+      "tecnica": "Olio su tela",
+      "dimensioni": "50 × 50 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "camminare-in-consapevolezza-2024",
+      "immagine": {
+        "file": "assets/img/2024/Camminare-in-consapevolezza,-olio-su-tela--51x40cm-.jpg",
+        "miniatura": "assets/img/2024/Camminare-in-consapevolezza,-olio-su-tela--51x40cm-.jpg"
+      },
+      "titolo": "Camminare in consapevolezza",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "51 × 40 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "che-storia-2024",
+      "immagine": {
+        "file": "assets/img/2024/Che-storia,-olio-su-bambo--46x30-cm.jpg",
+        "miniatura": "assets/img/2024/Che-storia,-olio-su-bambo--46x30-cm.jpg"
+      },
+      "titolo": "Che storia",
+      "anno": "2024",
+      "tecnica": "Olio su bambù",
+      "dimensioni": "46 × 30 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "crede-fermamente-2024",
+      "immagine": {
+        "file": "assets/img/2024/Crede-fermamente,-olio-su-tela--122X169cm.jpg",
+        "miniatura": "assets/img/2024/Crede-fermamente,-olio-su-tela--122X169cm.jpg"
+      },
+      "titolo": "Crede fermamente",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "122 × 169 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "l-altro-2024",
+      "immagine": {
+        "file": "assets/img/2024/L'altro,-olio-su-tela--150x125cm.jpg",
+        "miniatura": "assets/img/2024/L'altro,-olio-su-tela--150x125cm.jpg"
+      },
+      "titolo": "L'altro",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "150 × 125 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "l-uomo-che-fuma-2024",
+      "immagine": {
+        "file": "assets/img/2024/L'uomo-che-fuma,-olio-su-carta-115X150cm.jpg",
+        "miniatura": "assets/img/2024/L'uomo-che-fuma,-olio-su-carta-115X150cm.jpg"
+      },
+      "titolo": "L'uomo che fuma",
+      "anno": "2024",
+      "tecnica": "Olio su carta",
+      "dimensioni": "115 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "lasciami-giocare-2024",
+      "immagine": {
+        "file": "assets/img/2024/Lasciami Giocare Olio su tela 170x200 Ultima.jpg",
+        "miniatura": "assets/img/2024/Lasciami Giocare Olio su tela 170x200 Ultima.jpg"
+      },
+      "titolo": "Lasciami giocare",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "170 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "lei-potrebbe-aver-ragione-2024",
+      "immagine": {
+        "file": "assets/img/2024/Lei-potrebbe-aver-ragione,-olio-su--carta--150X200cm.jpg",
+        "miniatura": "assets/img/2024/Lei-potrebbe-aver-ragione,-olio-su--carta--150X200cm.jpg"
+      },
+      "titolo": "Lei potrebbe aver ragione",
+      "anno": "2024",
+      "tecnica": "Olio su carta",
+      "dimensioni": "150 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "lui-2-2024",
+      "immagine": {
+        "file": "assets/img/2024/Lui-2,-olio-su-tela-incollata--70-x-55,5cm.jpg",
+        "miniatura": "assets/img/2024/Lui-2,-olio-su-tela-incollata--70-x-55,5cm.jpg"
+      },
+      "titolo": "Lui 2",
+      "anno": "2024",
+      "tecnica": "Olio su tela incollata",
+      "dimensioni": "70 × 55,5 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "non-ho-capito-2024",
+      "immagine": {
+        "file": "assets/img/2024/Non-ho-capito,-olio-su-carta--112X150cm.jpg",
+        "miniatura": "assets/img/2024/Non-ho-capito,-olio-su-carta--112X150cm.jpg"
+      },
+      "titolo": "Non ho capito",
+      "anno": "2024",
+      "tecnica": "Olio su carta",
+      "dimensioni": "112 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "per-favore-2024",
+      "immagine": {
+        "file": "assets/img/2024/Per-Favore,-olio-su-tela-150x200cm.jpg",
+        "miniatura": "assets/img/2024/Per-Favore,-olio-su-tela-150x200cm.jpg"
+      },
+      "titolo": "Per favore",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "150 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "perche-vuoi-vedere-autoritratto-2024",
+      "immagine": {
+        "file": "assets/img/2024/Perche-vuoi-vedere-autoritratto,olio-su-tela--76x60,5cm.jpg",
+        "miniatura": "assets/img/2024/Perche-vuoi-vedere-autoritratto,olio-su-tela--76x60,5cm.jpg"
+      },
+      "titolo": "Perché vuoi vedere autoritratto",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "76 × 60,5 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "personaggio-2024",
+      "immagine": {
+        "file": "assets/img/2024/Personaggio,olio-su-tela--220X200CM.jpg",
+        "miniatura": "assets/img/2024/Personaggio,olio-su-tela--220X200CM.jpg"
+      },
+      "titolo": "Personaggio",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "220 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "poesia-nuda-2024",
+      "immagine": {
+        "file": "assets/img/2024/Poesia-nuda-,-olio-su-mdf---78,5x-61,2cm.jpg",
+        "miniatura": "assets/img/2024/Poesia-nuda-,-olio-su-mdf---78,5x-61,2cm.jpg"
+      },
+      "titolo": "Poesia nuda",
+      "anno": "2024",
+      "tecnica": "Olio su MDF",
+      "dimensioni": "78,5 × 61,2 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "ritratto-di-lui-2024",
+      "immagine": {
+        "file": "assets/img/2024/Ritratto-di-Lui,-olio-su-multistrato--37X30,5.jpg",
+        "miniatura": "assets/img/2024/Ritratto-di-Lui,-olio-su-multistrato--37X30,5.jpg"
+      },
+      "titolo": "Ritratto di Lui",
+      "anno": "2024",
+      "tecnica": "Olio su multistrato",
+      "dimensioni": "37 × 30,5 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "sono-stato-in-diversi-inferni-2024",
+      "immagine": {
+        "file": "assets/img/2024/Sono-stato-in-diversi-inferni,-olio-su-tela-cartonata,-60x40cm.jpg",
+        "miniatura": "assets/img/2024/Sono-stato-in-diversi-inferni,-olio-su-tela-cartonata,-60x40cm.jpg"
+      },
+      "titolo": "Sono stato in diversi inferni",
+      "anno": "2024",
+      "tecnica": "Olio su tela cartonata",
+      "dimensioni": "60 × 40 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "studio-di-lucian-freud-2024",
+      "immagine": {
+        "file": "assets/img/2024/Studio-di-Lucian-Freud,olio-su-legno,32,2X35,8cm.jpg",
+        "miniatura": "assets/img/2024/Studio-di-Lucian-Freud,olio-su-legno,32,2X35,8cm.jpg"
+      },
+      "titolo": "Studio di Lucian Freud",
+      "anno": "2024",
+      "tecnica": "Olio su legno",
+      "dimensioni": "32,2 × 35,8 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "studio-di-un-ritratto-2024",
+      "immagine": {
+        "file": "assets/img/2024/Studio-di-un-ritratto,-olio-su-tela-95X68cm.jpg",
+        "miniatura": "assets/img/2024/Studio-di-un-ritratto,-olio-su-tela-95X68cm.jpg"
+      },
+      "titolo": "Studio di un ritratto",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "95 × 68 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "studio-per-ti-ricordi-2024",
+      "immagine": {
+        "file": "assets/img/2024/Studio-per-ti-ricordi,olio-sutels-incollata-sul-legno-26,5X30-cm.jpg",
+        "miniatura": "assets/img/2024/Studio-per-ti-ricordi,olio-sutels-incollata-sul-legno-26,5X30-cm.jpg"
+      },
+      "titolo": "Studio per Ti ricordi",
+      "anno": "2024",
+      "tecnica": "Olio su tela incollata su legno",
+      "dimensioni": "26,5 × 30 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "ti-prego-2024",
+      "immagine": {
+        "file": "assets/img/2024/Ti-prego-olio-su-tela-200X240cm.jpg",
+        "miniatura": "assets/img/2024/Ti-prego-olio-su-tela-200X240cm.jpg"
+      },
+      "titolo": "Ti prego",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 240 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "ti-ricordi-2024",
+      "immagine": {
+        "file": "assets/img/2024/Ti-ricordi,-olio-su-carta--120X150cm.jpg",
+        "miniatura": "assets/img/2024/Ti-ricordi,-olio-su-carta--120X150cm.jpg"
+      },
+      "titolo": "Ti ricordi",
+      "anno": "2024",
+      "tecnica": "Olio su carta",
+      "dimensioni": "120 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "tutti-d-acciaio-2024",
+      "immagine": {
+        "file": "assets/img/2024/Tutti-d'acciaio,-olio-su-tela-120X200-cm.jpg",
+        "miniatura": "assets/img/2024/Tutti-d'acciaio,-olio-su-tela-120X200-cm.jpg"
+      },
+      "titolo": "Tutti d'acciaio",
+      "anno": "2024",
+      "tecnica": "Olio su tela",
+      "dimensioni": "120 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "esausto-2023",
+      "immagine": {
+        "file": "assets/img/2023/Esausto,--olio-su-tela,-135x200-cm.jpg",
+        "miniatura": "assets/img/2023/Esausto,--olio-su-tela,-135x200-cm.jpg"
+      },
+      "titolo": "Esausto",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "135 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "donna-con-il-fuoco-2023",
+      "immagine": {
+        "file": "assets/img/2023/Donna-con-il-fuoco,-olio-su-tela-170x-200-cm.jpg",
+        "miniatura": "assets/img/2023/Donna-con-il-fuoco,-olio-su-tela-170x-200-cm.jpg"
+      },
+      "titolo": "Donna con il fuoco",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "170 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "loro-2023",
+      "immagine": {
+        "file": "assets/img/2023/loro,-olio-su-tela---150x200-cm.jpg",
+        "miniatura": "assets/img/2023/loro,-olio-su-tela---150x200-cm.jpg"
+      },
+      "titolo": "Loro",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "150 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": true,
+      "in_galleria_3d": true
+    },
+    {
+      "id": "senza-colpa-2023",
+      "immagine": {
+        "file": "assets/img/2023/Senza Colpa, olio su tela 130x200cm.jpg",
+        "miniatura": "assets/img/2023/Senza Colpa, olio su tela 130x200cm.jpg"
+      },
+      "titolo": "Senza Colpa",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "130 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "lui-2023",
+      "immagine": {
+        "file": "assets/img/2023/Lui---Olio-su-tela---124,5x142-cm.jpg",
+        "miniatura": "assets/img/2023/Lui---Olio-su-tela---124,5x142-cm.jpg"
+      },
+      "titolo": "Lui",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "124,5 × 142 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "chiara-e-il-fuoco-2023",
+      "immagine": {
+        "file": "assets/img/2023/Chiara-e-il-fuoco,-olio-su-tela--150X200cm.jpg",
+        "miniatura": "assets/img/2023/Chiara-e-il-fuoco,-olio-su-tela--150X200cm.jpg"
+      },
+      "titolo": "Chiara e il fuoco",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "150 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "lui-2-2023",
+      "immagine": {
+        "file": "assets/img/2023/Lui2-S.jpg",
+        "miniatura": "assets/img/2023/Lui2-S.jpg"
+      },
+      "titolo": "Lui 2",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "mi-domando-se-2023",
+      "immagine": {
+        "file": "assets/img/2023/Mi-domando-se,-olio-su-tela--91-x70-cm.jpg",
+        "miniatura": "assets/img/2023/Mi-domando-se,-olio-su-tela--91-x70-cm.jpg"
+      },
+      "titolo": "Mi domando se",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "91 × 70 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "studio-di-lucian-freud-2023",
+      "immagine": {
+        "file": "assets/img/2023/Studio di Lucian Freud,olio su legno,32,2X35,8cm.jpeg",
+        "miniatura": "assets/img/2023/Studio di Lucian Freud,olio su legno,32,2X35,8cm.jpeg"
+      },
+      "titolo": "Studio di Lucian Freud",
+      "anno": "2023",
+      "tecnica": "Olio su legno",
+      "dimensioni": "32,2 × 35,8 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "studio-di-un-ritratto-2023",
+      "immagine": {
+        "file": "assets/img/2023/Studio-di-un-ritratto,-olio-su-tela-95X68cm.jpg",
+        "miniatura": "assets/img/2023/Studio-di-un-ritratto,-olio-su-tela-95X68cm.jpg"
+      },
+      "titolo": "Studio di un ritratto",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "95 × 68 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "studio-di-van-gogh-2023",
+      "immagine": {
+        "file": "assets/img/2023/Studio-di-van-gogh-,-olio-su-carta--95x65cm.jpg",
+        "miniatura": "assets/img/2023/Studio-di-van-gogh-,-olio-su-carta--95x65cm.jpg"
+      },
+      "titolo": "Studio di Van Gogh",
+      "anno": "2023",
+      "tecnica": "Olio su carta",
+      "dimensioni": "95 × 65 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "autoritratto-2023",
+      "immagine": {
+        "file": "assets/img/2023/autoritratto,-olio-su-tela-40X60cm.jpg",
+        "miniatura": "assets/img/2023/autoritratto,-olio-su-tela-40X60cm.jpg"
+      },
+      "titolo": "Autoritratto",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "40 × 60 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "autoritratto-2023-2",
+      "immagine": {
+        "file": "assets/img/2023/Autoritratto-olio-su-tela200x110cm.jpg",
+        "miniatura": "assets/img/2023/Autoritratto-olio-su-tela200x110cm.jpg"
+      },
+      "titolo": "Autoritratto",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 110 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "autoritratto-2023-3",
+      "immagine": {
+        "file": "assets/img/2023/Auturitratto,-olio-su-tela-54X70-cm.jpg",
+        "miniatura": "assets/img/2023/Auturitratto,-olio-su-tela-54X70-cm.jpg"
+      },
+      "titolo": "Autoritratto",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "54 × 70 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "chiara-2023",
+      "immagine": {
+        "file": "assets/img/2023/Chiara,-olio-su-tela--120,5x150cm.jpg",
+        "miniatura": "assets/img/2023/Chiara,-olio-su-tela--120,5x150cm.jpg"
+      },
+      "titolo": "Chiara",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "120,5 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "il-pittore-e-il-muro-2023",
+      "immagine": {
+        "file": "assets/img/2023/Il-pittore-e-il-muro,-olio-su-tela--224X200cm.jpg",
+        "miniatura": "assets/img/2023/Il-pittore-e-il-muro,-olio-su-tela--224X200cm.jpg"
+      },
+      "titolo": "Il Pittore e il Muro",
+      "anno": "2023",
+      "tecnica": "Olio su tela",
+      "dimensioni": "224 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "ghiaccio",
+      "immagine": {
+        "file": "assets/img/earlier-works/Ghiaccio - Olio su tela - 240x200 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Ghiaccio - Olio su tela - 240x200 cm.jpg"
+      },
+      "titolo": "Ghiaccio",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "240 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "serie-12-apostoli",
+      "immagine": {
+        "file": "assets/img/earlier-works/Serie 12 Apostoli Olio su tela 100x150 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Serie 12 Apostoli Olio su tela 100x150 cm.jpg"
+      },
+      "titolo": "Serie 12 Apostoli",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "100 × 150 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "miele-vetro-sabbiato",
+      "immagine": {
+        "file": "assets/img/earlier-works/Miele vetro sabbiato.jpg",
+        "miniatura": "assets/img/earlier-works/Miele vetro sabbiato.jpg"
+      },
+      "titolo": "Miele vetro sabbiato",
+      "anno": "",
+      "tecnica": "",
+      "dimensioni": "",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo",
+      "immagine": {
+        "file": "assets/img/earlier-works/Miele, macerie, chiodi da muratore, vetro e legno 40x30 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Miele, macerie, chiodi da muratore, vetro e legno 40x30 cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Miele, macerie, chiodi da muratore, vetro e legno",
+      "dimensioni": "40 × 30 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "jolly",
+      "immagine": {
+        "file": "assets/img/earlier-works/Jolly-miele, macerie, carta da gioco, vetro e legno 50x40 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Jolly-miele, macerie, carta da gioco, vetro e legno 50x40 cm.jpg"
+      },
+      "titolo": "Jolly",
+      "anno": "",
+      "tecnica": "Miele, macerie, carta da gioco, vetro e legno",
+      "dimensioni": "50 × 40 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "fanculosierotto",
+      "immagine": {
+        "file": "assets/img/earlier-works/fanculosièrotto- Corna animali, vetroresina, legno.jpg",
+        "miniatura": "assets/img/earlier-works/fanculosièrotto- Corna animali, vetroresina, legno.jpg"
+      },
+      "titolo": "fanculosièrotto",
+      "anno": "",
+      "tecnica": "Corna animali, vetroresina, legno",
+      "dimensioni": "",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "scusi",
+      "immagine": {
+        "file": "assets/img/earlier-works/Scusi - Pane a legno.jpg",
+        "miniatura": "assets/img/earlier-works/Scusi - Pane a legno.jpg"
+      },
+      "titolo": "Scusi",
+      "anno": "",
+      "tecnica": "Pane a legno",
+      "dimensioni": "",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-2",
+      "immagine": {
+        "file": "assets/img/earlier-works/Senza titolo - sigarette, miele, sapone di marsiglia, vetro e legno 40x30 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Senza titolo - sigarette, miele, sapone di marsiglia, vetro e legno 40x30 cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Sigarette, miele, sapone di Marsiglia, vetro e legno",
+      "dimensioni": "40 × 30 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "si-prega-di-chiudere-il-cancello-per-spedizione-",
+      "immagine": {
+        "file": "assets/img/earlier-works/Si prega di chiudere il cancello per spedizione e ricevimento - istallazione scarpe, erba, crocefisso, scritta sul muro.jpg",
+        "miniatura": "assets/img/earlier-works/Si prega di chiudere il cancello per spedizione e ricevimento - istallazione scarpe, erba, crocefisso, scritta sul muro.jpg"
+      },
+      "titolo": "Si prega di chiudere il cancello per spedizione e ricevimento",
+      "anno": "",
+      "tecnica": "Installazione: scarpe, erba, crocefisso, scritta sul muro",
+      "dimensioni": "",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "ti-prego",
+      "immagine": {
+        "file": "assets/img/earlier-works/Ti prego, smalto su vetro intagliato su legno.jpg",
+        "miniatura": "assets/img/earlier-works/Ti prego, smalto su vetro intagliato su legno.jpg"
+      },
+      "titolo": "Ti prego",
+      "anno": "",
+      "tecnica": "Smalto su vetro intagliato su legno",
+      "dimensioni": "",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "dove",
+      "immagine": {
+        "file": "assets/img/earlier-works/Dove Olio su tela 200x240 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Dove Olio su tela 200x240 cm.jpg"
+      },
+      "titolo": "Dove",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 240 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "ho-pensato-a-lei-molto-spesso",
+      "immagine": {
+        "file": "assets/img/earlier-works/Ho pensato a lei molto spesso 200x265 olio su tela.jpg",
+        "miniatura": "assets/img/earlier-works/Ho pensato a lei molto spesso 200x265 olio su tela.jpg"
+      },
+      "titolo": "Ho pensato a lei molto spesso",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 265 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "il-seminatore-usci-a-seminare",
+      "immagine": {
+        "file": "assets/img/earlier-works/Il seminatore usci a seminare-Olio su tela 240x200cm.jpg",
+        "miniatura": "assets/img/earlier-works/Il seminatore usci a seminare-Olio su tela 240x200cm.jpg"
+      },
+      "titolo": "Il seminatore usci a seminare",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "240 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "io",
+      "immagine": {
+        "file": "assets/img/earlier-works/Io-olio-su-tela-280x300-cm-696x613.jpg",
+        "miniatura": "assets/img/earlier-works/Io-olio-su-tela-280x300-cm-696x613.jpg"
+      },
+      "titolo": "Io",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "280 × 300 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "loro-2",
+      "immagine": {
+        "file": "assets/img/earlier-works/Loro 2 Olio su tela 200x450 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Loro 2 Olio su tela 200x450 cm.jpg"
+      },
+      "titolo": "Loro 2",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 450 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "loro",
+      "immagine": {
+        "file": "assets/img/earlier-works/Loro Olio su tela 200x450 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Loro Olio su tela 200x450 cm.jpg"
+      },
+      "titolo": "Loro",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 450 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "mi-son-perso-navigando",
+      "immagine": {
+        "file": "assets/img/earlier-works/Mi son perso navigando Olio su tela 200x220 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Mi son perso navigando Olio su tela 200x220 cm.jpg"
+      },
+      "titolo": "Mi son perso navigando",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "200 × 220 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-3",
+      "immagine": {
+        "file": "assets/img/earlier-works/Senza titolo - Olio su carta 100x70 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Senza titolo - Olio su carta 100x70 cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Olio su carta",
+      "dimensioni": "100 × 70 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-4",
+      "immagine": {
+        "file": "assets/img/earlier-works/Senza titolo - olio su tela 240x200cm.jpg",
+        "miniatura": "assets/img/earlier-works/Senza titolo - olio su tela 240x200cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "240 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-5",
+      "immagine": {
+        "file": "assets/img/earlier-works/Senza titolo Olio su tela 150x200 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Senza titolo Olio su tela 150x200 cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "150 × 200 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-6",
+      "immagine": {
+        "file": "assets/img/earlier-works/Senza titolo Olio su tela 40,6x30,5 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Senza titolo Olio su tela 40,6x30,5 cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Olio su tela",
+      "dimensioni": "40,6 × 30,5 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-7",
+      "immagine": {
+        "file": "assets/img/earlier-works/Senza titolo- Collage e olio su mdf 50x70 cm.jpg",
+        "miniatura": "assets/img/earlier-works/Senza titolo- Collage e olio su mdf 50x70 cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Collage e olio su MDF",
+      "dimensioni": "50 × 70 cm",
+      "descrizione": "",
+      "stato": "",
+      "selezionata": false,
+      "in_galleria_3d": false
+    },
+    {
+      "id": "senza-titolo-8",
+      "immagine": {
+        "file": "assets/img/earlier-works/Senza titolo-Olio su tela- 150x100cm.jpg",
+        "miniatura": "assets/img/earlier-works/Senza titolo-Olio su tela- 150x100cm.jpg"
+      },
+      "titolo": "Senza titolo",
+      "anno": "",
+      "tecnica": "Olio su tela",
       "dimensioni": "150 × 100 cm",
       "descrizione": "",
-      "stato": "Collezione privata",
-      "in_evidenza": true,
-      "in_galleria_3d": true
-    },
-    {
-      "id": "esempio-06",
-      "immagine": {
-        "file": "immagini/esempi/esempio-06.jpg",
-        "miniatura": "immagini/esempi/esempio-06-min.jpg",
-        "larghezza": 1200,
-        "altezza": 1600
-      },
-      "titolo": "Opera di esempio 6",
-      "anno": "2022",
-      "tecnica": "Olio su tela",
-      "dimensioni": "90 × 120 cm",
-      "descrizione": "",
       "stato": "",
-      "in_evidenza": true,
-      "in_galleria_3d": true
-    },
-    {
-      "id": "esempio-07",
-      "immagine": {
-        "file": "immagini/esempi/esempio-07.jpg",
-        "miniatura": "immagini/esempi/esempio-07-min.jpg",
-        "larghezza": 1400,
-        "altezza": 1400
-      },
-      "titolo": "Opera di esempio 7",
-      "anno": "2023",
-      "tecnica": "Acrilico su tela",
-      "dimensioni": "100 × 100 cm",
-      "descrizione": "",
-      "stato": "Disponibile",
-      "in_evidenza": true,
-      "in_galleria_3d": true
-    },
-    {
-      "id": "esempio-08",
-      "immagine": {
-        "file": "immagini/esempi/esempio-08.jpg",
-        "miniatura": "immagini/esempi/esempio-08-min.jpg",
-        "larghezza": 1500,
-        "altezza": 1000
-      },
-      "titolo": "Opera di esempio 8",
-      "anno": "2024",
-      "tecnica": "Tecnica mista su tavola",
-      "dimensioni": "120 × 80 cm",
-      "descrizione": "",
-      "stato": "Collezione privata",
-      "in_evidenza": false,
-      "in_galleria_3d": true
-    },
-    {
-      "id": "esempio-09",
-      "immagine": {
-        "file": "immagini/esempi/esempio-09.jpg",
-        "miniatura": "immagini/esempi/esempio-09-min.jpg",
-        "larghezza": 1100,
-        "altezza": 1400
-      },
-      "titolo": "Opera di esempio 9",
-      "anno": "2016",
-      "tecnica": "Olio su tela",
-      "dimensioni": "70 × 90 cm",
-      "descrizione": "",
-      "stato": "",
-      "in_evidenza": false,
-      "in_galleria_3d": true
-    },
-    {
-      "id": "esempio-10",
-      "immagine": {
-        "file": "immagini/esempi/esempio-10.jpg",
-        "miniatura": "immagini/esempi/esempio-10-min.jpg",
-        "larghezza": 1600,
-        "altezza": 1200
-      },
-      "titolo": "Opera di esempio 10",
-      "anno": "2017",
-      "tecnica": "Acrilico su tela",
-      "dimensioni": "160 × 120 cm",
-      "descrizione": "",
-      "stato": "Disponibile",
-      "in_evidenza": false,
-      "in_galleria_3d": true
+      "selezionata": false,
+      "in_galleria_3d": false
     }
   ],
   "mostre": [
     {
-      "id": "mostra-esempio-1",
+      "id": "nei-colori-di-francesco-2026",
+      "anno": "2026",
+      "data": "07/06/2026",
+      "titolo": "Nei colori di Francesco",
+      "tipo": "",
+      "luogo": "Convento di Ganghereto, Terranuova Bracciolini",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "oversize-2026",
+      "anno": "2026",
+      "data": "11/02/2026",
+      "titolo": "Oversize",
+      "tipo": "Group exhibition",
+      "luogo": "Satura, Genova",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "ndodhi-te-perjetuara-2026",
+      "anno": "2026",
+      "data": "21/03/2026",
+      "titolo": "Ndodhi të Përjetuara",
+      "tipo": "",
+      "luogo": "MAG – Design • Art • Living, Tirana",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "salon-des-refuses-2025",
       "anno": "2025",
-      "titolo": "Titolo della mostra personale",
-      "luogo": "Galleria, Città",
-      "tipo": "Personale",
+      "data": "29/11/2025",
+      "titolo": "Salon des refusés",
+      "tipo": "Group exhibition",
+      "luogo": "Gare82 Gallery, Brescia",
       "descrizione": "",
+      "foto": [],
       "link": ""
     },
     {
-      "id": "mostra-esempio-2",
+      "id": "oltre-il-nome-2025",
+      "anno": "2025",
+      "data": "27/10/2025",
+      "titolo": "Oltre il Nome",
+      "tipo": "Group exhibition",
+      "luogo": "Onartgallery, Florence",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "giotto-award-2025",
+      "anno": "2025",
+      "data": "09/06/2025",
+      "titolo": "Giotto Award",
+      "tipo": "Award",
+      "luogo": "Fondazione Effetto Arte, Florence",
+      "descrizione": "Selected and participated.",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "studiocolditz33-2025",
+      "anno": "2025",
+      "data": "25/04/2025",
+      "titolo": "STUDIOCOLDITZ33",
+      "tipo": "Solo exhibition",
+      "luogo": "Berlin",
+      "descrizione": "",
+      "foto": [
+        {
+          "file": "assets/img/StudioColditz33-1.jpg",
+          "miniatura": "assets/img/StudioColditz33-1.jpg"
+        },
+        {
+          "file": "assets/img/StudioColditz33-3.jpg",
+          "miniatura": "assets/img/StudioColditz33-3.jpg"
+        }
+      ],
+      "link": ""
+    },
+    {
+      "id": "corrispondenze-2025",
+      "anno": "2025",
+      "data": "22/03/2025",
+      "titolo": "Corrispondenze",
+      "tipo": "Group exhibition",
+      "luogo": "Onartgallery, Florence",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "habitat-2025",
+      "anno": "2025",
+      "data": "22/02/2025",
+      "titolo": "Habitat",
+      "tipo": "Group exhibition",
+      "luogo": "Onartgallery, Florence",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "loro-2024",
       "anno": "2024",
-      "titolo": "Titolo della mostra collettiva",
-      "luogo": "Museo, Città",
-      "tipo": "Collettiva",
+      "data": "09/02/2024",
+      "titolo": "Loro",
+      "tipo": "Solo exhibition",
+      "luogo": "Ortaccio Spazio Culturale, Vico Pisano",
       "descrizione": "",
+      "foto": [],
       "link": ""
     },
     {
-      "id": "mostra-esempio-3",
-      "anno": "2024",
-      "titolo": "Nome del premio",
-      "luogo": "Città",
-      "tipo": "Premio",
-      "descrizione": "Segnalazione della giuria.",
+      "id": "art-for-interior-2014",
+      "anno": "2014",
+      "data": "",
+      "titolo": "Art for Interior",
+      "tipo": "",
+      "luogo": "Collettivo Ansia, Milan",
+      "descrizione": "",
+      "foto": [],
       "link": ""
     },
     {
-      "id": "mostra-esempio-4",
-      "anno": "2022",
-      "titolo": "Titolo di un'altra mostra",
-      "luogo": "Spazio espositivo, Città",
-      "tipo": "Collettiva",
+      "id": "galleria-bagutta-2011",
+      "anno": "2011",
+      "data": "",
+      "titolo": "Galleria Bagutta",
+      "tipo": "Group exhibition",
+      "luogo": "Milan",
       "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "collettivo-ansia-2010",
+      "anno": "2010",
+      "data": "",
+      "titolo": "Collettivo Ansia",
+      "tipo": "",
+      "luogo": "Trezzo sull’Adda",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "no-war-please-2010",
+      "anno": "2010",
+      "data": "",
+      "titolo": "No war, please!",
+      "tipo": "",
+      "luogo": "Circolo Culturale Bertolt Brecht, Milan",
+      "descrizione": "Curated by Anna Epis and Aldo Torrebruno.",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "pero-piero-2009",
+      "anno": "2009",
+      "data": "",
+      "titolo": "Pero Piero",
+      "tipo": "Group exhibition",
+      "luogo": "Arezzo",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "young-artists-award-2008",
+      "anno": "2008",
+      "data": "",
+      "titolo": "Young Artists Award",
+      "tipo": "Award",
+      "luogo": "Arezzo",
+      "descrizione": "",
+      "foto": [],
+      "link": ""
+    },
+    {
+      "id": "galleria-signorelli-2007",
+      "anno": "2007",
+      "data": "",
+      "titolo": "Galleria Signorelli",
+      "tipo": "Solo exhibition",
+      "luogo": "Cortona",
+      "descrizione": "",
+      "foto": [],
       "link": ""
     }
   ],
   "critica": [
     {
-      "id": "critica-esempio-1",
-      "titolo": "Titolo del testo critico",
-      "autore": "Nome del critico",
-      "tipo": "Testo critico",
-      "fonte": "Catalogo della mostra",
-      "data": "2025",
-      "testo": "Qui va il testo critico completo. Sul sito compare un'anteprima delle prime righe; cliccando si apre il testo intero in una finestra di lettura.\n\nOgni riga vuota separa due paragrafi, come in questo esempio.\n\nI testi possono essere lunghi quanto serve.",
+      "id": "tension-of-vision",
+      "immagine": {
+        "file": "assets/img/ElidonMucajArticoloStefano.jpg",
+        "miniatura": "assets/img/ElidonMucajArticoloStefano.jpg"
+      },
+      "titolo": "Elidon Muçaj: The Tension of Vision, The Power of Colour",
+      "autore": "Stefano Duranti Poccetti",
+      "tipo": "Article",
+      "fonte": "",
+      "data": "",
+      "testo": "Elidon Muçaj is an Albanian painter with an intense and vibrant poetic vision. His works dig deep into the human soul, combining expressive strength with a high emotional tension, perceived from the very first glance. The painting becomes a battlefield between reality and vision, the visible and the invisible, where nothing is ever fully resolved...",
+      "documento": "assets/Elidon Mucaj di Stefano Duranti Poccetti.docx.pdf",
       "link": ""
     },
     {
-      "id": "critica-esempio-2",
-      "titolo": "Titolo di un articolo di giornale",
-      "autore": "Nome del giornalista",
-      "tipo": "Articolo",
-      "fonte": "Nome della testata",
-      "data": "Marzo 2024",
-      "testo": "Breve estratto dell'articolo. Se l'articolo è online, inserisci il link: sul sito comparirà il pulsante per leggerlo sulla testata.",
-      "link": ""
+      "id": "muca-abyss",
+      "immagine": {
+        "file": "assets/img/Io-olio-su-tela-280x300-cm-696x613.jpg",
+        "miniatura": "assets/img/Io-olio-su-tela-280x300-cm-696x613.jpg"
+      },
+      "titolo": "Muca — When Painting Digs into the Abyss Within Us",
+      "autore": "Stefano Duranti Poccetti",
+      "tipo": "Article",
+      "fonte": "Il Giornale OFF",
+      "data": "02/07/2022",
+      "testo": "Elidon Mucaj's painting does not merely depict the surface: it digs into the deep layers of human experience, reopening wounds and memories that become taut, living pictorial matter. The gestures of colour open fissures into the abyss of emotion, transforming figures and landscapes into symbols of fragility and resilience. The viewer is invited to confront what survives beneath the surface, between abandonment and the possibility of rebirth.",
+      "documento": "",
+      "link": "https://www.ilgiornaleoff.it/2022/07/02/muca-quando-la-pittura-scava-nellabisso-che-e-in-noi/"
     },
     {
-      "id": "critica-esempio-3",
-      "titolo": "Titolo di un'intervista",
-      "autore": "Nome dell'intervistatore",
-      "tipo": "Intervista",
-      "fonte": "Rivista o programma",
-      "data": "2023",
-      "testo": "Domanda e risposta di esempio.\n\nAnche le interviste si leggono nella finestra di lettura.",
+      "id": "esausto-pandolfini",
+      "immagine": {
+        "file": "assets/img/portfolio/Esausto--olio-su-tela-135x200-cm.jpg",
+        "miniatura": "assets/img/portfolio/Esausto--olio-su-tela-135x200-cm.jpg"
+      },
+      "titolo": "Esausto",
+      "autore": "Gian Mauro Sales Pandolfini",
+      "tipo": "Critical text",
+      "fonte": "Fondazione Effetto Arte, Palazzo Borghese, Florence",
+      "data": "14 June 2025",
+      "testo": "Elidon Mucaj bravely tackles the theme of human fragility, bringing to the canvas a naked, curled figure immersed in a natural setting that is as lush as it is alien. The body, bent and vulnerable, is rendered in muted tones and with expressive brushstrokes, while the background bursts with vegetation and vivid colours. The oil is applied thickly, creating a living materiality that reinforces the contrast between the energy of nature and the inertia of man. The large prickly pear cactus (Opuntia), a symbol of resistance and survival, towers over a body that seems about to dissolve. In this way the artist constructs a visual drama without rhetoric: the body is there, real, exposed and without defence. There is no judgement or pity, only observation. Elidon conveys the struggle of existence, the isolation, but also the possibility of rebirth through confrontation with the earth. The work becomes a visual meditation on abandonment and resilience.",
+      "documento": "",
       "link": ""
     }
   ],
+  "eventi": [
+    {
+      "id": "instagram-droxv7idhq5",
+      "link": "https://www.instagram.com/p/DRoxv7IDHq5/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    },
+    {
+      "id": "instagram-duaqidpdagg",
+      "link": "https://www.instagram.com/p/DUaQiDpDAGG/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    },
+    {
+      "id": "instagram-dwbwe48deqx",
+      "link": "https://www.instagram.com/p/DWBwE48DEQx/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    },
+    {
+      "id": "instagram-dx98zxfm7bw",
+      "link": "https://www.instagram.com/p/DX98zxfM7bw/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    },
+    {
+      "id": "instagram-dij5v0ca0th",
+      "link": "https://www.instagram.com/p/DIj5v0CA0th/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    },
+    {
+      "id": "instagram-dglnm-dovla",
+      "link": "https://www.instagram.com/p/DGLnm_doVLa/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    },
+    {
+      "id": "instagram-c2o9fymovzv",
+      "link": "https://www.instagram.com/p/C2o9FYMoVzv/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    },
+    {
+      "id": "instagram-dpblw3vjkgw",
+      "link": "https://www.instagram.com/p/DPBLw3vjKGw/",
+      "titolo": "",
+      "data": "",
+      "luogo": "",
+      "descrizione": "",
+      "immagine": null
+    }
+  ],
   "contatti": {
-    "invito": "Per informazioni sulle opere, acquisizioni e mostre, scrivimi.",
-    "email": "info@example.com",
-    "telefono": "",
+    "invito": "For enquiries about artworks, exhibitions and collaborations, please get in touch.",
+    "email": "mucajelidon76@gmail.com",
+    "telefono": "+39 328 775 2217",
     "studio": "",
+    "portfolio": "assets/Portfolio-Elidon_Mucaj_2025.pdf",
+    "portfolio_etichetta": "Download Portfolio ENG",
     "instagram": "",
     "facebook": "",
     "youtube": ""

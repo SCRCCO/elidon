@@ -22,29 +22,52 @@ export function avvia(contenitore, opere, { suClic } = {}) {
   const anello = new THREE.Group();
   scena.add(anello);
 
-  const caricatore = new THREE.TextureLoader();
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
   const cache = new Map();
   const quadri = [];
+  const lungo = 1.75;
+  // Dimensioni del quadro dalle proporzioni della foto (lato lungo = «lungo»).
+  const misure = (rapporto) => (rapporto >= 1 ? [lungo, lungo / rapporto] : [lungo * rapporto, lungo]);
+
+  // Le foto vengono ridotte: nella prima schermata 800 pixel bastano e il telefono non si affatica.
+  const carica = (url) => new Promise((risolvi, rifiuta) => {
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      const scala = Math.min(1, 800 / Math.max(img.naturalWidth, img.naturalHeight));
+      let sorgente = img;
+      if (scala < 1) {
+        sorgente = document.createElement('canvas');
+        sorgente.width = Math.round(img.naturalWidth * scala);
+        sorgente.height = Math.round(img.naturalHeight * scala);
+        sorgente.getContext('2d').drawImage(img, 0, 0, sorgente.width, sorgente.height);
+      }
+      const t = new THREE.Texture(sorgente);
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = Math.min(4, maxAniso);
+      t.needsUpdate = true;
+      risolvi({ texture: t, rapporto: img.naturalWidth / img.naturalHeight });
+    };
+    img.onerror = rifiuta;
+    img.src = url;
+  });
 
   posti.forEach((opera, i) => {
     const img = opera.immagine;
-    const rapporto = img.larghezza && img.altezza ? img.larghezza / img.altezza : 0.8;
-    const lungo = 1.75;
-    const w = rapporto >= 1 ? lungo : lungo * rapporto;
-    const h = rapporto >= 1 ? lungo / rapporto : lungo;
+    const [w, h] = misure(img.larghezza && img.altezza ? img.larghezza / img.altezza : 0.8);
     // Materiali propri per ogni quadro: servono a farlo svanire quando si gira di spalle.
     const fronte = new THREE.MeshBasicMaterial({ color: 0x2a2724, transparent: true });
     const lati = new THREE.MeshBasicMaterial({ color: 0x1d1b19, transparent: true });
-    if (!cache.has(img.miniatura)) {
-      cache.set(img.miniatura, caricatore.loadAsync(img.miniatura).then((t) => {
-        t.colorSpace = THREE.SRGBColorSpace;
-        t.anisotropy = Math.min(4, maxAniso);
-        return t;
-      }));
-    }
-    cache.get(img.miniatura).then((t) => { fronte.map = t; fronte.color.set(0xffffff); fronte.needsUpdate = true; }).catch(() => {});
-    const tela = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.05), [lati, lati, lati, lati, fronte, lati]);
+    const tela = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.05), [lati, lati, lati, lati, fronte, lati]);
+    tela.scale.set(w, h, 1);
+    if (!cache.has(img.miniatura)) cache.set(img.miniatura, carica(img.miniatura));
+    cache.get(img.miniatura).then(({ texture, rapporto }) => {
+      fronte.map = texture;
+      fronte.color.set(0xffffff);
+      fronte.needsUpdate = true;
+      const [w2, h2] = misure(rapporto);
+      tela.scale.set(w2, h2, 1);
+    }).catch(() => { quadro.userData.mancante = true; });
     const angolo = (i / posti.length) * Math.PI * 2;
     const quadro = new THREE.Group();
     quadro.add(tela);
@@ -165,7 +188,7 @@ export function avvia(contenitore, opere, { suClic } = {}) {
       normale.set(0, 0, 1).applyQuaternion(q.getWorldQuaternion(new THREE.Quaternion()));
       verso.copy(camera.position).sub(posMondo).normalize();
       const fronte = THREE.MathUtils.smoothstep(normale.dot(verso), -0.05, 0.4);
-      q.visible = fronte > 0.01;
+      q.visible = fronte > 0.01 && !d.mancante;
       for (const m of d.materiali) m.opacity = fronte;
       q.position.y = d.base + Math.sin(t * 0.6 + d.fase) * 0.06;
       d.scala += ((q === sopra ? 1.07 : 1) - d.scala) * 0.12;

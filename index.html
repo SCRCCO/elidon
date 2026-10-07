@@ -1,124 +1,156 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Elidon Mucaj — Pittore</title>
-  <meta name="description" content="Elidon Mucaj, pittore. Opere, mostre, testi critici e contatti.">
+  <title>Elidon Muçaj — Painter · Visual Artist · Storyteller</title>
+  <meta name="description" content="Elidon Muçaj (Vlorë, 1976) is a contemporary painter and visual artist living and working in Tuscany. Paintings, artistic research, exhibitions, reviews and contacts.">
   <meta name="theme-color" content="#0f0e0d">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Elidon Mucaj — Pittore">
-  <meta property="og:description" content="Elidon Mucaj, pittore. Opere, mostre, testi critici e contatti.">
+  <meta property="og:title" content="Elidon Muçaj — Painter · Visual Artist · Storyteller">
+  <meta property="og:description" content="Elidon Muçaj (Vlorë, 1976) is a contemporary painter and visual artist living and working in Tuscany.">
   <meta property="og:url" content="https://www.elidonmucaj.art/">
   <link rel="canonical" href="https://www.elidonmucaj.art/">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="contenuti/sito.json" as="fetch" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=1">
+  <link rel="stylesheet" href="assets/css/style.css?v=2">
   <script type="importmap">
     { "imports": { "three": "./assets/vendor/three/three.min.js" } }
   </script>
-  <script type="module" src="assets/js/main.js?v=1"></script>
+  <script type="module" src="assets/js/main.js?v=2"></script>
 </head>
 <body>
-  <a class="salta" href="#opere">Vai alle opere</a>
+  <a class="salta" href="#portfolio">Skip to the paintings</a>
 
   <header class="testata" data-testata>
-    <a class="testata__nome" href="#home" data-testo="sito.nome">Elidon Mucaj</a>
+    <a class="testata__nome" href="#hero" data-testo="sito.nome">Elidon Muçaj</a>
     <button class="testata__menu" type="button" aria-expanded="false" aria-controls="navigazione" data-menu>
       <span class="sr">Menu</span><span aria-hidden="true"></span>
     </button>
-    <nav class="testata__nav" id="navigazione" aria-label="Sezioni">
-      <a href="#opere">Opere</a>
-      <a href="#galleria-3d">Galleria 3D</a>
-      <a href="#biografia">Biografia</a>
-      <a href="#mostre">Mostre</a>
-      <a href="#critica-articoli">Critica</a>
-      <a href="#contatti">Contatti</a>
+    <nav class="testata__nav" id="navigazione" aria-label="Sections">
+      <a href="#portfolio">Paintings</a>
+      <a href="#gallery-3d">3D Gallery</a>
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#curriculum">Curriculum</a>
+      <a href="#critica-articoli">Reviews</a>
+      <a href="#events">Events</a>
+      <a href="#contact">Contact</a>
     </nav>
   </header>
 
   <main>
-    <section class="apertura" id="home" aria-label="Apertura">
+    <section class="apertura" id="hero" aria-label="Introduction">
       <div class="apertura__scena" data-scena-apertura aria-hidden="true"></div>
       <div class="apertura__testo">
         <p class="apertura__professione" data-testo="sito.professione"></p>
-        <h1 class="apertura__nome" data-testo="sito.nome">Elidon Mucaj</h1>
+        <h1 class="apertura__nome" data-testo="sito.nome">Elidon Muçaj</h1>
         <p class="apertura__frase" data-testo="sito.frase_apertura"></p>
         <div class="apertura__azioni">
-          <a class="bottone bottone--chiaro" href="#opere">Scopri le opere</a>
-          <button class="bottone bottone--trasparente" type="button" data-apri-galleria>Entra nella galleria 3D</button>
+          <a class="bottone bottone--chiaro" href="#portfolio">See the paintings</a>
+          <button class="bottone bottone--trasparente" type="button" data-apri-galleria>Enter the 3D gallery</button>
         </div>
       </div>
-      <a class="apertura__scorri" href="#opere" aria-label="Scorri alle opere"><span></span></a>
+      <a class="apertura__scorri" href="#portfolio" aria-label="Scroll to the paintings"><span></span></a>
     </section>
 
-    <section class="sezione" id="opere">
+    <section class="sezione" id="portfolio">
       <div class="contenitore">
         <header class="sezione__testa">
           <p class="sezione__numero">01</p>
-          <h2 class="sezione__titolo">Opere</h2>
+          <h2 class="sezione__titolo">Paintings</h2>
         </header>
-        <div class="filtri" role="group" aria-label="Filtra le opere" data-filtri></div>
-        <ul class="griglia" data-griglia-opere></ul>
+        <div class="filtri" role="group" aria-label="Filter the paintings" data-filtri></div>
+        <div class="griglia" data-griglia-opere></div>
       </div>
     </section>
 
-    <section class="sezione sezione--scura" id="galleria-3d">
+    <section class="sezione sezione--scura" id="gallery-3d">
       <div class="contenitore invito-3d">
         <div class="invito-3d__testo">
           <p class="sezione__numero">02</p>
-          <h2 class="sezione__titolo">Galleria virtuale</h2>
-          <p class="invito-3d__descrizione">Cammina tra le opere esposte in una sala 3D, in scala reale. Trascina per guardarti intorno, tocca il pavimento per spostarti, tocca un quadro per avvicinarti.</p>
-          <button class="bottone bottone--chiaro" type="button" data-apri-galleria>Entra nella galleria</button>
+          <h2 class="sezione__titolo">Virtual gallery</h2>
+          <p class="invito-3d__descrizione">Walk among the paintings, hung at their real size in a 3D exhibition room. Drag to look around, tap the floor to walk, tap a painting to get closer.</p>
+          <button class="bottone bottone--chiaro" type="button" data-apri-galleria>Enter the gallery</button>
         </div>
-        <button class="invito-3d__anteprima" type="button" data-apri-galleria aria-label="Entra nella galleria 3D">
+        <button class="invito-3d__anteprima" type="button" data-apri-galleria aria-label="Enter the 3D gallery">
           <span class="invito-3d__quadri" data-anteprima-3d></span>
         </button>
       </div>
     </section>
 
-    <section class="sezione" id="biografia">
-      <div class="contenitore biografia">
+    <section class="sezione" id="about">
+      <div class="contenitore biografia" data-biografia>
         <header class="sezione__testa">
           <p class="sezione__numero">03</p>
-          <h2 class="sezione__titolo">Biografia</h2>
+          <h2 class="sezione__titolo">About</h2>
         </header>
-        <figure class="biografia__foto" data-foto-biografia></figure>
+        <div class="biografia__lato">
+          <p class="biografia__sottotitolo" data-testo="biografia.sottotitolo"></p>
+          <figure class="biografia__foto" data-foto-biografia></figure>
+        </div>
         <div class="biografia__testo testo-lungo" data-paragrafi="biografia.testo"></div>
+      </div>
+    </section>
+
+    <section class="sezione sezione--tenue" id="research">
+      <span class="ancora" id="resume"></span>
+      <div class="contenitore ricerca">
+        <header class="sezione__testa">
+          <p class="sezione__numero">04</p>
+          <h2 class="sezione__titolo">Artistic research</h2>
+        </header>
+        <div class="ricerca__testo testo-lungo" data-paragrafi="ricerca.testo"></div>
         <blockquote class="citazione" data-citazione>
-          <p data-testo="biografia.citazione"></p>
-          <footer data-testo="biografia.autore_citazione"></footer>
+          <p data-testo="ricerca.citazione"></p>
+          <footer data-testo="ricerca.autore_citazione"></footer>
         </blockquote>
       </div>
     </section>
 
-    <section class="sezione sezione--tenue" id="mostre">
+    <section class="sezione" id="curriculum">
+      <span class="ancora" id="pricing"></span>
       <div class="contenitore">
         <header class="sezione__testa">
-          <p class="sezione__numero">04</p>
-          <h2 class="sezione__titolo">Mostre</h2>
+          <p class="sezione__numero">05</p>
+          <h2 class="sezione__titolo">Curriculum</h2>
         </header>
+        <p class="sezione__sottotitolo">Exhibitions, publications and awards</p>
         <div class="mostre" data-mostre></div>
       </div>
     </section>
 
-    <section class="sezione" id="critica-articoli">
+    <section class="sezione sezione--tenue" id="critica-articoli">
       <div class="contenitore">
         <header class="sezione__testa">
-          <p class="sezione__numero">05</p>
-          <h2 class="sezione__titolo">Critica e articoli</h2>
+          <p class="sezione__numero">06</p>
+          <h2 class="sezione__titolo">Reviews and articles</h2>
         </header>
         <ul class="critica" data-critica></ul>
       </div>
     </section>
 
-    <section class="sezione sezione--scura" id="contatti">
+    <section class="sezione" id="events">
+      <span class="ancora" id="services"></span>
+      <div class="contenitore">
+        <header class="sezione__testa">
+          <p class="sezione__numero">07</p>
+          <h2 class="sezione__titolo">Events</h2>
+        </header>
+        <div class="consenso" data-consenso hidden>
+          <p>Posts are loaded from Instagram (Meta), which may set its own cookies.</p>
+          <button class="bottone bottone--scuro" type="button" data-consenso-si>Show Instagram posts</button>
+        </div>
+        <ul class="eventi" data-eventi></ul>
+      </div>
+    </section>
+
+    <section class="sezione sezione--scura" id="contact">
       <div class="contenitore contatti">
         <header class="sezione__testa">
-          <p class="sezione__numero">06</p>
-          <h2 class="sezione__titolo">Contatti</h2>
+          <p class="sezione__numero">08</p>
+          <h2 class="sezione__titolo">Contact</h2>
         </header>
         <p class="contatti__invito" data-testo="contatti.invito"></p>
         <div class="contatti__voci" data-contatti></div>
@@ -127,62 +159,66 @@
   </main>
 
   <footer class="piede">
-    <p>© <span data-anno></span> <span data-testo="sito.nome">Elidon Mucaj</span>. Tutte le immagini delle opere sono protette da diritto d'autore.</p>
+    <div class="piede__testo" data-piede></div>
   </footer>
 
-  <dialog class="visore" data-visore aria-label="Opera">
+  <dialog class="visore" data-visore aria-label="Artwork">
     <div class="visore__corpo">
       <figure class="visore__figura">
-        <img alt="" data-visore-img>
+        <img alt="" draggable="false" data-visore-img>
       </figure>
       <div class="visore__scheda">
         <p class="visore__conta" data-visore-conta></p>
         <h3 class="visore__titolo" data-visore-titolo></h3>
         <dl class="visore__dati" data-visore-dati></dl>
         <div class="visore__descrizione testo-lungo" data-visore-descrizione></div>
-        <a class="bottone bottone--scuro" data-visore-richiesta>Chiedi informazioni</a>
+        <a class="bottone bottone--scuro" data-visore-richiesta>Ask about this work</a>
       </div>
     </div>
-    <button class="visore__chiudi" type="button" data-chiudi aria-label="Chiudi">×</button>
-    <button class="visore__freccia visore__freccia--prec" type="button" data-visore-prec aria-label="Opera precedente">‹</button>
-    <button class="visore__freccia visore__freccia--succ" type="button" data-visore-succ aria-label="Opera successiva">›</button>
+    <button class="visore__chiudi" type="button" data-chiudi aria-label="Close">×</button>
+    <button class="visore__freccia visore__freccia--prec" type="button" data-visore-prec aria-label="Previous">‹</button>
+    <button class="visore__freccia visore__freccia--succ" type="button" data-visore-succ aria-label="Next">›</button>
   </dialog>
 
-  <dialog class="lettore" data-lettore aria-label="Testo">
+  <dialog class="lettore" data-lettore aria-label="Text">
     <article class="lettore__corpo">
       <p class="lettore__tipo" data-lettore-tipo></p>
       <h3 class="lettore__titolo" data-lettore-titolo></h3>
       <p class="lettore__firma" data-lettore-firma></p>
+      <figure class="lettore__immagine" data-lettore-immagine></figure>
       <div class="testo-lungo" data-lettore-testo></div>
-      <a class="bottone bottone--scuro" target="_blank" rel="noopener" data-lettore-link>Leggi alla fonte</a>
+      <div class="lettore__azioni">
+        <a class="bottone bottone--scuro" target="_blank" rel="noopener" data-lettore-pdf>Read the full article (PDF)</a>
+        <a class="bottone" target="_blank" rel="noopener" data-lettore-link>Read at the source ↗</a>
+      </div>
     </article>
-    <button class="visore__chiudi" type="button" data-chiudi aria-label="Chiudi">×</button>
+    <button class="visore__chiudi" type="button" data-chiudi aria-label="Close">×</button>
   </dialog>
 
   <div class="sala" data-sala hidden>
     <div class="sala__scena" data-sala-scena></div>
     <div class="sala__caricamento" data-sala-caricamento>
-      <p>Allestimento della sala…</p>
+      <p>Setting up the room…</p>
       <div class="sala__barra"><span data-sala-progresso></span></div>
     </div>
     <div class="sala__aiuto" data-sala-aiuto>
-      <p><strong>Trascina</strong> per guardarti intorno · <strong>tocca il pavimento</strong> per camminare · <strong>tocca un quadro</strong> per avvicinarti</p>
-      <p class="sala__aiuto-tasti">Da tastiera: frecce o W A S D per camminare, Esc per uscire</p>
+      <p><strong>Drag</strong> to look around · <strong>tap the floor</strong> to walk · <strong>tap a painting</strong> to get closer</p>
+      <p class="sala__aiuto-tasti">Keyboard: arrows or W A S D to walk, Esc to exit</p>
     </div>
     <div class="sala__didascalia" data-sala-didascalia hidden>
       <p class="sala__conta" data-sala-conta></p>
       <h3 data-sala-titolo></h3>
       <p data-sala-dati></p>
-      <button class="sala__dettagli" type="button" data-sala-dettagli>Dettagli</button>
+      <button class="sala__dettagli" type="button" data-sala-dettagli>Details</button>
     </div>
     <div class="sala__comandi">
-      <button type="button" data-sala-prec aria-label="Opera precedente">‹</button>
-      <button type="button" data-sala-giro>Visita guidata</button>
-      <button type="button" data-sala-succ aria-label="Opera successiva">›</button>
+      <button type="button" data-sala-prec aria-label="Previous painting">‹</button>
+      <button type="button" data-sala-giro>Guided tour</button>
+      <button type="button" data-sala-succ aria-label="Next painting">›</button>
     </div>
-    <button class="sala__esci" type="button" data-sala-esci>Esci ×</button>
+    <button class="sala__esci" type="button" data-sala-esci>Exit ×</button>
   </div>
 
-  <noscript><p class="avviso">Per vedere le opere attiva JavaScript nel browser.</p></noscript>
+  <noscript><p class="avviso">Please enable JavaScript to see the paintings.</p></noscript>
 </body>
 </html>

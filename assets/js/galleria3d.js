@@ -9,7 +9,7 @@ const COLORI_PARETI = {
   'Terracotta': 0xb4705a,
 };
 const OCCHI = 1.6;           // altezza dello sguardo (m)
-const SOFFITTO = 3.9;
+const SOFFITTO_MIN = 3.9;
 const SPAZIO = 1.3;          // spazio minimo tra due opere (m)
 const MARGINE = 1.4;         // distanza minima dagli angoli (m)
 
@@ -17,16 +17,68 @@ const limita = (v, a, b) => Math.min(b, Math.max(a, v));
 const angoloTra = (a, b) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
 
 // Dimensioni reali dell'opera in metri, ricavate dal testo «100 × 70 cm» e dalle proporzioni della foto.
-export function misureOpera(opera) {
+export function misureOpera(opera, rapportoFoto) {
   const img = opera.immagine || {};
-  const rapporto = img.larghezza && img.altezza ? img.larghezza / img.altezza : 0.8;
+  const rapporto = rapportoFoto || (img.larghezza && img.altezza ? img.larghezza / img.altezza : 0.8);
   const testo = String(opera.dimensioni || '');
   const numeri = (testo.replace(/(\d),(\d)/g, '$1.$2').match(/\d+(\.\d+)?/g) || []).map(Number).filter((n) => n > 0).slice(0, 2);
   let lato = numeri.length ? Math.max(...numeri) / 100 : 1;
   if (/\bmm\b/i.test(testo)) lato /= 10;
   else if (/\d\s*m\b/i.test(testo) && !/cm/i.test(testo)) lato *= 100;
-  lato = limita(lato, 0.25, 3.2);
-  return rapporto >= 1 ? { w: lato, h: lato / rapporto } : { w: lato * rapporto, h: lato };
+  lato = limita(lato, 0.25, 4.6);
+  const m = rapporto >= 1 ? { w: lato, h: lato / rapporto } : { w: lato * rapporto, h: lato };
+  if (m.h > 3.4) { m.w *= 3.4 / m.h; m.h = 3.4; }
+  return m;
+}
+
+// Carica una foto e, se è molto grande, la riduce: le schede grafiche dei telefoni hanno poca memoria.
+export function caricaImmagine(url, latoMassimo, attesa = 20000) {
+  return new Promise((risolvi) => {
+    const img = new Image();
+    img.decoding = 'async';
+    const timer = setTimeout(() => { img.src = ''; risolvi(null); }, attesa);
+    img.onload = () => {
+      clearTimeout(timer);
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      if (!w || !h) return risolvi(null);
+      const scala = Math.min(1, latoMassimo / Math.max(w, h));
+      if (scala === 1) return risolvi({ sorgente: img, w, h });
+      const c = document.createElement('canvas');
+      c.width = Math.round(w * scala);
+      c.height = Math.round(h * scala);
+      const g = c.getContext('2d');
+      g.imageSmoothingQuality = 'high';
+      g.drawImage(img, 0, 0, c.width, c.height);
+      risolvi({ sorgente: c, w, h });
+    };
+    img.onerror = () => { clearTimeout(timer); risolvi(null); };
+    img.src = url;
+  });
+}
+
+function textureDa(sorgente, maxAniso) {
+  const t = new THREE.Texture(sorgente);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = Math.min(8, maxAniso);
+  t.needsUpdate = true;
+  return t;
+}
+
+// Carica più foto insieme (al massimo «insieme» per volta) e segnala l'avanzamento.
+async function precarica(urls, latoMassimo, suAvanzamento) {
+  const risultati = new Array(urls.length).fill(null);
+  let prossimo = 0;
+  let fatti = 0;
+  const lavoratore = async () => {
+    while (prossimo < urls.length) {
+      const i = prossimo++;
+      risultati[i] = await caricaImmagine(urls[i], latoMassimo);
+      suAvanzamento(++fatti, urls.length);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(6, urls.length) }, lavoratore));
+  return risultati;
 }
 
 // Sceglie la grandezza della sala e distribuisce le opere sulle quattro pareti.
@@ -170,7 +222,7 @@ function textureScritta(testo, colore) {
 
 // ---------------------------------------------------------------- sala
 
-export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, suEsci } = {}) {
+export async function creaSala(radice, tutteLeOpere, { colorePareti, nome = '', suDettagli } = {}) {
   const $ = (s) => radice.querySelector(s);
   const scenaEl = $('[data-sala-scena]');
   const caricamento = $('[data-sala-caricamento]');
@@ -184,6 +236,16 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
   progresso.style.width = '0';
 
   const tattile = matchMedia('(pointer: coarse)').matches;
+
+  // Prima si caricano le foto: servono le loro proporzioni per appenderle in scala.
+  // Quelle che non si caricano (file mancante) restano fuori dalla sala.
+  const latoTexture = tattile || tutteLeOpere.length > 40 ? 1024 : 1600;
+  const foto = await precarica(tutteLeOpere.map((o) => o.immagine.miniatura), latoTexture, (fatti, totale) => {
+    progresso.style.width = `${Math.round((fatti / totale) * 90)}%`;
+  });
+  const opere = tutteLeOpere.filter((_, i) => foto[i]);
+  const caricate = foto.filter(Boolean);
+
   const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, tattile ? 1.5 : 2));
   renderer.setClearColor(0x0b0a09);
@@ -198,20 +260,10 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
   const tieni = (x) => { daLiberare.push(x); return x; };
   let chiuso = false;
 
-  // Caricamento con barra di avanzamento
-  const gestore = new THREE.LoadingManager();
-  let finito = false;
   const fine = () => {
-    if (finito) return;
-    finito = true;
     progresso.style.width = '100%';
     caricamento.classList.add('sala__caricamento--fine');
   };
-  gestore.onProgress = (_url, caricati, totale) => { progresso.style.width = `${Math.round((caricati / totale) * 100)}%`; };
-  gestore.onLoad = fine;
-  gestore.onError = () => {};
-  const timerCaricamento = setTimeout(fine, 9000);
-  const caricatore = new THREE.TextureLoader(gestore);
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
 
   // Luci: una luce diffusa calda; i coni dei faretti sono disegnati sulle pareti.
@@ -219,8 +271,10 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
   scena.add(new THREE.AmbientLight(0xffffff, 0.9));
 
   // Progetto della sala
-  const misure = opere.map(misureOpera);
+  const misure = opere.map((o, i) => misureOpera(o, caricate[i].w / caricate[i].h));
   const { W, D, assegnati } = opere.length ? progettaSala(misure) : { W: 8, D: 6, assegnati: [[], [], [], []] };
+  // Con quadri molto alti il soffitto si alza.
+  const SOFFITTO = Math.max(SOFFITTO_MIN, ...misure.map((m) => Math.max(1.55, m.h / 2 + 0.5) + m.h / 2 + 0.9));
   const pareti = [
     { centro: new THREE.Vector3(0, 0, -D / 2), destra: new THREE.Vector3(1, 0, 0), normale: new THREE.Vector3(0, 0, 1), lunghezza: W },
     { centro: new THREE.Vector3(W / 2, 0, 0), destra: new THREE.Vector3(0, 0, 1), normale: new THREE.Vector3(-1, 0, 0), lunghezza: D },
@@ -316,15 +370,7 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
       const y = Math.max(1.55, h / 2 + 0.5);
       const centro = p.centro.clone().addScaledVector(p.destra, s + w / 2).setY(y);
 
-      const fronte = tieni(new THREE.MeshBasicMaterial({ color: 0x8c877f, toneMapped: false }));
-      const tex = caricatore.load(opera.immagine.miniatura, (t) => {
-        t.colorSpace = THREE.SRGBColorSpace;
-        t.anisotropy = Math.min(8, maxAniso);
-        fronte.map = t;
-        fronte.color.set(0xf4f4f4);
-        fronte.needsUpdate = true;
-      });
-      tieni(tex);
+      const fronte = tieni(new THREE.MeshBasicMaterial({ color: 0xf4f4f4, toneMapped: false, map: tieni(textureDa(caricate[i].sorgente, maxAniso)) }));
       const profondita = 0.035;
       const tela3d = new THREE.Mesh(tieni(new THREE.BoxGeometry(w, h, profondita)), [matLati, matLati, matLati, matLati, fronte, matLati]);
       tela3d.position.copy(centro).addScaledVector(p.normale, profondita / 2 + 0.012);
@@ -354,7 +400,7 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
       scena.add(cartellino);
       cartellini.push(cartellino);
 
-      tela3d.userData = { opera, indice: sequenza.length, centro, normale: p.normale.clone(), w, h, fronte, alta: false };
+      tela3d.userData = { opera, indice: sequenza.length, centro, normale: p.normale.clone(), w, h, fronte, alta: false, latoFoto: Math.max(caricate[i].w, caricate[i].h) };
       quadri.push(tela3d);
       sequenza.push(tela3d);
       s += w + spazio;
@@ -436,15 +482,13 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
     puntoVista = meta.clone();
     arrivo = tempo;
     mostraDidascalia(q);
-    if (!q.alta && q.opera.immagine.file !== q.opera.immagine.miniatura) {
+    // Da vicino serve più dettaglio: si carica la foto grande (o meno ridotta).
+    if (!q.alta && (q.opera.immagine.file !== q.opera.immagine.miniatura || q.latoFoto > latoTexture)) {
       q.alta = true;
-      new THREE.TextureLoader().load(q.opera.immagine.file, (t) => {
-        if (chiuso) { t.dispose(); return; }
-        t.colorSpace = THREE.SRGBColorSpace;
-        t.anisotropy = Math.min(8, maxAniso);
-        tieni(t);
+      caricaImmagine(q.opera.immagine.file, tattile ? 1600 : 2400).then((f) => {
+        if (!f || chiuso) return;
         const vecchia = q.fronte.map;
-        q.fronte.map = t;
+        q.fronte.map = tieni(textureDa(f.sorgente, maxAniso));
         q.fronte.needsUpdate = true;
         vecchia?.dispose();
       });
@@ -453,7 +497,7 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
 
   function mostraDidascalia(q) {
     $('[data-sala-conta]').textContent = `${q.indice + 1} / ${sequenza.length}`;
-    $('[data-sala-titolo]').textContent = q.opera.titolo || 'Senza titolo';
+    $('[data-sala-titolo]').textContent = q.opera.titolo || 'Untitled';
     $('[data-sala-dati]').textContent = [q.opera.anno, q.opera.tecnica, q.opera.dimensioni].filter(Boolean).join(' · ');
     didascalia.hidden = false;
   }
@@ -542,7 +586,6 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
   }
   function suTasto(e) {
     if (document.querySelector('dialog[open]')) return;
-    if (e.type === 'keydown' && e.key === 'Escape') { suEsci?.(); return; }
     const k = e.key.toLowerCase();
     if (!['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) return;
     e.preventDefault();
@@ -572,7 +615,6 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
     succ: $('[data-sala-succ]'),
     giro: bottoneGiro,
     dettagli: $('[data-sala-dettagli]'),
-    esci: $('[data-sala-esci]'),
   };
   const azioni = {
     prec: () => { fermaGiro(); vai(attuale < 0 ? sequenza.length - 1 : attuale - 1); },
@@ -583,7 +625,6 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
       if (giro) vai(attuale + 1);
     },
     dettagli: () => { if (attuale >= 0) suDettagli?.(sequenza[attuale].userData.opera); },
-    esci: () => suEsci?.(),
   };
   for (const [k, b] of Object.entries(bottoni)) b.addEventListener('click', azioni[k]);
   bottoneGiro.setAttribute('aria-pressed', 'false');
@@ -638,14 +679,12 @@ export function creaSala(radice, opere, { colorePareti, nome = '', suDettagli, s
 
   suRidimensiona();
   fotogramma();
-  if (!opere.length) fine();
-  tela.focus?.();
+  fine();
 
   return {
     chiudi() {
       chiuso = true;
       cancelAnimationFrame(richiesta);
-      clearTimeout(timerCaricamento);
       clearTimeout(timerAiuto);
       window.removeEventListener('keydown', suTasto);
       window.removeEventListener('keyup', suTasto);

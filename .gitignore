@@ -3,5 +3,7 @@ admin/privato/*.php
 contenuti/backup/*.json
 immagini/caricate/*
 !immagini/caricate/.htaccess
+documenti/*
+!documenti/.htaccess
 .DS_Store
 Thumbs.db

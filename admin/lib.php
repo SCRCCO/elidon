@@ -6,6 +6,7 @@ define('PRIVATO', __DIR__ . '/privato');
 define('FILE_CONTENUTI', RADICE . '/contenuti/sito.json');
 define('CARTELLA_COPIE', RADICE . '/contenuti/backup');
 define('CARTELLA_CARICATE', RADICE . '/immagini/caricate');
+define('CARTELLA_DOCUMENTI', RADICE . '/documenti');
 define('FILE_SCHEMA', __DIR__ . '/schema.json');
 define('COPIE_DA_TENERE', 30);
 define('DURATA_SESSIONE', 8 * 3600);
@@ -267,6 +268,17 @@ function testo_pulito($v, int $max, bool $piuRighe): string
     return mb_substr($v, 0, $max);
 }
 
+// Percorso di un file del sito: solo dentro le cartelle ammesse, senza «..» né caratteri che rompono un indirizzo.
+// Sono ammessi spazi, virgole, apostrofi e lettere accentate, come nei nomi delle foto del vecchio sito.
+function percorso_valido($p, string $cartelle, string $estensioni): bool
+{
+    return is_string($p)
+        && strlen($p) < 400
+        && preg_match('#^(' . $cartelle . ')/[^<>"\\\\?\#%\x00-\x1f]+\.(' . $estensioni . ')$#iu', $p)
+        && strpos($p, '..') === false
+        && strpos($p, '//') === false;
+}
+
 function immagine_pulita($v): ?array
 {
     if (is_string($v)) {
@@ -275,15 +287,13 @@ function immagine_pulita($v): ?array
     if (!is_array($v)) {
         return null;
     }
-    $percorsoValido = function ($p) {
-        return is_string($p)
-            && preg_match('#^immagini/[A-Za-z0-9_\-/.]+\.(jpe?g|png|webp|gif)$#i', $p)
-            && strpos($p, '..') === false;
+    $valido = function ($p) {
+        return percorso_valido($p, 'immagini|assets/img', 'jpe?g|png|webp|gif');
     };
-    if (!$percorsoValido($v['file'] ?? null)) {
+    if (!$valido($v['file'] ?? null)) {
         return null;
     }
-    $immagine = ['file' => $v['file'], 'miniatura' => $percorsoValido($v['miniatura'] ?? null) ? $v['miniatura'] : $v['file']];
+    $immagine = ['file' => $v['file'], 'miniatura' => $valido($v['miniatura'] ?? null) ? $v['miniatura'] : $v['file']];
     foreach (['larghezza', 'altezza'] as $k) {
         if (isset($v[$k]) && is_numeric($v[$k]) && (int) $v[$k] > 0 && (int) $v[$k] < 20000) {
             $immagine[$k] = (int) $v[$k];
@@ -313,8 +323,45 @@ function campo_pulito(array $campo, $valore)
             return in_array($valore, $opzioni, true) ? $valore : ($opzioni[0] ?? '');
         case 'immagine':
             return immagine_pulita($valore);
+        case 'immagini':
+            $elenco = [];
+            foreach (is_array($valore) ? array_slice(array_values($valore), 0, 40) : [] as $v) {
+                $immagine = immagine_pulita($v);
+                if ($immagine) {
+                    $elenco[] = $immagine;
+                }
+            }
+            return $elenco;
+        case 'documento':
+            $v = testo_pulito($valore, 400, false);
+            return percorso_valido($v, 'documenti|assets', 'pdf') ? $v : '';
     }
     return null;
+}
+
+// Completa larghezza e altezza delle immagini che ne sono prive (servono alla griglia e alla galleria 3D).
+// getimagesize legge solo l'intestazione del file: è veloce anche con molte foto.
+function completa_misure(array $dati): array
+{
+    $completa = function (&$v) use (&$completa) {
+        if (!is_array($v)) {
+            return;
+        }
+        if (isset($v['file']) && is_string($v['file']) && empty($v['larghezza'])) {
+            $percorso = RADICE . '/' . $v['file'];
+            $info = is_file($percorso) ? @getimagesize($percorso) : false;
+            if ($info) {
+                $v['larghezza'] = (int) $info[0];
+                $v['altezza'] = (int) $info[1];
+            }
+            return;
+        }
+        foreach ($v as &$figlio) {
+            $completa($figlio);
+        }
+    };
+    $completa($dati);
+    return $dati;
 }
 
 function slug(string $testo): string
@@ -402,8 +449,8 @@ function salva_immagine_caricata(array $file, string $base): array
     if (!$info || !in_array($info[2], [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP], true)) {
         throw new RuntimeException('Il file non è una foto JPEG, PNG o WebP.');
     }
-    if ($info[0] > 8000 || $info[1] > 8000) {
-        throw new RuntimeException('Foto troppo grande (massimo 8000 pixel per lato).');
+    if ($info[0] > 12000 || $info[1] > 12000) {
+        throw new RuntimeException('Foto troppo grande (massimo 12000 pixel per lato).');
     }
     $estensioni = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp'];
     $destinazione = $base . '.' . $estensioni[$info[2]];
@@ -415,4 +462,29 @@ function salva_immagine_caricata(array $file, string $base): array
     }
     @chmod($destinazione, 0644);
     return ['percorso' => $destinazione, 'larghezza' => (int) $info[0], 'altezza' => (int) $info[1]];
+}
+
+// Salva un PDF caricato nella cartella documenti/.
+function salva_documento_caricato(array $file, string $nome): string
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name'])) {
+        $codice = $file['error'] ?? -1;
+        throw new RuntimeException($codice === UPLOAD_ERR_INI_SIZE || $codice === UPLOAD_ERR_FORM_SIZE
+            ? 'Il PDF è troppo grande per il server (limite: ' . round(limite_caricamento() / 1048576, 1) . ' MB).'
+            : 'Caricamento non riuscito, riprova.');
+    }
+    $inizio = (string) file_get_contents($file['tmp_name'], false, null, 0, 5);
+    if ($inizio !== '%PDF-') {
+        throw new RuntimeException('Il file non è un PDF.');
+    }
+    $base = slug(pathinfo($nome, PATHINFO_FILENAME)) ?: 'documento';
+    $destinazione = CARTELLA_DOCUMENTI . '/' . $base . '-' . bin2hex(random_bytes(3)) . '.pdf';
+    if (!is_dir(CARTELLA_DOCUMENTI)) {
+        mkdir(CARTELLA_DOCUMENTI, 0755, true);
+    }
+    if (!move_uploaded_file($file['tmp_name'], $destinazione)) {
+        throw new RuntimeException('Impossibile salvare il PDF sul server.');
+    }
+    @chmod($destinazione, 0644);
+    return ltrim(substr($destinazione, strlen(RADICE)), '/');
 }

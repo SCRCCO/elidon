@@ -9,7 +9,7 @@ $azione = (string) ($_GET['azione'] ?? '');
 $metodo = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 // Tutto ciò che modifica qualcosa arriva solo in POST, con il gettone anti-falsificazione.
-$soloPost = ['imposta-password', 'accedi', 'esci', 'cambia-password', 'salva', 'carica-immagine', 'ripristina'];
+$soloPost = ['imposta-password', 'accedi', 'esci', 'cambia-password', 'salva', 'carica-immagine', 'carica-documento', 'ripristina'];
 if (in_array($azione, $soloPost, true)) {
     if ($metodo !== 'POST') {
         errore('Metodo non consentito', 405);
@@ -90,7 +90,14 @@ try {
 
         case 'contenuti':
             richiedi_accesso();
-            rispondi(['dati' => leggi_contenuti(), 'versione' => versione_contenuti(), 'schema' => schema()]);
+            $dati = leggi_contenuti();
+            // Le foto importate dal vecchio sito non hanno misure: si completano al primo accesso.
+            $completi = completa_misure($dati);
+            if ($completi !== $dati) {
+                salva_contenuti($completi);
+                $dati = $completi;
+            }
+            rispondi(['dati' => $dati, 'versione' => versione_contenuti(), 'schema' => schema()]);
             // no break
 
         case 'salva':
@@ -103,7 +110,7 @@ try {
             if (($corpo['versione'] ?? '') !== versione_contenuti()) {
                 errore('I contenuti sono stati modificati da un\'altra finestra o da un altro dispositivo. Ricarica la pagina prima di salvare.', 409);
             }
-            $dati = pulisci_contenuti($corpo['dati'], schema());
+            $dati = completa_misure(pulisci_contenuti($corpo['dati'], schema()));
             rispondi(['ok' => true, 'versione' => salva_contenuti($dati), 'dati' => $dati]);
             // no break
 
@@ -130,6 +137,14 @@ try {
             ]);
             // no break
 
+        case 'carica-documento':
+            richiedi_accesso();
+            if (empty($_FILES['documento'])) {
+                errore('Nessun file ricevuto. Se il PDF è molto grande, il server potrebbe averlo rifiutato.');
+            }
+            rispondi(['ok' => true, 'documento' => salva_documento_caricato($_FILES['documento'], (string) ($_POST['nome'] ?? ''))]);
+            // no break
+
         case 'copie':
             richiedi_accesso();
             rispondi(['copie' => elenco_copie()]);
@@ -151,7 +166,7 @@ try {
             if (!is_array($dati)) {
                 errore('La copia è danneggiata.');
             }
-            $dati = pulisci_contenuti($dati, schema());
+            $dati = completa_misure(pulisci_contenuti($dati, schema()));
             rispondi(['ok' => true, 'versione' => salva_contenuti($dati), 'dati' => $dati]);
             // no break
 
@@ -160,5 +175,9 @@ try {
     }
 } catch (Throwable $e) {
     error_log('[pannello] ' . $e->getMessage());
-    errore($e instanceof RuntimeException ? $e->getMessage() : 'Errore del server.', 500);
+    // Le RuntimeException portano un messaggio pensato per chi usa il pannello (file non valido, cartella non scrivibile…).
+    if ($e instanceof RuntimeException) {
+        errore($e->getMessage(), 400);
+    }
+    errore('Errore del server.', 500);
 }

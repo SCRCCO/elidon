@@ -14,6 +14,7 @@ const stato = {
   modifiche: 0,             // contatore: serve a non perdere ciò che si scrive durante un salvataggio
   sezione: '',
   aperti: new Set(),
+  anteprimeInutili: new Set(), // foto già leggere o non raggiungibili: non si riprova
   salvataggio: false,
 };
 
@@ -47,6 +48,11 @@ function avvisa(testo, tipo = 'ok', durata = 4500) {
 
 function nuovoId(prefisso) {
   return `${prefisso}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+}
+
+// Indirizzo dell'anteprima di una foto vista dalla cartella admin/ (i nomi possono contenere spazi e accenti).
+function srcAnteprima(img) {
+  return `../${encodeURI(img.miniatura || img.file)}`;
 }
 
 function testoBreve(v, n = 80) {
@@ -296,6 +302,10 @@ function campo(def, oggetto, { suCambio } = {}) {
       break;
     case 'immagine':
       return campoImmagine(def, oggetto, aggiorna);
+    case 'immagini':
+      return campoImmagini(def, oggetto, aggiorna);
+    case 'documento':
+      return campoDocumento(def, oggetto, aggiorna);
     default: {
       const tipi = { email: 'email', link: 'url' };
       controllo = crea('input', {
@@ -308,7 +318,8 @@ function campo(def, oggetto, { suCambio } = {}) {
       if (def.tipo === 'link') {
         controllo.addEventListener('blur', () => {
           const v = controllo.value.trim();
-          if (v && !/^https?:\/\//i.test(v) && /\./.test(v)) { controllo.value = `https://${v}`; aggiorna(controllo.value); }
+          // «www.sito.it/pagina» diventa «https://www.sito.it/pagina»
+          if (/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(v)) { controllo.value = `https://${v}`; aggiorna(controllo.value); }
         });
       }
     }
@@ -324,7 +335,7 @@ function campoImmagine(def, oggetto, aggiorna) {
   const disegna = () => {
     const img = oggetto[def.chiave];
     anteprima.replaceChildren(img?.file
-      ? crea('img', { src: `../${img.miniatura || img.file}`, alt: '' })
+      ? crea('img', { src: srcAnteprima(img), alt: '' })
       : crea('span', { testo: 'Nessuna foto' }));
     rimuovi.hidden = !img?.file;
   };
@@ -364,6 +375,143 @@ function campoImmagine(def, oggetto, aggiorna) {
   return radice;
 }
 
+function campoImmagini(def, oggetto, aggiorna) {
+  const elenco = () => (Array.isArray(oggetto[def.chiave]) ? oggetto[def.chiave] : []);
+  const griglia = crea('div', { classe: 'galleria-campo__foto' });
+  const messaggio = crea('p', { classe: 'foto__stato', role: 'status' });
+  const scegli = crea('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp,image/*', multiple: true, classe: 'sr' });
+  const cambia = (nuovo) => { aggiorna(nuovo); disegna(); };
+  const disegna = () => {
+    const foto = elenco();
+    griglia.replaceChildren(...foto.map((img, i) => crea('div', { classe: 'galleria-campo__voce' }, [
+      crea('img', { src: srcAnteprima(img), alt: '' }),
+      crea('div', { classe: 'galleria-campo__azioni' }, [
+        crea('button', { type: 'button', classe: 'icona', 'aria-label': 'Sposta a sinistra', title: 'Sposta a sinistra', testo: '←', disabled: i === 0,
+          suClick: () => { const n = [...foto]; [n[i - 1], n[i]] = [n[i], n[i - 1]]; cambia(n); } }),
+        crea('button', { type: 'button', classe: 'icona', 'aria-label': 'Sposta a destra', title: 'Sposta a destra', testo: '→', disabled: i === foto.length - 1,
+          suClick: () => { const n = [...foto]; [n[i + 1], n[i]] = [n[i], n[i + 1]]; cambia(n); } }),
+        crea('button', { type: 'button', classe: 'icona icona--pericolo', 'aria-label': 'Togli la foto', title: 'Togli', testo: '✕',
+          suClick: () => cambia(foto.filter((_, k) => k !== i)) }),
+      ]),
+    ])));
+    if (!foto.length) griglia.append(crea('span', { classe: 'campo__aiuto', testo: 'Nessuna foto.' }));
+  };
+  scegli.addEventListener('change', async () => {
+    const file = [...scegli.files];
+    scegli.value = '';
+    const errori = [];
+    for (const [i, f] of file.entries()) {
+      messaggio.textContent = `Carico la foto ${i + 1} di ${file.length}…`;
+      try { cambia([...elenco(), await caricaFoto(f)]); } catch (err) { errori.push(err.message); }
+    }
+    messaggio.textContent = errori.length ? errori.join(' ') : 'Foto aggiunte. Ricorda di salvare.';
+  });
+  disegna();
+  return crea('div', { classe: 'campo foto' }, [
+    crea('span', { classe: 'campo__etichetta', testo: def.etichetta }),
+    griglia,
+    crea('div', { classe: 'foto__azioni' }, [crea('label', { classe: 'bottone' }, ['Aggiungi foto…', scegli]), messaggio]),
+  ]);
+}
+
+function campoDocumento(def, oggetto, aggiorna) {
+  const nome = crea('span', { classe: 'documento__nome' });
+  const messaggio = crea('p', { classe: 'foto__stato', role: 'status' });
+  const scegli = crea('input', { type: 'file', accept: 'application/pdf,.pdf', classe: 'sr' });
+  const rimuovi = crea('button', { type: 'button', classe: 'bottone bottone--leggero', testo: 'Rimuovi' });
+  const disegna = () => {
+    const percorso = oggetto[def.chiave];
+    nome.replaceChildren(percorso
+      ? crea('a', { href: `../${encodeURI(percorso)}`, target: '_blank', rel: 'noopener', testo: percorso.split('/').pop() })
+      : crea('span', { classe: 'campo__aiuto', testo: 'Nessun PDF.' }));
+    rimuovi.hidden = !percorso;
+  };
+  scegli.addEventListener('change', async () => {
+    const file = scegli.files[0];
+    scegli.value = '';
+    if (!file) return;
+    if (file.size > stato.limite) {
+      messaggio.textContent = `Il PDF pesa ${(file.size / 1048576).toFixed(1)} MB: il server ne accetta al massimo ${(stato.limite / 1048576).toFixed(1)}. Riducilo (per esempio esportandolo «per il web») e riprova.`;
+      return;
+    }
+    messaggio.textContent = 'Invio il PDF…';
+    try {
+      const modulo = new FormData();
+      modulo.append('nome', file.name);
+      modulo.append('documento', file, 'documento.pdf');
+      const r = await chiama('carica-documento', { metodo: 'POST', modulo });
+      aggiorna(r.documento);
+      messaggio.textContent = 'PDF caricato. Ricorda di salvare.';
+      disegna();
+    } catch (err) {
+      messaggio.textContent = err.message;
+    }
+  });
+  rimuovi.addEventListener('click', () => { aggiorna(''); messaggio.textContent = ''; disegna(); });
+  disegna();
+  return crea('div', { classe: 'campo foto' }, [
+    crea('span', { classe: 'campo__etichetta', testo: def.etichetta }),
+    crea('div', { classe: 'foto__azioni' }, [nome, crea('label', { classe: 'bottone' }, ['Scegli PDF…', scegli]), rimuovi, messaggio]),
+  ]);
+}
+
+// ---------------------------------------------------------------- anteprime leggere per le foto che ne sono prive
+
+// Le foto importate dal vecchio sito non hanno una versione ridotta: il sito scaricherebbe sempre l'originale.
+// Qui il browser le scarica una per volta, ne crea una copia da 900 pixel e la carica sul server.
+function fotoSenzaAnteprima() {
+  const trovate = [];
+  const cerca = (v) => {
+    if (!v || typeof v !== 'object') return;
+    if (typeof v.file === 'string') {
+      if (!v.miniatura || v.miniatura === v.file) trovate.push(v);
+      return;
+    }
+    for (const figlio of Object.values(v)) cerca(figlio);
+  };
+  cerca(stato.dati);
+  return trovate.filter((img) => !stato.anteprimeInutili.has(img.file));
+}
+
+async function creaAnteprime(bottone) {
+  const elenco = fotoSenzaAnteprima();
+  if (!elenco.length) return;
+  bottone.classList.add('bottone--attesa');
+  let fatte = 0;
+  const errori = [];
+  for (const [i, img] of elenco.entries()) {
+    avvisa(`Anteprima ${i + 1} di ${elenco.length}…`, 'info', 0);
+    try {
+      const r = await fetch(`../${encodeURI(img.file)}`, { cache: 'force-cache' });
+      if (!r.ok) throw new Error(`${img.file.split('/').pop()}: file non trovato`);
+      const blob = await r.blob();
+      const sorgente = await decodifica(new File([blob], img.file.split('/').pop(), { type: blob.type || 'image/jpeg' }));
+      img.larghezza = larghezzaDi(sorgente);
+      img.altezza = altezzaDi(sorgente);
+      if (Math.max(img.larghezza, img.altezza) <= LATO_MINIATURA * 1.15 && blob.size < 350 * 1024) {
+        stato.anteprimeInutili.add(img.file); // già leggera: va bene così
+      } else {
+        const piccola = await comeJpeg(riduci(sorgente, LATO_MINIATURA), Math.max(300 * 1024, stato.limite * 0.95));
+        const modulo = new FormData();
+        modulo.append('nome', img.file.split('/').pop());
+        modulo.append('immagine', piccola, 'anteprima.jpg');
+        const caricata = await chiama('carica-immagine', { metodo: 'POST', modulo });
+        img.miniatura = caricata.immagine.file;
+        fatte++;
+      }
+      sorgente.close?.();
+      segnaModificato();
+    } catch (err) {
+      errori.push(err.message);
+      stato.anteprimeInutili.add(img.file);
+    }
+  }
+  bottone.classList.remove('bottone--attesa');
+  if (stato.sporco) await salva();
+  avvisa(`${fatte} anteprime create e salvate.${errori.length ? ` Non riuscite: ${errori.join('; ')}` : ''}`, errori.length ? 'errore' : 'ok', errori.length ? 0 : 7000);
+  disegnaSezione();
+}
+
 // ---------------------------------------------------------------- sezioni
 
 function sezioneOggetto(sezione) {
@@ -395,6 +543,7 @@ function nuovaVoce(sezione) {
     if (def.tipo === 'si_no') voce[def.chiave] = !!def.predefinito;
     else if (def.tipo === 'scelta') voce[def.chiave] = def.opzioni[0];
     else if (def.tipo === 'immagine') voce[def.chiave] = null;
+    else if (def.tipo === 'immagini') voce[def.chiave] = [];
     else voce[def.chiave] = '';
   }
   return voce;
@@ -455,6 +604,12 @@ function sezioneLista(sezione) {
     });
     azioni.push(etichetta);
   }
+  const senzaAnteprima = sezione.chiave === 'opere' ? fotoSenzaAnteprima().length : 0;
+  if (senzaAnteprima) {
+    const bottone = crea('button', { type: 'button', classe: 'bottone', testo: `Crea anteprime leggere (${senzaAnteprima})`, suClick: () => creaAnteprime(bottone) });
+    bottone.title = 'Le foto importate dal vecchio sito non hanno una versione ridotta: crearla rende il sito molto più veloce. Si fa una volta sola.';
+    azioni.push(bottone);
+  }
 
   const lista = crea('ol', { classe: 'voci' });
   if (!elenco.length) lista.append(crea('li', { classe: 'voci__vuoto', testo: `Ancora nessun elemento. Usa «Aggiungi ${nome}».` }));
@@ -466,7 +621,7 @@ function sezioneLista(sezione) {
     const info = crea('span', { classe: 'voce__info', testo: infoVoce(sezione, voce) });
     const img = sezione.campo_immagine ? voce[sezione.campo_immagine] : null;
     const miniatura = sezione.campo_immagine
-      ? crea('span', { classe: 'voce__miniatura' }, img?.file ? crea('img', { src: `../${img.miniatura || img.file}`, alt: '', loading: 'lazy' }) : crea('span', { testo: 'senza foto' }))
+      ? crea('span', { classe: 'voce__miniatura' }, img?.file ? crea('img', { src: srcAnteprima(img), alt: '', loading: 'lazy' }) : crea('span', { testo: 'senza foto' }))
       : null;
     const corpo = crea('div', { classe: 'voce__corpo', hidden: !aperta });
     const apri = crea('button', {
@@ -515,7 +670,7 @@ function sezioneLista(sezione) {
           info.textContent = infoVoce(sezione, voce);
           if (def.tipo === 'immagine' && miniatura) {
             const im = voce[def.chiave];
-            miniatura.replaceChildren(im?.file ? crea('img', { src: `../${im.miniatura || im.file}`, alt: '' }) : crea('span', { testo: 'senza foto' }));
+            miniatura.replaceChildren(im?.file ? crea('img', { src: srcAnteprima(im), alt: '' }) : crea('span', { testo: 'senza foto' }));
           }
         },
       })));
