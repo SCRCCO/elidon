@@ -10,7 +10,7 @@
         { "chiave": "nome", "etichetta": "Nome dell'artista", "tipo": "testo", "max": 120 },
         { "chiave": "professione", "etichetta": "Sottotitolo", "tipo": "testo", "max": 160, "aiuto": "Es. «Painter · Visual Artist · Storyteller»" },
         { "chiave": "frase_apertura", "etichetta": "Frase in apertura (facoltativa)", "tipo": "testo_lungo", "max": 400, "righe": 2, "aiuto": "Compare sotto il nome, nella prima schermata." },
-        { "chiave": "immagine_apertura", "etichetta": "Immagine della prima schermata", "tipo": "immagine", "aiuto": "Usata per le anteprime sui social e come ripiego." },
+        { "chiave": "immagine_apertura", "etichetta": "Immagine della prima schermata", "tipo": "immagine", "aiuto": "Il tuo ritratto: sta nel buio dietro il nome ed esce dove passa la luce del mouse. Meglio una foto verticale, scura, col volto a destra. Serve anche per le anteprime sui social." },
         { "chiave": "descrizione_seo", "etichetta": "Descrizione per Google", "tipo": "testo_lungo", "max": 300, "righe": 3, "aiuto": "Una o due frasi che riassumono chi sei. Google la mostra sotto il titolo del sito." },
         { "chiave": "nota_piede", "etichetta": "Testo a piè di pagina", "tipo": "testo_lungo", "max": 1200, "righe": 4, "aiuto": "Diritti d'autore, nota sui cookie. Ogni riga va a capo." },
         { "chiave": "colore_pareti", "etichetta": "Colore delle pareti nella galleria 3D", "tipo": "scelta", "opzioni": ["Bianco", "Grigio chiaro", "Antracite", "Terracotta"] }

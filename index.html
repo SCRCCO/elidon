@@ -14,13 +14,18 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=3">
-  <link rel="stylesheet" href="assets/css/apertura.css?v=3">
-  <link rel="stylesheet" href="assets/css/sala.css?v=3">
+  <link rel="stylesheet" href="assets/css/style.css?v=5">
+  <link rel="stylesheet" href="assets/css/apertura.css?v=5">
+  <link rel="stylesheet" href="assets/css/sala.css?v=5">
   <script type="importmap">
     { "imports": { "three": "./assets/vendor/three/three.min.js" } }
   </script>
-  <script type="module" src="assets/js/main.js?v=3"></script>
+  <!-- i moduli della prima schermata si scaricano insieme a main.js, non uno dopo l'altro -->
+  <link rel="modulepreload" href="assets/js/testi.js?v=5">
+  <link rel="modulepreload" href="assets/js/misure.js?v=5">
+  <link rel="modulepreload" href="assets/js/apertura.js?v=5">
+  <link rel="modulepreload" href="assets/js/ritratto.js?v=5">
+  <script type="module" src="assets/js/main.js?v=5"></script>
 </head>
 <body>
   <a class="salta" href="#portfolio">Skip to the paintings</a>
@@ -44,6 +49,7 @@
 
   <main>
     <section class="apertura" id="hero" aria-label="Introduction">
+      <div class="apertura__ritratto" data-ritratto hidden></div>
       <div class="apertura__testo">
         <p class="apertura__professione" data-testo="sito.professione"></p>
         <h1 class="apertura__nome" data-testo="sito.nome">Elidon Muçaj</h1>

@@ -7,9 +7,9 @@
 // - un solo passaggio di disegno (i riflessi sono copie speculari sotto un pavimento semitrasparente);
 // - con «riduci movimento» la camera non si muove: si passa da un punto all'altro con un velo nero.
 import * as THREE from 'three';
-import { misureOpera } from './misure.js?v=3';
-import { materialeDipinto, cambiaMappa, forzaRilievo } from './rilievo.js?v=3';
-import { rigaCartellino } from './testi.js?v=3';
+import { misureOpera } from './misure.js?v=5';
+import { materialeDipinto, cambiaMappa, forzaRilievo } from './rilievo.js?v=5';
+import { rigaCartellino } from './testi.js?v=5';
 
 // Colore delle pareti scelto nel pannello: albedo, luce di fondo della sala, forza delle pozze dei faretti
 // e chiarezza dei cartellini (sulle pareti scure un cartoncino bianco sembrerebbe un errore di disegno).

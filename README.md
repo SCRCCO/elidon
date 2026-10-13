@@ -14,7 +14,7 @@ La guida per il proprietario è in [GUIDA.md](GUIDA.md).
 
 | Sezione | Cosa fa |
 |---|---|
-| Prima schermata | Le opere scelte («Selected works») sospese in un anello 3D che ruota; si trascina per girarlo, un clic apre l'opera. |
+| Prima schermata | Le opere scelte («Selected works»), una alla volta, sotto una lampada radente che segue il mouse; un clic apre l'opera. Dietro il nome, il ritratto dell'artista esce dal buio dove passa la stessa luce. |
 | Paintings | Griglia con i filtri del vecchio sito: Selected works, gli ultimi quattro anni, Earlier works, All. Visore a tutto schermo con zoom, frecce, scorrimento col dito e «Ask about this work» (email già compilata). |
 | 3D Gallery | Una sala virtuale con le opere appese in scala reale (dal campo «Dimensioni»), faretti, cartellini, visita guidata automatica. Si naviga trascinando, toccando il pavimento o un quadro, oppure con la tastiera (W A S D, frecce). |
 | About, Research | Biografia e ricerca artistica, con la citazione. |
@@ -35,7 +35,8 @@ Altri dettagli:
 index.html              pagina pubblica (scheletro: i contenuti arrivano da contenuti/sito.json)
 assets/css/style.css    aspetto del sito (i colori sono variabili in cima al file)
 assets/js/main.js       costruisce le sezioni dai contenuti
-assets/js/apertura3d.js anello 3D della prima schermata
+assets/js/apertura3d.js luce radente sul quadro della prima schermata (WebGL)
+assets/js/ritratto.js   ritratto dell'artista nella prima schermata, illuminato dal mouse
 assets/js/galleria3d.js sala virtuale 3D
 assets/vendor/three/    Three.js r186 (licenza MIT), in un solo file
 assets/fonts/           caratteri Cormorant Garamond e Inter, ospitati in locale (niente Google Fonts → nessun dato inviato a terzi)
@@ -74,15 +75,19 @@ Dopo la messa online, **i contenuti vivono sul server**: il proprietario li camb
 - `assets/img/` (foto del vecchio sito)
 - `admin/privato/` (password)
 
-Per aggiornare il sito basta ricaricare `index.html`, `assets/css`, `assets/js`, `assets/vendor/three`, `assets/fonts` e i file in `admin/` tranne `privato/`. Dopo una modifica a CSS o JS, aumenta il numero in `?v=2` nei link di `index.html` così i browser scaricano la versione nuova.
+Per aggiornare il sito basta ricaricare `index.html`, `assets/css`, `assets/js`, `assets/vendor/three`, `assets/fonts` e i file in `admin/` tranne `privato/`. Dopo una modifica a CSS o JS, aumenta il numero in `?v=5` nei link di `index.html` e negli `import` dei file in `assets/js` (lo stesso numero ovunque) così i browser scaricano la versione nuova.
+
+Il ritratto della prima schermata è l'«Immagine della prima schermata» del pannello (scheda Generale). Se la foto cambia, in cima al blocco del ritratto in `assets/css/apertura.css` vanno ritoccate tre percentuali: dov'è il volto (`--volto-x`, `--volto-y`) e quale riga della foto resta appena sopra il testo (`--sopra-testo`).
 
 ## Provarlo sul proprio computer
 
 Serve PHP installato. Per vedere le foto, copia anche `assets/img/` e i PDF dal server. Dalla cartella del progetto:
 
 ```sh
-php -S localhost:8000
+PHP_CLI_SERVER_WORKERS=8 php -S localhost:8000
 ```
+
+(`PHP_CLI_SERVER_WORKERS=8` fa servire più file insieme: senza, il server di prova di PHP ne manda uno alla volta e le foto arrivano in fila.)
 
 Poi apri <http://localhost:8000> per il sito e <http://localhost:8000/admin/> per il pannello. Aprire `index.html` con un doppio clic non basta: il browser blocca la lettura di `contenuti/sito.json` dai file locali.
 

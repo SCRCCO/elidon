@@ -10,8 +10,8 @@
 // - Il cambio d'opera è un cambio di luce: la lampada si abbassa, al buio si cambia opera, la luce radente
 //   rientra dal lato. L'opera non viene mai deformata, ritagliata né mescolata con un'altra.
 import * as THREE from 'three';
-import { materialeDipinto, cambiaMappa, forzaRilievo } from './rilievo.js?v=3';
-import { misureOpera } from './misure.js?v=3';
+import { materialeDipinto, cambiaMappa, forzaRilievo } from './rilievo.js?v=5';
+import { misureOpera } from './misure.js?v=5';
 
 const FOV = 30;                 // obiettivo lungo: la prospettiva si intuisce appena
 const INTRO = 2.6;              // s: passata radente da sinistra all'arrivo
@@ -234,7 +234,8 @@ function leggiImmagine(url) {
 // rettangolo(rapporto) → { x, y, w, h } dell'opera rispetto alla sezione (px CSS); zonaTesto() → idem per il testo.
 // Richiami: suSpegni() all'inizio di un cambio, suBuio(opera, rapporto) al buio, suPronto() al primo fotogramma,
 // suGuasto(motivo) quando conviene tornare allo strato statico.
-export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dettaglio = false, suSpegni, suBuio, suPronto, suGuasto }) {
+// dettaglio: schermo grande col mouse (parallasse, texture fino a 1600 px); grande: usa la foto grande invece dell'anteprima.
+export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dettaglio = false, grande = dettaglio, suSpegni, suBuio, suPronto, suGuasto }) {
   const renderer = new THREE.WebGLRenderer({
     canvas: tela, context: contesto, alpha: false, depth: false, stencil: false, antialias: false, powerPreference: 'default',
   });
@@ -359,7 +360,7 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
   const voci = new Map();    // chiave → Promise<voce>
   const vive = new Set();    // voci con la texture creata, per liberarle subito
   let precaricata = null;
-  const urlDi = (o) => (dettaglio && o.immagine.file) || o.immagine.miniatura;
+  const urlDi = (o) => (grande && o.immagine.file) || o.immagine.miniatura;
   const chiaveDi = (o) => (o ? `${o.id}|${urlDi(o)}` : '');
 
   function creaVoce(opera, chiave, img) {

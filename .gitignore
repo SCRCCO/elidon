@@ -7,3 +7,4 @@ documenti/*
 !documenti/.htaccess
 .DS_Store
 Thumbs.db
+assets/img/*

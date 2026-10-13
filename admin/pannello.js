@@ -238,13 +238,17 @@ function riduci(sorgente, lato) {
   return finale;
 }
 
-async function comeJpeg(canvas, limite) {
-  for (const qualita of [0.9, 0.85, 0.8, 0.72, 0.64]) {
+// Le anteprime (griglia, prima schermata) partono da una qualità più bassa: pesano la metà e a 900 pixel non si nota.
+const QUALITA_GRANDE = [0.9, 0.85, 0.8, 0.72, 0.64];
+const QUALITA_ANTEPRIMA = [0.8, 0.72, 0.64];
+
+async function comeJpeg(canvas, limite, scala = QUALITA_GRANDE) {
+  for (const qualita of scala) {
     const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', qualita));
     if (blob && blob.size <= limite) return blob;
   }
   // ancora troppo pesante per il server: si riduce la risoluzione
-  return comeJpeg(riduci(canvas, Math.round(Math.max(canvas.width, canvas.height) * 0.8)), limite);
+  return comeJpeg(riduci(canvas, Math.round(Math.max(canvas.width, canvas.height) * 0.8)), limite, scala);
 }
 
 async function caricaFoto(file, suStato = () => {}) {
@@ -256,7 +260,7 @@ async function caricaFoto(file, suStato = () => {}) {
   const limite = Math.max(300 * 1024, stato.limite * 0.95);
   const grande = riduci(sorgente, LATO_GRANDE);
   const piccola = riduci(sorgente, LATO_MINIATURA);
-  const [bGrande, bPiccola] = await Promise.all([comeJpeg(grande, limite), comeJpeg(piccola, limite)]);
+  const [bGrande, bPiccola] = await Promise.all([comeJpeg(grande, limite), comeJpeg(piccola, limite, QUALITA_ANTEPRIMA)]);
   sorgente.close?.();
   suStato('Invio la foto…');
   const modulo = new FormData();
@@ -491,7 +495,7 @@ async function creaAnteprime(bottone) {
       if (Math.max(img.larghezza, img.altezza) <= LATO_MINIATURA * 1.15 && blob.size < 350 * 1024) {
         stato.anteprimeInutili.add(img.file); // già leggera: va bene così
       } else {
-        const piccola = await comeJpeg(riduci(sorgente, LATO_MINIATURA), Math.max(300 * 1024, stato.limite * 0.95));
+        const piccola = await comeJpeg(riduci(sorgente, LATO_MINIATURA), Math.max(300 * 1024, stato.limite * 0.95), QUALITA_ANTEPRIMA);
         const modulo = new FormData();
         modulo.append('nome', img.file.split('/').pop());
         modulo.append('immagine', piccola, 'anteprima.jpg');

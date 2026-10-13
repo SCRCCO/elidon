@@ -1,8 +1,8 @@
 // Costruisce il sito a partire da contenuti/sito.json.
 // Il testo viene sempre inserito come testo semplice (textContent), mai come HTML.
 // Le scritte rivolte ai visitatori sono in inglese, come il sito.
-import { tecnicaInglese, rigaCartellino } from './testi.js?v=3';
-import { misureOpera, haDimensioni } from './misure.js?v=3';
+import { tecnicaInglese, rigaCartellino } from './testi.js?v=5';
+import { misureOpera, haDimensioni } from './misure.js?v=5';
 
 const FILE_CONTENUTI = 'contenuti/sito.json';
 const ROTTA_OPERA = 'work/';
@@ -844,7 +844,7 @@ function webglDisponibile() {
 }
 
 // Prima schermata: la gestisce apertura.js (strato statico sempre presente + motore WebGL facoltativo).
-// Contratto: avvia({ radice, palco, opere, immagineRiserva, suApri }) → { sospendi(bool), ferma() }.
+// Contratto: avvia({ radice, palco, opere, immagineRiserva, ritratto, nome, suApri }) → { sospendi(bool), ferma() }.
 let apertura = null;
 
 async function avviaApertura() {
@@ -852,12 +852,15 @@ async function avviaApertura() {
   const prime = (scelte.length ? scelte : opere()).slice(0, 12);
   const elenco = prime.map((o) => ({ ...o, immagine: immagine(o.immagine) }));
   try {
-    const { avvia } = await import('./apertura.js?v=3');
+    const { avvia } = await import('./apertura.js?v=5');
     apertura = avvia({
       radice: $('#hero'),
       palco: $('[data-palco]'),
       opere: elenco,
       immagineRiserva: immagine(dati.sito?.immagine_apertura),
+      // la stessa immagine è il ritratto che esce dal buio dietro il nome
+      ritratto: immagine(dati.sito?.immagine_apertura),
+      nome: testo(dati.sito?.nome),
       // il visore scorre le stesse opere della prima schermata; chiudendolo si torna lì
       suApri: (o) => { elencoVisore = prime; sezioneVisore = 'hero'; apriOpera(o.id); },
     });
@@ -898,7 +901,7 @@ async function apriSala(idIniziale = '') {
   const segnaposto = { chiudi() {} }; // finché la sala si allestisce
   sala = segnaposto;
   try {
-    const { creaSala } = await import('./galleria3d.js?v=3');
+    const { creaSala } = await import('./galleria3d.js?v=5');
     if (sala !== segnaposto) return; // chiusa durante il caricamento
     const elenco = opereSala().map((o) => ({ ...o, immagine: immagine(o.immagine) }));
     // Contratto: creaSala(radice, opere, opzioni) → Promise<{ chiudi(), vaiA(id) }>
