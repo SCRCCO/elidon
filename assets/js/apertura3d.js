@@ -24,9 +24,11 @@ const ALTEZZA = 0.22;           // a riposo: abbastanza bassa da far leggere il 
 const RASENTE = 0.1;            // quando entra dal lato o sta fuori dal quadro
 const LATO = 1.5;               // da quanto lontano entra (mezze misure)
 
-// Governatore delle prestazioni: fotogrammi da ignorare all'inizio, fotogrammi misurati per la mediana.
+// Governatore delle prestazioni: fotogrammi da ignorare all'inizio, fotogrammi misurati per la mediana,
+// fotogrammi a vuoto per misurare la cadenza che lo schermo concede.
 const RISCALDAMENTO = 30;
 const CAMPIONI = 60;
+const A_VUOTO = 12;
 
 // Luce sulla superficie dipinta (vedi materialeDipinto): con la luce piena la foto resta la verità.
 const AMBIENTE = 0.38;
@@ -38,7 +40,9 @@ const PORTATA_ENTRATA = 8;      // in più quando la luce rientra dopo il buio: 
 const AMBIENTE_ENTRATA = 0.1;   // frazione dell'ambiente all'inizio del rientro (il resto arriva con la lampada)
 
 // Parete
-const POZZA = 0.032;            // luminosità della pozza di luce (lineare, sopra il colore del muro)
+const POZZA = 0.075;            // luminosità della pozza di luce (lineare, sopra il colore del muro): una lampada calda
+                                // che si legge (muro accanto al quadro ≈ 50–70 sRGB su un fondo di 18, mai oltre 80)
+const RAGGIO = 0.95;            // raggio della pozza, in lati lunghi del quadro
 const CALDO = [1, 0.83, 0.64];  // colore della lampada (lineare)
 const SFUMA_TESTO = 240;        // px: la luce si spegne prima di arrivare al testo
 
@@ -235,8 +239,10 @@ function leggiImmagine(url) {
 // Richiami: suSpegni() all'inizio di un cambio, suBuio(opera, rapporto) al buio, suPronto() al primo fotogramma,
 // suGuasto(motivo) quando conviene tornare allo strato statico.
 export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dettaglio = false, suSpegni, suBuio, suPronto, suGuasto }) {
+  // l'MSAA lo decide apertura.js creando il contesto (solo schermi a DPR < 1,5 con il mouse, dove la parallasse inclina il quadro)
   const renderer = new THREE.WebGLRenderer({
-    canvas: tela, context: contesto, alpha: false, depth: false, stencil: false, antialias: false, powerPreference: 'default',
+    canvas: tela, context: contesto, alpha: false, depth: false, stencil: false,
+    antialias: !!contesto.getContextAttributes()?.antialias, powerPreference: 'default',
   });
   const sfondo = getComputedStyle(radice).backgroundColor;
   const muro = new THREE.Color(/^rgba\(.*,\s*0\)$/.test(sfondo) || !sfondo ? '#121010' : sfondo);
@@ -333,6 +339,8 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
   const luceM = new THREE.Vector3();
   const luceMondo = new THREE.Vector3();
   let T = 0;                 // tempo della deriva (s)
+  let quieto = false;        // la regia è in pausa: la deriva si ferma, la lampada si posa (il mouse la muove ancora)
+  let assestata = false;     // luce, lampada e parallasse ferme: in quiete il ciclo smette di chiedere fotogrammi
 
   // puntatore (solo mouse e penna: col dito la lampada va da sola). Il tempo è sempre quello di
   // requestAnimationFrame: `mosso` segnala il movimento e il ciclo ne annota l'istante.
@@ -346,8 +354,9 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
     puntatore.sy = limita((puntatore.y / s.height) * 2 - 1, -1, 1);
     puntatore.voluto = 1;
     puntatore.mosso = true;
+    sveglia();
   };
-  const suLascia = (e) => { if (e.pointerType !== 'touch') puntatore.voluto = 0; };
+  const suLascia = (e) => { if (e.pointerType !== 'touch') { puntatore.voluto = 0; sveglia(); } };
   radice.addEventListener('pointermove', suMuovi, { passive: true });
   radice.addEventListener('pointerleave', suLascia, { passive: true });
 
@@ -443,7 +452,7 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
     parete.position.z = -prof;
     uParete.uQ.value.set(gruppo.position.x, gruppo.position.y, q.w / 2, q.h / 2);
     uParete.uProf.value = prof;
-    uParete.uRaggio.value = 0.7 * Math.max(q.w, q.h);
+    uParete.uRaggio.value = RAGGIO * Math.max(q.w, q.h);
     materiale.uniforms.uDim.value.set(misure.w, misure.h);
     return true;
   }
@@ -508,9 +517,10 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
   }
 
   function aggiorna(dt, ora) {
-    T += dt;
+    if (!quieto) T += dt;
     if (puntatore.mosso) { puntatore.mosso = false; puntatore.ultimo = ora; }
-    if (ora - puntatore.ultimo > 4000) puntatore.voluto = 0;   // mouse fermo da 4 s: torna la deriva
+    // mouse fermo da 4 s: torna la deriva (in quiete no: la lampada resta dove l'ha lasciata chi guarda)
+    if (!quieto && ora - puntatore.ultimo > 4000) puntatore.voluto = 0;
     puntatore.peso += (puntatore.voluto - puntatore.peso) * (1 - Math.exp(-dt * (puntatore.voluto ? 4 : 0.8)));
     deriva(vDeriva, T);
     if (puntatore.peso > 0.001) meta.lerpVectors(vDeriva, versoPuntatore(vPuntatore), puntatore.peso);
@@ -550,8 +560,16 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
     // parallasse col mouse, al massimo ±2°: chi guarda da destra vede il fianco destro della tela
     const k = 1 - Math.exp(-dt * 3);
     const peso = dettaglio ? puntatore.peso : 0;
-    gruppo.rotation.y += (-0.0349 * puntatore.sx * peso - gruppo.rotation.y) * k;
-    gruppo.rotation.x += (-0.026 * puntatore.sy * peso - gruppo.rotation.x) * k;
+    const ry = -0.0349 * puntatore.sx * peso;
+    const rx = -0.026 * puntatore.sy * peso;
+    gruppo.rotation.y += (ry - gruppo.rotation.y) * k;
+    gruppo.rotation.x += (rx - gruppo.rotation.x) * k;
+
+    assestata = fase === 'fermo' && entrata >= 1
+      && Math.abs(puntatore.voluto - puntatore.peso) < 1e-3
+      && inseguita.distanceToSquared(meta) < 1e-8
+      && Math.abs(voluta - intensita) < 1e-3
+      && Math.abs(ry - gruppo.rotation.y) < 1e-5 && Math.abs(rx - gruppo.rotation.x) < 1e-5;
   }
 
   function luci() {
@@ -587,26 +605,69 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
   let tickDisegno = 0;
   let riscaldamento = 0;
   const campioni = [];
+  let cadenza = 0;           // ms: intervallo di requestAnimationFrame senza disegnare (0 = non ancora misurato)
+  let dorme = false;         // in quiete e assestata: nessun fotogramma finché qualcosa non cambia
 
   function disegna() {
     luci();
     renderer.render(scena, camera);
   }
 
-  // Governatore: mediana dei fotogrammi oltre 22 ms → DPR 1; oltre 30 ms → si torna allo strato statico.
+  // Soglie del governatore: mediana oltre 22 ms → DPR 1, oltre 30 ms → strato statico, con uno schermo a 60 Hz
+  // (o più). Se è lo schermo a limitare requestAnimationFrame (iOS «Risparmio energetico», «Risparmio energetico»
+  // di Chrome: 30 fotogrammi al secondo) le soglie si spostano sopra quella cadenza: il dispositivo non è lento.
+  const soglie = () => (cadenza > 20 ? [cadenza + 8, cadenza + 14] : [22, 30]);
+
+  // Riparte il ciclo dopo una sosta (attivazione, misura a vuoto, quiete): il primo intervallo non conta.
+  function riprendi() {
+    dorme = false;
+    ultimo = -1;
+    riscaldamento = Math.min(riscaldamento, RISCALDAMENTO - 15);
+    campioni.length = 0;
+    cancelAnimationFrame(richiesta);
+    richiesta = requestAnimationFrame(ciclo);
+  }
+
+  // In quiete il ciclo dorme quando tutto è fermo; il puntatore, un cambio d'opera o la fine della pausa lo svegliano.
+  function sveglia() {
+    if (attivo && dorme && !fermato && !guastato) riprendi();
+  }
+
+  // Misura a vuoto: qualche fotogramma senza disegnare (il canvas tiene l'ultimo) dice quale cadenza concede
+  // lo schermo, GPU a parte. La richiesta sta in `richiesta`, così attiva(false) e ferma() la annullano.
+  function misuraCadenza(poi) {
+    const intervalli = [];
+    let prima = -1;
+    const passo = (ora) => {
+      if (prima >= 0) intervalli.push(ora - prima);
+      prima = ora;
+      if (intervalli.length < A_VUOTO) { richiesta = requestAnimationFrame(passo); return; }
+      cadenza = intervalli.sort((a, b) => a - b)[A_VUOTO >> 1];
+      riprendi();
+      poi();
+    };
+    cancelAnimationFrame(richiesta);
+    richiesta = requestAnimationFrame(passo);
+  }
+
+  // Governatore: prima di rallentare (DPR 1) o di tornare allo strato statico controlla che sia davvero la GPU.
   function governa(intervallo) {
     if (++riscaldamento < RISCALDAMENTO) return;   // compilazione, caricamento della texture, comparsa del canvas
     campioni.push(intervallo);
     if (campioni.length < CAMPIONI) return;
     const mediana = campioni.sort((a, b) => a - b)[campioni.length >> 1];
     campioni.length = 0;
-    if (mediana > 30) guasto(`slow: ${mediana.toFixed(1)} ms per frame`);
-    else if (mediana > 22 && dpr > 1) {
-      dpr = 1;
-      renderer.setPixelRatio(dpr);   // svuota il canvas: si ridisegna subito
-      disegna();
-      riscaldamento = RISCALDAMENTO - 15;
-    }
+    if (cadenza > 20 && mediana < cadenza - 8) cadenza = 0;   // il limite dello schermo è stato tolto
+    if (mediana <= soglie()[0]) return;
+    misuraCadenza(() => {
+      const [riduci, lento] = soglie();
+      if (mediana > lento) guasto(`slow: ${mediana.toFixed(1)} ms per frame`);
+      else if (mediana > riduci && dpr > 1) {
+        dpr = 1;
+        renderer.setPixelRatio(dpr);   // svuota il canvas: si ridisegna subito
+        disegna();
+      }
+    });
   }
 
   function ciclo(ora) {
@@ -617,8 +678,9 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
       inizia();
     }
     if (fase === 'compila') return;
-    // a riposo (nessun cambio, mouse fermo) 30 fotogrammi al secondo
-    if (visto && fase === 'fermo' && !puntatore.mosso && ora - puntatore.ultimo > 1500 && tick % 2) return;
+    // a riposo (nessun cambio, mouse fermo) metà dei fotogrammi: 30 al secondo su uno schermo a 60 Hz
+    // (non se lo schermo ne concede già solo 30)
+    if (visto && fase === 'fermo' && !puntatore.mosso && ora - puntatore.ultimo > 1500 && cadenza <= 20 && tick % 2) return;
     if (ultimo < 0) ultimo = ora;
     const passi = Math.max(1, tick - tickDisegno);
     tickDisegno = tick;
@@ -638,6 +700,12 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
       tela.classList.add('accesa');   // il primo fotogramma illuminato è pronto: il canvas entra in dissolvenza
       suPronto?.();
     }
+    // in quiete, a luce e lampada ferme, il ciclo si addormenta: l'ultimo fotogramma resta sul canvas
+    if (quieto && assestata) {
+      cancelAnimationFrame(richiesta);
+      dorme = true;
+      return;
+    }
     governa(intervallo);
   }
 
@@ -645,12 +713,11 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
     si = !!si && !fermato && !guastato;
     if (si === attivo) return;
     attivo = si;
-    if (si) {
-      ultimo = -1;
-      riscaldamento = Math.min(riscaldamento, RISCALDAMENTO - 15);
-      campioni.length = 0;
-      richiesta = requestAnimationFrame(ciclo);
-    } else cancelAnimationFrame(richiesta);
+    if (si) riprendi();
+    else {
+      cancelAnimationFrame(richiesta);
+      dorme = false;
+    }
   }
 
   // Lo strato statico prende il posto del canvas, senza rettangolo nero: il canvas sparisce subito.
@@ -671,6 +738,7 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
     vai(opera, verso = 1) {
       return new Promise((r) => {
         if (fermato || guastato) { r(false); return; }
+        sveglia();
         const precedenti = attese;
         attese = [r];
         for (const p of precedenti) p(false);
@@ -686,6 +754,7 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
           if (!v || fermato || destinazione?.opera !== opera) return;
           prossima = v;
           pulisci();
+          sveglia();
         }, () => guasto('image not available'));
       });
     },
@@ -696,6 +765,12 @@ export function creaMotore({ radice, tela, contesto, rettangolo, zonaTesto, dett
       carica(opera).then((v) => { if (v && vive.has(v) && !fermato) renderer.initTexture(v.texture); }, () => {});
     },
     attiva,
+    // Pausa della regia (tasto ❙❙, fine del giro): la deriva della lampada si ferma e, a luce assestata,
+    // il motore smette di disegnare. Seguire il mouse resta (è chi guarda a muovere la lampada).
+    quiete(si) {
+      quieto = !!si;
+      if (!quieto) sveglia();
+    },
     ridimensiona() {
       if (fermato || guastato) return;
       // ridisegna subito: cambiare le misure del canvas lo svuota

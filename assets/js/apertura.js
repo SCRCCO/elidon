@@ -14,8 +14,13 @@ const DOPO_COMANDO = 6000;    // ms in più dopo ‹ › o uno scorrimento del d
 const DISSOLVENZA = 1200;     // ms: cambio d'opera senza WebGL, l'una sparisce e l'altra entra (vedi apertura.css)
 const SOGLIA_DITO = 50;       // px di scorrimento orizzontale per cambiare opera sul telefono
 
-// Attributi del contesto WebGL: niente canale alfa né profondità (la scena è disegnata in ordine), niente MSAA.
-const CONTESTO = { alpha: false, depth: false, stencil: false, antialias: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'default' };
+// Attributi del contesto WebGL: niente canale alfa né profondità (la scena è disegnata in ordine). L'MSAA solo dove
+// serve e costa poco: col mouse la parallasse inclina il quadro di ±2° e, a DPR < 1,5, il suo bordo contro il muro
+// scuro farebbe gli scalini; sui telefoni il quadro resta dritto (niente parallasse) e i pixel sono fitti.
+const contesto = () => ({
+  alpha: false, depth: false, stencil: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'default',
+  antialias: matchMedia('(pointer: fine)').matches && (window.devicePixelRatio || 1) < 1.5,
+});
 
 const due = (n) => String(n).padStart(2, '0');
 
@@ -129,9 +134,9 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
 
   // Per il motore: la zona occupata davvero dal testo (righe e pulsanti, non la colonna intera),
   // che la luce lascia scura.
+  const blocchiTesto = [...radice.querySelectorAll('.apertura__testo, .apertura__azioni')];
   function zonaTesto() {
-    const testo = radice.querySelector('.apertura__testo');
-    if (!testo) return null;
+    if (!blocchiTesto.length) return null;
     const s = radice.getBoundingClientRect();
     let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
     const unisci = (r) => {
@@ -139,13 +144,15 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
       x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom);
     };
     const tratto = document.createRange();
-    const giro = document.createTreeWalker(testo, NodeFilter.SHOW_TEXT);
-    while (giro.nextNode()) {
-      if (!giro.currentNode.textContent.trim()) continue;
-      tratto.selectNodeContents(giro.currentNode);
-      for (const r of tratto.getClientRects()) unisci(r);
+    for (const testo of blocchiTesto) {
+      const giro = document.createTreeWalker(testo, NodeFilter.SHOW_TEXT);
+      while (giro.nextNode()) {
+        if (!giro.currentNode.textContent.trim()) continue;
+        tratto.selectNodeContents(giro.currentNode);
+        for (const r of tratto.getClientRects()) unisci(r);
+      }
+      for (const b of testo.querySelectorAll('a, button')) unisci(b.getBoundingClientRect());
     }
-    for (const b of testo.querySelectorAll('a, button')) unisci(b.getBoundingClientRect());
     return x0 < x1 ? { x: x0 - s.left, y: y0 - s.top, w: x1 - x0, h: y1 - y0 } : null;
   }
 
@@ -235,6 +242,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
   let passi = 0;               // cambi automatici dall'ultimo giro (dopo un giro intero ci si ferma)
   let giroFinito = false;
   let pausaUtente = false;
+  let annuncia = false;        // l'ultimo cambio l'ha chiesto chi guarda (‹ ›, frecce, dito): il cartellino si annuncia
   let sopra = false;           // puntatore sul quadro o sul cartellino
   let fuoco = false;           // tastiera dentro il quadro o i comandi
   let visibile = true;         // la sezione è sullo schermo
@@ -266,16 +274,22 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
     timer = 0;
     restante = PERMANENZA;
     passi += 1;
+    annuncia = false;
+    if (passi >= n) giroFinito = true;   // giro completo: si resta sulla prima opera
+    statoPausa();                        // prima che il cartellino cambi
     vai(indice + 1, { verso: 1 });
-    if (passi >= n) { giroFinito = true; statoPausa(); }   // giro completo: si resta sulla prima opera
   }
 
   function statoPausa() {
     const ferma = pausaUtente || giroFinito;
     tastoPausa.setAttribute('aria-pressed', String(ferma));
     tastoPausa.hidden = !automatico();
-    // annunciare il cartellino solo quando le opere non scorrono da sole
-    didascalia.setAttribute('aria-live', automatico() && !ferma ? 'off' : 'polite');
+    // il cartellino si annuncia quando le opere non scorrono da sole, quando chi usa la tastiera è dentro i comandi
+    // e dopo un cambio chiesto con ‹ › (anche col dito o con un lettore di schermo)
+    didascalia.setAttribute('aria-live', automatico() && !ferma && !fuoco && !annuncia ? 'off' : 'polite');
+    // in pausa (o a giro finito, o con una sola opera) anche la lampada smette di vagare: niente movimento
+    // automatico che non si possa fermare
+    motore?.quiete(ferma || !automatico());
   }
 
   function aggiornaDisegno() { motore?.attiva(disegnabile()); }
@@ -290,6 +304,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
     if (manuale) {
       passi = 0;
       restante = PERMANENZA + DOPO_COMANDO;
+      annuncia = true;
       statoPausa();
     }
     const t = ++gettoneCambio;
@@ -345,7 +360,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
     tela.className = 'apertura__tela';
     tela.setAttribute('aria-hidden', 'true');
     let gl = null;
-    try { gl = tela.getContext('webgl2', CONTESTO); } catch { gl = null; }
+    try { gl = tela.getContext('webgl2', contesto()); } catch { gl = null; }
     if (!gl) return;
     const rilascia = () => { gl.getExtension('WEBGL_lose_context')?.loseContext(); tela.remove(); };
     radice.prepend(tela);
@@ -357,6 +372,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
         ...callbackMotore,
       });
       motore.attiva(disegnabile());
+      statoPausa();
       motore.vai(elenco[indice], 1);
     }).catch((err) => {
       console.warn('Hero: WebGL engine not available', err);
@@ -408,11 +424,12 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
     zona.addEventListener('pointerleave', suEsce, conAscolto);
   }
   // solo il fuoco da tastiera: un clic col mouse su ‹ › non deve fermare lo scorrimento per sempre
-  palco.addEventListener('focusin', (e) => { fuoco = !!e.target.matches?.(':focus-visible'); orologio(); }, conAscolto);
+  palco.addEventListener('focusin', (e) => { fuoco = !!e.target.matches?.(':focus-visible'); statoPausa(); orologio(); }, conAscolto);
   palco.addEventListener('focusout', (e) => {
     if (palco.contains(e.relatedTarget)) return;
     fuoco = false;
     restante = Math.max(restante, 2500);
+    statoPausa();
     orologio();
   }, conAscolto);
 
@@ -446,8 +463,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
   const ridimensiona = new ResizeObserver(() => { disponi(); motore?.ridimensiona(); });
   ridimensiona.observe(radice);
   ridimensiona.observe(riquadro);
-  const blocco = radice.querySelector('.apertura__testo');
-  if (blocco) ridimensiona.observe(blocco);   // il testo cambia misura quando arrivano i caratteri
+  for (const blocco of blocchiTesto) ridimensiona.observe(blocco);   // il testo cambia misura quando arrivano i caratteri
 
   // chi chiede meno movimento mentre la pagina è aperta: niente WebGL né avanzamento automatico
   const suPreferenza = () => {

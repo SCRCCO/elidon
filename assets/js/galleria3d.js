@@ -11,13 +11,14 @@ import { misureOpera } from './misure.js?v=3';
 import { materialeDipinto, cambiaMappa, forzaRilievo } from './rilievo.js?v=3';
 import { rigaCartellino } from './testi.js?v=3';
 
-// Colore delle pareti scelto nel pannello: albedo, luce di fondo della sala, forza delle pozze dei faretti
-// e chiarezza dei cartellini (sulle pareti scure un cartoncino bianco sembrerebbe un errore di disegno).
+// Colore delle pareti scelto nel pannello: albedo, luce di fondo della sala, forza delle pozze dei faretti,
+// chiarezza dei cartellini (sulle pareti scure un cartoncino bianco sembrerebbe un errore di disegno) e soffitto.
+// Le pareti chiare restano chiare anche fra una pozza e l'altra: la sala non deve sembrare una cantina.
 const PARETI = {
-  'Bianco': { colore: 0xf1efea, fondo: 0.05, faretti: 1.7, carta: 1 },
-  'Grigio chiaro': { colore: 0xd6d4cf, fondo: 0.06, faretti: 2, carta: 1 },
-  'Antracite': { colore: 0x3d3c39, fondo: 0.4, faretti: 8, carta: 0.4 },
-  'Terracotta': { colore: 0xb4705a, fondo: 0.09, faretti: 3, carta: 0.7 },
+  'Bianco': { colore: 0xf1efea, fondo: 0.6, faretti: 1, carta: 1.06, soffitto: 0x2a2826 },
+  'Grigio chiaro': { colore: 0xd6d4cf, fondo: 0.55, faretti: 1.1, carta: 1.04, soffitto: 0x2a2826 },
+  'Antracite': { colore: 0x3d3c39, fondo: 0.4, faretti: 8, carta: 0.4, soffitto: 0x1b1a19 },
+  'Terracotta': { colore: 0xb4705a, fondo: 0.09, faretti: 3, carta: 0.7, soffitto: 0x1b1a19 },
 };
 const OCCHI = 1.6;            // altezza dello sguardo (m)
 const SOFFITTO_MIN = 3.9;
@@ -30,7 +31,6 @@ const STACCO = 0.012;         // distanza della tela dal muro (m)
 const PORTATA = 0.008;        // attenuazione della luce sul quadro: lieve calo dall'alto in basso
 const DURATA_RADENTE = 2.6;   // passata di luce radente all'arrivo (s)
 const RADENTE = 0.85;         // peso del rilievo sotto il faretto (durante la passata sale a 1)
-const COLORE_SOFFITTO = 0x1b1a19;
 const COLORE_PAVIMENTO = 0x2b2825;
 const CARTA = 0xeeeae3;       // carta dei cartellini
 
@@ -175,8 +175,8 @@ const FRAMMENTO_PARETE = /* glsl */ `
   void main() {
     vec3 P = vMondo;
     float verticale = P.y < 1.6
-      ? mix(0.55, 1.0, smoothstep(0.0, 1.5, P.y))
-      : mix(1.0, 0.78, smoothstep(1.6, uAltezza, P.y));
+      ? mix(0.8, 1.0, smoothstep(0.0, 1.5, P.y))
+      : mix(1.0, 0.84, smoothstep(1.6, uAltezza, P.y));
     float pozze = 0.0;
     vec3 lungo = vec3(uLungo.x, 0.0, uLungo.y);
     for (int i = 0; i < N; i++) {
@@ -195,9 +195,11 @@ const FRAMMENTO_PARETE = /* glsl */ `
     float luce = (uFondo + uForza * pozze) * verticale;
     vec2 q = vec2(dot(P.xz, uLungo), P.y);
     float intonaco = 1.0 + 0.03 * (rumore(q * 3.5) - 0.5) + 0.018 * (rumore(q * 31.0) - 0.5);
+    // quanto di questa luce viene dai faretti: le pozze sono appena calde, il fondo della sala resta neutro
+    float quota = uForza * pozze / max(uFondo + uForza * pozze, 1e-3);
     // spalla morbida: le pozze più forti restano bianche senza bruciarsi
-    luce = luce < 0.6 ? luce : 0.6 + 0.3 * (1.0 - exp(-(luce - 0.6) * 3.3));
-    gl_FragColor = vec4(uAlbedo * luce * intonaco, 1.0);
+    luce = luce < 0.75 ? luce : 0.75 + 0.25 * (1.0 - exp(-(luce - 0.75) * 4.0));
+    gl_FragColor = vec4(uAlbedo * luce * intonaco * mix(vec3(1.0), vec3(1.0, 0.94, 0.86), quota), 1.0);
     #include <colorspace_fragment>
     gl_FragColor.rgb += (hash12(gl_FragCoord.xy) - 0.5) / 255.0;
   }
@@ -437,7 +439,10 @@ function instrada(a, b, ostacoli) {
 // ---------------------------------------------------------------- sala
 
 export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
-  const { colorePareti, nome = '', citazione = '', autoreCitazione = '', idIniziale = '', suDettagli, suTutteLeOpere } = opzioni;
+  const { colorePareti, nome = '', citazione = '', autoreCitazione = '', idIniziale = '', suDettagli, suTutteLeOpere, segnale } = opzioni;
+  // Oggetto restituito quando la sala è stata chiusa prima di essere pronta: non c'è più niente da comandare.
+  const INERTE = { chiudi() {}, vaiA() {} };
+  if (segnale?.aborted) return INERTE;
   const $ = (s) => radice.querySelector(s);
   const el = {
     scena: $('[data-sala-scena]'),
@@ -454,6 +459,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     dati: $('[data-sala-dati]'),
     sosta: $('[data-sala-sosta]'),
     dettagli: $('[data-sala-dettagli]'),
+    annuncio: $('[data-sala-annuncio]'),
     prec: $('[data-sala-prec]'),
     succ: $('[data-sala-succ]'),
     giro: $('[data-sala-giro]'),
@@ -466,6 +472,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     torna: $('[data-sala-torna]'),
     esci: $('[data-sala-esci]'),
   };
+  const annuncia = (testo) => { if (el.annuncio) el.annuncio.textContent = testo; };
 
   // Stato iniziale dell'interfaccia (la sala si può aprire più volte nella stessa visita)
   radice.classList.remove('sala--ferma');
@@ -478,6 +485,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
   el.giro.setAttribute('aria-pressed', 'false');
   el.progresso.style.transform = 'scaleX(0)';
   el.barra.setAttribute('aria-valuenow', '0');
+  annuncia('');
   const frase = String(citazione || '').trim();
   el.citazione.textContent = frase || 'Preparing the exhibition';
   el.citazione.classList.toggle('sala__citazione--breve', !frase);
@@ -487,6 +495,15 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
   // Chi usa la tastiera entra nella sala; all'uscita torna dove era.
   const fuocoPrima = document.activeElement;
   radice.focus({ preventScroll: true });
+
+  // Il resto della pagina non riceve il fuoco della tastiera finché la sala è aperta, già mentre si allestisce
+  // (la soglia copre tutto). I <dialog> restano attivi: il visore si apre sopra la sala.
+  const inertiti = [];
+  for (const x of document.body.children) {
+    if (x === radice || x.tagName === 'DIALOG' || x.tagName === 'SCRIPT' || x.inert) continue;
+    x.inert = true;
+    inertiti.push(x);
+  }
 
   const riduci = matchMedia('(prefers-reduced-motion: reduce)');
   const tattile = matchMedia('(pointer: coarse)').matches;
@@ -514,20 +531,97 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
   }
   ascolta(el.torna, 'click', esci);
 
-  // Controllore minimo, per quando la sala non si può allestire (il messaggio resta finché si esce)
-  const controlloreVuoto = () => ({
-    chiudi() {
-      staccaTutto();
-      el.messaggio.hidden = true;
-      radice.classList.remove('sala--ferma');
-      if (fuocoPrima?.isConnected && !radice.contains(fuocoPrima)) fuocoPrima.focus?.({ preventScroll: true });
-    },
-    vaiA() {},
-  });
+  // ------------------------------------------------ ciclo di vita
 
-  // Il contesto WebGL si crea subito: se manca, lo si dice senza far aspettare le foto.
   const tela = document.createElement('canvas');
   let renderer = null;
+  let contestoPerso = false;
+  let liberata = false;      // contesto WebGL e memoria già restituiti
+  let chiuso = false;        // sala chiusa: da qui in poi non si tocca più l'interfaccia condivisa
+  let avviato = false;       // allestimento finito, il ciclo dei fotogrammi gira
+  let fermo = false;         // contesto perso a sala aperta: niente più fotogrammi
+  let richiesta = 0;
+  let timerAiuto = 0;
+  let timerVelo = 0;
+  const daLiberare = [];
+  const tieni = (x) => { daLiberare.push(x); return x; };
+  const definite = [];       // opere con la foto più definita caricata (al massimo 4)
+
+  // Restituisce subito il contesto WebGL e la memoria della scheda grafica (vale a ogni punto dell'allestimento).
+  function liberaGrafica() {
+    if (liberata) return;
+    liberata = true;
+    cancelAnimationFrame(richiesta);
+    clearTimeout(timerAiuto);
+    clearTimeout(timerVelo);
+    staccaTutto();
+    for (const q of definite) q.definita?.dispose();
+    for (const x of daLiberare) x.dispose?.();
+    if (renderer) {
+      renderer.dispose();
+      if (!contestoPerso) renderer.forceContextLoss();
+    }
+    tela.remove();
+  }
+
+  // All'uscita il fuoco torna dove era, ma solo se è rimasto nella sala (o si è perso):
+  // se nel frattempo il visitatore è andato altrove, non lo si sposta.
+  function restituisciFuoco() {
+    const a = document.activeElement;
+    const perso = !a || a === document.body || radice.contains(a);
+    if (perso && fuocoPrima?.isConnected && !radice.contains(fuocoPrima)) fuocoPrima.focus?.({ preventScroll: true });
+  }
+
+  let osservatore = null;
+  const controllore = {
+    chiudi() {
+      if (chiuso) return;
+      chiuso = true;
+      segnale?.removeEventListener('abort', suAnnullata);
+      osservatore?.disconnect();
+      liberaGrafica();
+      staccaTutto();
+      for (const x of inertiti) x.inert = false;
+      inertiti.length = 0;
+      radice.classList.remove('sala--ferma');
+      delete radice.dataset.qualita;
+      el.velo.classList.remove('sala__velo--chiuso');
+      el.didascalia.hidden = true;
+      el.fine.hidden = true;
+      el.messaggio.hidden = true;
+      el.aiuto.classList.add('sala__aiuto--nascosto');
+      el.caricamento.classList.remove('sala__caricamento--fine'); // alla prossima apertura si rivede subito la soglia
+      avanza(0);
+      annuncia('');
+      restituisciFuoco();
+    },
+    vaiA() {}, // collegato a fine allestimento
+  };
+
+  // Chiusa durante l'allestimento (Exit, Esc, «indietro»): main.js annulla il segnale; per prudenza si guarda anche
+  // l'attributo hidden della radice. Si libera tutto subito: mai due contesti della sala vivi insieme.
+  function suAnnullata() { controllore.chiudi(); }
+  segnale?.addEventListener('abort', suAnnullata, { once: true });
+  osservatore = new MutationObserver((mutazioni) => {
+    if (mutazioni.some((m) => m.oldValue === null) || radice.hidden) controllore.chiudi();
+  });
+  osservatore.observe(radice, { attributes: true, attributeFilter: ['hidden'], attributeOldValue: true });
+
+  // Se l'allestimento non riesce si libera tutto e resta un messaggio (mai un alert()) finché si esce.
+  function fallito(err, testo = 'The 3D gallery could not be opened. You can still see all the paintings on the site.') {
+    if (chiuso) return INERTE;
+    if (err) console.error('3D room:', err);
+    liberaGrafica();
+    ascolta(el.torna, 'click', esci);
+    mostraMessaggio(testo);
+    return controllore;
+  }
+
+  // Dopo ogni attesa: sala chiusa nel frattempo (→ oggetto inerte), oppure contesto perso (→ messaggio).
+  const interrotta = () => chiuso || liberata || contestoPerso;
+  const esito = () => (chiuso ? INERTE : liberata ? controllore : fallito(new Error('WebGL context lost')));
+
+  // Il contesto WebGL si crea subito: se manca, lo si dice senza far aspettare le foto.
   try {
     const contesto = tela.getContext('webgl2', {
       alpha: false, depth: true, stencil: false, antialias: true, premultipliedAlpha: true,
@@ -537,31 +631,21 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
   } catch (err) {
     console.info('3D room: WebGL not available', err);
   }
-  if (!renderer) {
-    mostraMessaggio('The 3D gallery cannot start on this device. You can still see all the paintings on the site.');
-    return controlloreVuoto();
-  }
-  let contestoPerso = false;
-  const daLiberare = [];
-  const tieni = (x) => { daLiberare.push(x); return x; };
-  const inertiti = [];
-  let chiuso = false;
-  let richiesta = 0;
-  // Se l'allestimento fallisce si libera tutto e si mostra un messaggio (mai un alert()).
-  const fallito = (err) => {
-    console.error('3D room:', err);
-    chiuso = true;
+  if (!renderer) return fallito(null, 'The 3D gallery cannot start on this device. You can still see all the paintings on the site.');
+
+  // Il dispositivo può togliere il contesto in ogni momento (iOS quando si passa a un'altra app, riavvio del driver):
+  // si ascolta da subito. Durante l'allestimento si mostra il messaggio senza aspettare le foto.
+  function suContestoPerso(e) {
+    e.preventDefault();
+    if (contestoPerso) return;
+    contestoPerso = true;
+    if (!avviato) { fallito(new Error('WebGL context lost')); return; }
     cancelAnimationFrame(richiesta);
-    staccaTutto();
-    for (const x of inertiti) x.inert = false;
-    for (const x of daLiberare) x.dispose?.();
-    renderer.dispose();
-    if (!contestoPerso) renderer.forceContextLoss();
-    tela.remove();
-    ascolta(el.torna, 'click', esci);
-    mostraMessaggio('The 3D gallery could not be opened. You can still see all the paintings on the site.');
-    return controlloreVuoto();
-  };
+    fermo = true;
+    mostraMessaggio('The 3D view was interrupted by the device. Please go back to the site and open the gallery again.');
+  }
+  ascolta(tela, 'webglcontextlost', suContestoPerso);
+
   try {
     let dprMassimo = Math.min(window.devicePixelRatio || 1, tattile ? 1.5 : 2);
     renderer.setPixelRatio(dprMassimo);
@@ -571,22 +655,11 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     // Quelle che non si caricano (file mancante) restano fuori dalla sala.
     const latoTexture = tattile || tutteLeOpere.length > 40 ? 1024 : 1600;
     const latoVicino = tattile ? 1024 : 2400; // da vicino, solo su schermi grandi, si carica la foto più definita
-    const foto = await precarica(tutteLeOpere.map((o) => o.immagine.miniatura), latoTexture, (fatti, totale) => avanza((fatti / totale) * 0.85));
+    const foto = await precarica(tutteLeOpere.map((o) => o.immagine.miniatura), latoTexture, (fatti, totale) => { if (!interrotta()) avanza((fatti / totale) * 0.85); });
+    if (interrotta()) return esito();
     const opere = tutteLeOpere.filter((_, i) => foto[i]);
     const caricate = foto.filter(Boolean);
-
-    // Chiusa mentre si caricavano le foto: niente da allestire.
-    if (radice.hidden) {
-      renderer.dispose();
-      renderer.forceContextLoss?.();
-      return controlloreVuoto();
-    }
-    if (!opere.length) {
-      renderer.dispose();
-      renderer.forceContextLoss?.();
-      mostraMessaggio('There are no paintings on display in the room at the moment.');
-      return controlloreVuoto();
-    }
+    if (!opere.length) return fallito(null, 'There are no paintings on display in the room at the moment.');
 
     const scena = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 120);
@@ -671,7 +744,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     const fondoSala = { valore: riduci.matches ? 1 : 0.25 };
     function luceSuParete(P, ip) {
       const p = pareti[ip];
-      const verticale = P.y < 1.6 ? 0.55 + 0.45 * gradino(0, 1.5, P.y) : 1 - 0.22 * gradino(1.6, SOFFITTO, P.y);
+      const verticale = P.y < 1.6 ? 0.8 + 0.2 * gradino(0, 1.5, P.y) : 1 - 0.16 * gradino(1.6, SOFFITTO, P.y);
       let pozze = 0;
       const Lv = new THREE.Vector3();
       for (const f of p.faretti) {
@@ -686,7 +759,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
         pozze += Math.max(...f.membri.map((q) => q.accensione)) * cono * coseno / (1 + 0.25 * d2);
       }
       const luce = (tinta.fondo * fondoSala.valore + tinta.faretti * pozze) * verticale;
-      return luce < 0.6 ? luce : 0.6 + 0.3 * (1 - Math.exp(-(luce - 0.6) * 3.3));
+      return luce < 0.75 ? luce : 0.75 + 0.25 * (1 - Math.exp(-(luce - 0.75) * 4));
     }
 
     // ------------------------------------------------ pareti, soffitto, binari
@@ -722,7 +795,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       pareteMesh.push(m);
     });
 
-    const soffitto = new THREE.Mesh(tieni(new THREE.PlaneGeometry(W, D)), tieni(new THREE.MeshBasicMaterial({ color: COLORE_SOFFITTO })));
+    const soffitto = new THREE.Mesh(tieni(new THREE.PlaneGeometry(W, D)), tieni(new THREE.MeshBasicMaterial({ color: tinta.soffitto })));
     soffitto.rotation.x = Math.PI / 2;
     soffitto.position.y = SOFFITTO;
     scena.add(soffitto);
@@ -785,21 +858,29 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
 
     // ------------------------------------------------ panca da museo
 
+    // Seduta in rovere affumicato su uno zoccolo del colore del pavimento, con la sua ombra di contatto:
+    // nessuna faccia più scura del pavimento, niente «lastra nera» in mezzo alla sala.
+    const texOmbra = tieni(textureOmbra());
     const ostacoli = [];
     if (W > 7) {
       const panca = new THREE.Group();
-      const seduta = new THREE.Mesh(tieni(new THREE.BoxGeometry(2.0, 0.07, 0.5)), tieni(new THREE.MeshLambertMaterial({ color: 0x38322c })));
+      const seduta = new THREE.Mesh(tieni(new THREE.BoxGeometry(2.0, 0.07, 0.5)), tieni(new THREE.MeshLambertMaterial({ color: 0x5e5144 })));
       seduta.position.y = 0.425;
-      const zoccolo = new THREE.Mesh(tieni(new THREE.BoxGeometry(1.8, 0.39, 0.32)), tieni(new THREE.MeshLambertMaterial({ color: 0x24211e })));
+      const zoccolo = new THREE.Mesh(tieni(new THREE.BoxGeometry(1.8, 0.39, 0.32)), tieni(new THREE.MeshLambertMaterial({ color: 0x3a3631 })));
       zoccolo.position.y = 0.195;
-      panca.add(seduta, zoccolo);
+      // la texture dell'ombra ha il quadrato pieno nei 2/3 centrali: la mesh è più grande della panca
+      const ombraPanca = new THREE.Mesh(geoUnita, tieni(new THREE.MeshBasicMaterial({ map: texOmbra, transparent: true, opacity: 0.35, depthWrite: false })));
+      ombraPanca.rotation.x = -Math.PI / 2;
+      ombraPanca.position.y = 0.003;
+      ombraPanca.scale.set(2.0 * 1.4, 0.5 * 1.6, 1);
+      ombraPanca.renderOrder = 1; // dopo il pavimento semitrasparente
+      panca.add(ombraPanca, seduta, zoccolo);
       scena.add(panca);
       ostacoli.push(new THREE.Box2(new THREE.Vector2(-1.35, -0.6), new THREE.Vector2(1.35, 0.6)));
     }
 
     // ------------------------------------------------ quadri, riflessi, cartellini, faretti
 
-    const texOmbra = tieni(textureOmbra());
     const fronti = [];
     const cartellini = [];
     const matLente = tieni(new THREE.MeshBasicMaterial({ color: 0xffffff }));
@@ -895,7 +976,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     // Cartellini: si disegnano quando i caratteri sono pronti
     const caratteri = ['italic 500 88px Cormorant', '400 42px Inter'].map((f) => document.fonts.load(f).catch(() => {}));
     Promise.all(caratteri).then(() => {
-      if (chiuso) return;
+      if (liberata) return;
       for (const c of cartellini) {
         c.material.map = tieni(textureCartellino(c.userData.q.opera));
         c.material.map.anisotropy = Math.min(8, maxAniso);
@@ -958,7 +1039,10 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     // ------------------------------------------------ movimento
 
     const limiti = { x: W / 2 - 0.55, z: D / 2 - 0.55 };
-    const posizione = new THREE.Vector3(0, OCCHI, D / 2 - 1.3);
+    const obiettivo = { alto: 1, largo: 1, fascia: 0, tanV: 0.47 }; // vedi suRidimensiona()
+    // Sullo schermo verticale del telefono si parte più avanti: la parete di fondo riempie l'inquadratura, la panca ne esce.
+    const verticaleSchermo = (radice.clientWidth || innerWidth) < (radice.clientHeight || innerHeight);
+    const posizione = new THREE.Vector3(0, OCCHI, verticaleSchermo ? Math.min(D / 2 - 1.3, 1.3) : D / 2 - 1.3);
     const meta = posizione.clone();
     let yaw = 0;
     let pitch = 0;
@@ -988,23 +1072,34 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       return v;
     }
 
-    // Dove fermarsi davanti a un'opera: il quadro occupa circa tre quarti dell'altezza (o quattro quinti della larghezza).
+    // Dove fermarsi davanti a un'opera: nello spazio libero sopra la fascia dei pannelli il quadro occupa
+    // circa i 4/5 dell'altezza (o i 4/5 della larghezza dello schermo), e non finisce sotto il pulsante «Exit».
     function vistaDi(q) {
-      const fov = THREE.MathUtils.degToRad(camera.fov);
-      const fovOrizz = 2 * Math.atan(Math.tan(fov / 2) * camera.aspect);
-      const distanza = limita(Math.max((q.h / 0.72) / 2 / Math.tan(fov / 2), (q.w / 0.8) / 2 / Math.tan(fovOrizz / 2)), 1.4, Math.min(W, D) - 1.2);
+      const { alto, largo, fascia, tanV } = obiettivo;
+      let pxMetro = Math.min((0.82 * (alto - fascia)) / q.h, (0.8 * largo) / q.w); // px per metro sul quadro
+      const r = radice.getBoundingClientRect();
+      const e = el.esci.getBoundingClientRect();
+      const sinistraEsci = e.left - r.left - 8;
+      if (e.width && largo / 2 + (q.w * pxMetro) / 2 > sinistraEsci) {
+        const sottoEsci = (2 * ((alto - fascia) / 2 - (e.bottom - r.top) - 8)) / q.h; // il bordo alto scende sotto il pulsante
+        const accanto = (2 * (sinistraEsci - largo / 2)) / q.w;                       // oppure il quadro gli resta a sinistra
+        pxMetro = Math.min(pxMetro, Math.max(sottoEsci, accanto));
+      }
+      const distanza = limita(alto / (2 * tanV * Math.max(pxMetro, 1e-3)), 1.4, Math.min(W, D) - 1.2);
       const p = dentro(q.centro.clone().addScaledVector(q.normale, distanza).setY(OCCHI));
       const piano = Math.hypot(p.x - q.centro.x, p.z - q.centro.z);
       return { p, yaw: Math.atan2(q.normale.x, q.normale.z), pitch: Math.atan2(q.centro.y - OCCHI, piano) };
     }
 
     // Velo nero (riduci movimento): si chiude, si sposta la camera, si riapre. Circa 220 ms in tutto.
-    let timerVelo = 0;
-    function taglio(sposta) {
+    let tagliando = null;      // opera verso cui si sta passando dietro il velo
+    function taglio(sposta, opera = null) {
       clearTimeout(timerVelo);
+      tagliando = opera;
       el.velo.classList.add('sala__velo--chiuso');
       timerVelo = setTimeout(() => {
-        if (chiuso) return;
+        tagliando = null;
+        if (liberata) return;
         sposta();
         sporco = true;
         requestAnimationFrame(() => requestAnimationFrame(() => el.velo.classList.remove('sala__velo--chiuso')));
@@ -1013,7 +1108,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
 
     // Camminata morbida lungo una curva che evita la panca: prima si guarda lungo il cammino, poi ci si gira verso la meta.
     const tangente = new THREE.Vector3();
-    function cammina(destinazione, guarda, alArrivo) {
+    function cammina(destinazione, guarda, alArrivo, opera = null) {
       percorso = null;
       if (riduci.matches) {
         taglio(() => {
@@ -1021,9 +1116,10 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
           meta.copy(destinazione);
           if (guarda) { yaw = yawMeta = guarda.yaw; pitch = pitchMeta = guarda.pitch; }
           alArrivo?.();
-        });
+        }, opera);
         return;
       }
+      tagliando = null;
       const a = posizione.clone();
       const b = destinazione.clone();
       let punti = instrada(a, b, ostacoli);
@@ -1042,7 +1138,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       const curva = new THREE.CatmullRomCurve3(punti, false, 'centripetal');
       const lunghezza = lunghezzaDiretta < 0.02 ? 0 : curva.getLength();
       percorso = {
-        curva, lunghezza, inizio: tempo,
+        curva, lunghezza, inizio: tempo, opera,
         durata: lunghezza < 0.05 ? 0.9 : limita(1.2 + 0.3 * lunghezza, 1.6, 4.2),
         yaw0: yaw, pitch0: pitch, guarda, alArrivo,
         pesoTangente: gradino(0.6, 2.2, lunghezza),
@@ -1093,7 +1189,13 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       el.fine.hidden = true;
       fermaRadente();
       const v = vistaDi(q);
-      cammina(v.p, v, () => arrivoA(q, v.p));
+      cammina(v.p, v, () => arrivoA(q, v.p), q);
+    }
+
+    // La camera è già davanti all'opera q, o sta andando verso di lei?
+    function versoOpera(q) {
+      if (attuale !== q.indice) return false;
+      return arrivato || percorso?.opera === q || tagliando === q || (!percorso && !!dopoAccensione);
     }
 
     function arrivoA(q, punto) {
@@ -1101,6 +1203,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       arrivato = true;
       arrivo = tempo;
       puntoVista = punto.clone();
+      nascondiAiuto(); // davanti al quadro l'aiuto non deve coprirlo
       mostraDidascalia(q);
       if (!visitate.has(q) && !riduci.matches) { visitate.add(q); avviaRadente(q); }
       caricaDefinita(q);
@@ -1149,14 +1252,13 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     }
 
     // Da vicino serve più dettaglio: su schermi grandi si carica la foto meno ridotta (al massimo 4 alla volta).
-    const definite = [];
     function caricaDefinita(q) {
       if (q.definita || q.inCarica || latoVicino <= latoTexture) return;
       if (q.opera.immagine.file === q.opera.immagine.miniatura && Math.max(q.foto.w, q.foto.h) <= latoTexture) return;
       q.inCarica = true;
       caricaImmagine(q.opera.immagine.file, latoVicino).then((f) => {
         q.inCarica = false;
-        if (!f || chiuso) return;
+        if (!f || liberata) return;
         const t = textureDa(f.sorgente, maxAniso);
         renderer.initTexture(t);
         cambiaMappa(q.materiale, t);
@@ -1175,18 +1277,25 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     // ------------------------------------------------ interfaccia
 
     function mostraDidascalia(q) {
+      const titolo = q.opera.titolo || 'Untitled';
+      const riga = rigaCartellino(q.opera);
       el.conta.textContent = `${String(q.indice + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`;
-      el.titolo.textContent = q.opera.titolo || 'Untitled';
-      el.dati.textContent = rigaCartellino(q.opera);
-      el.dati.hidden = !el.dati.textContent;
+      el.titolo.textContent = titolo;
+      el.dati.textContent = riga;
+      el.dati.hidden = !riga;
       el.sosta.style.transform = 'scaleX(0)';
       el.didascalia.classList.toggle('sala__didascalia--giro', giro);
       el.didascalia.hidden = false;
+      // la didascalia compare già piena: per chi usa un lettore di schermo l'arrivo si annuncia in una regione sempre presente
+      annuncia(`Painting ${q.indice + 1} of ${n}: ${titolo}${riga ? `, ${riga}` : ''}`);
     }
-    function nascondiDidascalia() { el.didascalia.hidden = true; }
+    function nascondiDidascalia() {
+      // il fuoco non deve sparire con la didascalia (es. su «Details» quando la visita guidata passa oltre)
+      if (el.didascalia.contains(document.activeElement)) el.giro.focus({ preventScroll: true });
+      el.didascalia.hidden = true;
+    }
 
     let aiutoVisibile = false;
-    let timerAiuto = 0;
     function nascondiAiuto() {
       if (!aiutoVisibile) return;
       aiutoVisibile = false;
@@ -1310,21 +1419,23 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       e.preventDefault();
       if (e.type === 'keydown') { tasti.add(k); interrompi(); fermaGiro(); nascondiAiuto(); } else tasti.delete(k);
     }
+    // Obiettivo decentrato, come quello di una macchina da architettura: il centro ottico sta a metà dello spazio
+    // libero sopra la fascia dei pannelli (--sala-fascia in sala.css), non a metà schermo. Così un quadro guardato di
+    // fronte cade sopra didascalia e comandi senza inclinare lo sguardo: resta un rettangolo, niente trapezio.
     function suRidimensiona() {
       const w = radice.clientWidth || window.innerWidth;
       const h = radice.clientHeight || window.innerHeight;
       renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      camera.fov = camera.aspect >= 1 ? 50 : 62;
-      camera.updateProjectionMatrix();
+      const fascia = limita(parseFloat(getComputedStyle(radice).getPropertyValue('--sala-fascia')) || 0, 0, h * 0.45);
+      obiettivo.alto = h;
+      obiettivo.largo = w;
+      obiettivo.fascia = fascia;
+      obiettivo.tanV = Math.tan(THREE.MathUtils.degToRad(w >= h ? 50 : 62) / 2); // campo verticale sullo schermo
+      // immagine intera alta h + fascia, di cui si mostra la parte bassa: stessa scala, centro ottico più in alto
+      camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(obiettivo.tanV * (h + fascia) / h));
+      camera.aspect = w / (h + fascia);
+      camera.setViewOffset(w, h + fascia, 0, fascia, w, h);
       sporco = true;
-    }
-    function suContestoPerso(e) {
-      e.preventDefault();
-      contestoPerso = true;
-      cancelAnimationFrame(richiesta);
-      fermo = true;
-      mostraMessaggio('The 3D view was interrupted by the device. Please go back to the site and open the gallery again.');
     }
 
     ascolta(tela, 'pointerdown', suGiu);
@@ -1333,27 +1444,32 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     ascolta(tela, 'pointercancel', () => { trascina = null; });
     ascolta(tela, 'pointerleave', () => { if (anello.visible) { anello.visible = false; sporco = true; } });
     ascolta(tela, 'wheel', suRotella, { passive: false });
-    ascolta(tela, 'webglcontextlost', suContestoPerso);
     ascolta(window, 'keydown', suTasto);
     ascolta(window, 'keyup', suTasto);
     ascolta(window, 'blur', () => tasti.clear());
     ascolta(window, 'resize', suRidimensiona);
 
-    ascolta(el.prec, 'click', () => { fermaGiro(); vai(attuale < 0 ? n - 1 : attuale - 1); });
-    ascolta(el.succ, 'click', () => { fermaGiro(); vai(attuale + 1); });
+    ascolta(el.prec, 'click', () => { fermaGiro(); nascondiAiuto(); vai(attuale < 0 ? n - 1 : attuale - 1); });
+    ascolta(el.succ, 'click', () => { fermaGiro(); nascondiAiuto(); vai(attuale + 1); });
     ascolta(el.giro, 'click', () => {
       if (giro) { fermaGiro(); return; }
       nascondiAiuto();
       avviaGiro(attuale < 0 || attuale >= n - 1 ? 0 : attuale + 1);
     });
     ascolta(el.dettagli, 'click', () => { if (attuale >= 0) suDettagli?.(sequenza[attuale].opera); });
-    ascolta(el.ricomincia, 'click', () => { el.fine.hidden = true; avviaGiro(0); });
+    ascolta(el.ricomincia, 'click', () => {
+      el.fine.hidden = true;
+      avviaGiro(0);
+      el.giro.focus({ preventScroll: true }); // il pulsante premuto sparisce col cartello: il fuoco resta sulla visita
+    });
     ascolta(el.tutte, 'click', () => suTutteLeOpere?.());
 
     // ------------------------------------------------ prestazioni
 
     // Se i fotogrammi superano circa 22 ms: prima si spengono i riflessi, poi si abbassa la risoluzione.
-    const governatore = { campioni: [], attesa: 0, passi: 0 };
+    // Uno schermo che va a 30 Hz (risparmio energetico) non è lento: la soglia tiene conto della cadenza
+    // misurata con fotogrammi vuoti durante la citazione.
+    const governatore = { campioni: [], attesa: 0, passi: 0, cadenza: 1 / 60 };
     function governa(dtVero) {
       if (accensione || tempo < governatore.attesa || governatore.passi > 4) return;
       governatore.campioni.push(dtVero); // la mediana ignora gli scatti isolati (foto caricate, cambio di scheda)
@@ -1361,7 +1477,7 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       const ordinati = governatore.campioni.sort((a, b) => a - b);
       const mediana = ordinati[ordinati.length >> 1];
       governatore.campioni = [];
-      if (mediana <= 0.022) return;
+      if (mediana <= Math.max(0.022, governatore.cadenza + 0.006)) return;
       governatore.attesa = tempo + 1;
       governatore.passi++;
       if (matPavimento.uniforms.uRiflessi.value > 0) {
@@ -1377,15 +1493,16 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     }
 
     // Si disegna solo quando qualcosa cambia; fermo con la scheda nascosta o con il visore aperto sopra la sala.
+    // Un solo ciclo alla volta: parte a fine allestimento, mai prima (nemmeno tornando sulla scheda).
     const dialoghi = [...document.querySelectorAll('dialog')];
     let ultimo = performance.now();
-    let fermo = false;
     let disegnatoPrima = false;
     const avanti = new THREE.Vector3();
     const lato = new THREE.Vector3();
     const firma = [NaN, NaN, NaN, NaN, NaN];
 
     function fotogramma() {
+      if (liberata || fermo) return;
       richiesta = requestAnimationFrame(fotogramma);
       const ora = performance.now();
       const dtVero = Math.min((ora - ultimo) / 1000, 0.5);
@@ -1450,9 +1567,10 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
     }
 
     function suVisibilita() {
+      if (!avviato) return; // durante l'allestimento il ciclo non c'è ancora: lo avvierà l'allestimento
       cancelAnimationFrame(richiesta);
       disegnatoPrima = false;
-      if (!document.hidden && !chiuso && !fermo) { ultimo = performance.now(); fotogramma(); }
+      if (!document.hidden && !liberata && !fermo) { ultimo = performance.now(); fotogramma(); }
     }
     ascolta(document, 'visibilitychange', suVisibilita);
 
@@ -1480,66 +1598,45 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       if (renderer.extensions.has('KHR_parallel_shader_compile')) await renderer.compileAsync(scena, camera);
       else renderer.compile(scena, camera);
     } catch { /* si compilano al primo disegno */ }
+    if (interrotta()) return esito();
     for (let i = 0; i < sequenza.length; i++) {
-      if (chiuso || radice.hidden) break;
       renderer.initTexture(sequenza[i].base);
       avanza(0.85 + (0.15 * (i + 1)) / sequenza.length);
-      if (i % 3 === 2) await prossimoFotogramma();
+      if (i % 3 === 2) {
+        await prossimoFotogramma();
+        if (interrotta()) return esito();
+      }
     }
     avanza(1);
-    // la citazione resta almeno un momento, anche quando le foto sono già in memoria
-    const attesa = 1600 - (performance.now() - apertoIl);
-    if (attesa > 0) await new Promise((r) => setTimeout(r, attesa));
+    // La citazione resta almeno un momento, anche quando le foto sono già in memoria. Intanto si misura
+    // la cadenza dello schermo con fotogrammi vuoti (almeno 12): serve al governatore.
+    const intervalli = [];
+    for (let prima = performance.now(); intervalli.length < 12 || performance.now() - apertoIl < 1600;) {
+      await prossimoFotogramma();
+      if (interrotta()) return esito();
+      const ora = performance.now();
+      intervalli.push(ora - prima);
+      prima = ora;
+    }
+    intervalli.sort((a, b) => a - b);
+    governatore.cadenza = Math.min(0.034, intervalli[intervalli.length >> 1] / 1000);
 
-    const controllore = {
-      chiudi() {
-        if (chiuso) return;
-        chiuso = true;
-        for (const x of inertiti) x.inert = false;
-        inertiti.length = 0;
-        cancelAnimationFrame(richiesta);
-        clearTimeout(timerAiuto);
-        clearTimeout(timerVelo);
-        staccaTutto();
-        for (const q of sequenza) q.definita?.dispose();
-        for (const x of daLiberare) x.dispose?.();
-        renderer.dispose();
-        if (!contestoPerso) renderer.forceContextLoss();
-        tela.remove();
-        radice.classList.remove('sala--ferma');
-        delete radice.dataset.qualita;
-        el.velo.classList.remove('sala__velo--chiuso');
-        el.didascalia.hidden = true;
-        el.fine.hidden = true;
-        el.messaggio.hidden = true;
-        el.aiuto.classList.add('sala__aiuto--nascosto');
-        el.caricamento.classList.remove('sala__caricamento--fine'); // alla prossima apertura si rivede subito la soglia
-        avanza(0);
-        if (fuocoPrima?.isConnected && !radice.contains(fuocoPrima)) fuocoPrima.focus?.({ preventScroll: true });
-      },
-      vaiA(id) {
-        const q = sequenza.find((x) => String(x.opera.id) === String(id));
-        if (!q || chiuso) return;
-        fermaGiro();
-        vai(q.indice);
-      },
+    controllore.vaiA = (id) => {
+      const q = sequenza.find((x) => String(x.opera.id) === String(id));
+      // già lì o già in cammino (es. ritorno dal visore aperto con «Details»): non si rifà la strada
+      if (!q || liberata || versoOpera(q)) return;
+      fermaGiro();
+      vai(q.indice);
     };
 
-    // Chiusa durante l'allestimento: si libera tutto subito.
-    if (radice.hidden) { controllore.chiudi(); return controllore; }
-
-    // Il resto della pagina non riceve il fuoco della tastiera finché la sala è aperta (i <dialog> restano attivi).
-    for (const x of document.body.children) {
-      if (x === radice || x.tagName === 'DIALOG' || x.tagName === 'SCRIPT' || x.inert) continue;
-      x.inert = true;
-      inertiti.push(x);
-    }
-
     // Si toglie la soglia, poi le luci si accendono una opera dopo l'altra (tutte insieme con «riduci movimento»).
+    // L'aiuto compare all'ingresso; entrando davanti a un'opera (#virtual-gallery/<id>) la si lascia libera.
     el.caricamento.classList.add('sala__caricamento--fine');
-    aiutoVisibile = true;
-    el.aiuto.classList.remove('sala__aiuto--nascosto');
-    timerAiuto = setTimeout(nascondiAiuto, 9000);
+    if (!iniziale) {
+      aiutoVisibile = true;
+      el.aiuto.classList.remove('sala__aiuto--nascosto');
+      timerAiuto = setTimeout(nascondiAiuto, 9000);
+    }
     if (riduci.matches) {
       fondoSala.valore = 1;
       for (const q of sequenza) q.accensione = 1;
@@ -1549,6 +1646,8 @@ export async function creaSala(radice, tutteLeOpere, opzioni = {}) {
       accensione = { inizio: 0.35 };
       dopoAccensione = iniziale ? () => { if (attuale === iniziale.indice && !percorso) arrivoA(iniziale, posizione); } : null;
     }
+    avviato = true;
+    cancelAnimationFrame(richiesta);
     ultimo = performance.now();
     fotogramma();
 

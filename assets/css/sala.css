@@ -2,6 +2,8 @@
    Pannelli in «vetro scuro» (testo ≥ 7:1 anche sopra una parete bianca), pulsanti squadrati come la segnaletica di un museo. */
 
 .sala {
+  /* Fascia in basso occupata da didascalia e comandi: galleria3d.js inquadra le opere nello spazio libero sopra. */
+  --sala-fascia: 190px;
   --sala-vetro: rgba(14, 13, 12, .86);
   --sala-bordo: rgba(236, 231, 222, .16);
   --sala-testo: #ece7de;
@@ -29,6 +31,8 @@
   padding: 24px; background: #050505; text-align: center; transition: opacity .8s ease, visibility 0s .8s;
 }
 .sala__caricamento--fine { opacity: 0; visibility: hidden; pointer-events: none; }
+/* Sotto la soglia i comandi non servono ancora: fuori dalla vista e dall'ordine del tasto Tab (resta solo «Exit»). */
+.sala__caricamento:not(.sala__caricamento--fine) ~ :is(.sala__aiuto, .sala__didascalia, .sala__comandi, .sala__fine) { visibility: hidden; }
 .sala__soglia { margin: 0; max-width: 34rem; }
 .sala__citazione { margin: 0; }
 .sala__citazione p {
@@ -95,21 +99,26 @@
 .sala__comandi button:hover { background: rgba(236, 231, 222, .1); }
 .sala__comandi button[aria-pressed="true"] { background: var(--sala-testo); color: #141312; }
 
-/* Uscita */
+/* Uscita: sopra la soglia e il velo, si può uscire anche mentre la sala si allestisce */
 .sala__esci {
+  z-index: 4;
   right: 16px; top: calc(16px + env(safe-area-inset-top)); min-height: 44px; padding: 0 18px; border-radius: 0;
   cursor: pointer; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
 }
 .sala__esci:hover { background: rgba(40, 38, 35, .92); }
 
-/* Fine della mostra e messaggi: al centro */
-.sala__fine, .sala__messaggio {
-  left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(440px, calc(100% - 32px));
-  padding: 32px 32px 28px; text-align: center;
+/* Fine della mostra: prende il posto della fascia in basso, mai sopra l'ultimo quadro; niente vetro sfocato
+   (sfocherebbe l'opera). I messaggi restano al centro: lì la sala è ferma. */
+.sala__fine, .sala__messaggio { left: 50%; width: min(440px, calc(100% - 32px)); text-align: center; }
+.sala__fine {
+  bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); padding: 20px 24px;
+  background: rgba(14, 13, 12, .94); -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-.sala__fine-titolo { margin: 0; font: italic 500 clamp(28px, 4vw, 36px)/1.15 var(--serif); }
-.sala__fine-testo { margin: 10px 0 0; font-size: 13px; letter-spacing: .06em; color: var(--sala-tenue); }
-.sala__fine-azioni { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
+.sala__messaggio { top: 50%; transform: translate(-50%, -50%); padding: 32px 32px 28px; }
+.sala:has(.sala__fine:not([hidden])) .sala__comandi { visibility: hidden; }
+.sala__fine-titolo { margin: 0; font: italic 500 clamp(26px, 3.4vw, 32px)/1.15 var(--serif); }
+.sala__fine-testo { margin: 8px 0 0; font-size: 13px; letter-spacing: .06em; color: var(--sala-tenue); }
+.sala__fine-azioni { display: flex; flex-wrap: nowrap; justify-content: center; gap: 10px; margin-top: 16px; }
 .sala__fine button, .sala__messaggio button {
   min-height: 46px; padding: 0 20px; border: 1px solid rgba(236, 231, 222, .45); border-radius: 0; background: none;
   cursor: pointer; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
@@ -119,6 +128,11 @@
 .sala__fine button:first-child:hover, .sala__messaggio button:hover { background: #fff; }
 .sala__messaggio p { margin: 0 0 22px; font-size: 15px; line-height: 1.6; }
 
+/* Tablet e portatili stretti: la didascalia resta a sinistra, i comandi vanno a destra (affiancati non si coprono) */
+@media (min-width: 761px) and (max-width: 1080px) {
+  .sala__comandi { left: auto; right: 20px; transform: none; }
+}
+
 @media (max-width: 760px) {
   .sala__aiuto { top: calc(72px + env(safe-area-inset-top)); max-width: calc(100% - 24px); }
   .sala__didascalia {
@@ -126,11 +140,45 @@
     padding: 12px 16px 12px;
   }
   .sala__titolo { font-size: 22px; }
-  .sala__dettagli { position: absolute; right: 12px; top: 12px; margin: 0; min-height: 36px; padding: 0 12px; }
+  .sala__dettagli { position: absolute; right: 12px; top: 8px; margin: 0; min-height: 44px; padding: 0 12px; }
   .sala__conta, .sala__titolo, .sala__dati { padding-right: 96px; }
   .sala__comandi { left: 12px; right: 12px; transform: none; bottom: calc(16px + env(safe-area-inset-bottom)); }
   .sala__comandi button { flex: 1 1 auto; height: 52px; }
   .sala__comandi button[aria-label] { flex: 0 0 64px; }
+  .sala__fine { padding: 18px 16px; }
+  .sala__fine-azioni { flex-wrap: wrap; }
+  .sala__fine-azioni button { padding: 0 14px; }
+}
+
+/* Schermi bassi (telefono in orizzontale, zoom al 200%): didascalia compatta in basso a sinistra, comandi in basso
+   a destra, dell'aiuto solo la prima riga. Il quadro resta libero nella fascia sopra. */
+@media (max-height: 500px) {
+  .sala { --sala-fascia: 76px; }
+  .sala__aiuto { top: calc(12px + env(safe-area-inset-top)); max-width: calc(100% - 240px); padding: 8px 14px; font-size: 12px; }
+  .sala__aiuto-tasti { display: none; }
+  .sala__esci { top: calc(12px + env(safe-area-inset-top)); right: 12px; }
+  .sala__didascalia {
+    left: 12px; right: auto; bottom: calc(12px + env(safe-area-inset-bottom)); width: auto;
+    max-width: calc(100% - 24px - 292px - 12px); min-width: 0; padding: 6px 6px 6px 14px;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; align-items: center;
+  }
+  .sala__conta { display: none; }
+  .sala__titolo, .sala__dati { grid-column: 1; padding-right: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sala__titolo { font-size: 18px; line-height: 1.2; }
+  .sala__dati { margin: 1px 0 0; font-size: 12px; line-height: 1.35; }
+  .sala__dettagli { position: static; grid-column: 2; grid-row: 1 / span 2; margin: 0; min-height: 44px; padding: 0 12px; }
+  .sala__comandi { left: auto; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); transform: none; }
+  .sala__comandi button { flex: none; height: 50px; padding: 0 16px; }
+  .sala__comandi button[aria-label] { flex: none; width: 52px; padding: 0; }
+  /* il cartello finale su una sola riga: titolo a sinistra, pulsanti a destra */
+  .sala__fine {
+    bottom: calc(12px + env(safe-area-inset-bottom)); width: max-content; max-width: calc(100% - 24px);
+    display: flex; align-items: center; gap: 18px; padding: 8px 8px 8px 18px; text-align: left;
+  }
+  .sala__fine-titolo { font-size: 20px; white-space: nowrap; }
+  .sala__fine-testo { display: none; }
+  .sala__fine-azioni { margin-top: 0; gap: 8px; }
+  .sala__fine button { min-height: 44px; padding: 0 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

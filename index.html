@@ -48,10 +48,6 @@
         <p class="apertura__professione" data-testo="sito.professione"></p>
         <h1 class="apertura__nome" data-testo="sito.nome">Elidon Muçaj</h1>
         <p class="apertura__frase" data-testo="sito.frase_apertura"></p>
-        <div class="apertura__azioni">
-          <a class="bottone bottone--chiaro" href="#portfolio">See the paintings</a>
-          <button class="bottone bottone--trasparente" type="button" data-apri-galleria>Enter the 3D gallery</button>
-        </div>
       </div>
       <div class="apertura__palco" data-palco>
         <div class="apertura__riquadro" data-riquadro></div>
@@ -74,6 +70,10 @@
             </button>
           </div>
         </div>
+      </div>
+      <div class="apertura__azioni">
+        <a class="bottone bottone--chiaro" href="#portfolio">See the paintings</a>
+        <button class="bottone bottone--trasparente" type="button" data-apri-galleria>Enter the 3D gallery</button>
       </div>
     </section>
 
@@ -247,13 +247,14 @@
       <p><strong>Drag</strong> to look around · <strong><span class="sala__tocco">tap</span><span class="sala__clic">click</span> the floor</strong> to walk · <strong><span class="sala__tocco">tap</span><span class="sala__clic">click</span> a painting</strong> to get closer</p>
       <p class="sala__aiuto-tasti">Keyboard: arrows or W A S D to walk, Esc to exit</p>
     </div>
-    <div class="sala__didascalia" data-sala-didascalia hidden aria-live="polite">
+    <div class="sala__didascalia" data-sala-didascalia hidden>
       <span class="sala__sosta" data-sala-sosta aria-hidden="true"></span>
       <p class="sala__conta" data-sala-conta></p>
       <h2 class="sala__titolo" data-sala-titolo></h2>
       <p class="sala__dati" data-sala-dati></p>
       <button class="sala__dettagli" type="button" data-sala-dettagli>Details</button>
     </div>
+    <p class="sr" aria-live="polite" data-sala-annuncio></p>
     <div class="sala__comandi" role="group" aria-label="Visit">
       <button type="button" data-sala-prec aria-label="Previous painting">‹</button>
       <button type="button" data-sala-giro aria-pressed="false">Guided tour</button>
