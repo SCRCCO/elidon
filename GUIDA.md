@@ -55,7 +55,7 @@ Funzionano allo stesso modo: scegli la scheda a sinistra (sul telefono in alto),
 - **Critica e articoli**: puoi incollare il testo completo o un estratto, e aggiungere il **PDF** dell'articolo e/o il **link** all'articolo online.
 - **Eventi**: per un post Instagram basta incollare il link del post (per esempio `https://www.instagram.com/p/…/`). Se aggiungi una foto, titolo e data, l'evento diventa una scheda normale.
 - **Contatti**: i campi lasciati vuoti non compaiono sul sito. Qui c'è anche il **portfolio in PDF** da scaricare: per aggiornarlo, premi **Scegli PDF…**.
-- **Generale**: nome, sottotitolo, testo per Google, piè di pagina e colore delle pareti della galleria 3D.
+- **Generale**: nome, sottotitolo, testo per Google, piè di pagina e colore delle pareti della galleria 3D. L'**immagine della prima schermata** è il tuo ritratto: sta nel buio dietro il nome ed esce dove passa la luce del mouse.
 
 ## Se qualcosa va storto
 

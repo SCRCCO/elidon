@@ -6,13 +6,17 @@
 // dispositivo lo regge e disegna sopra lo strato statico, allineato al pixel; se si guasta resta lo strato statico,
 // già sull'opera giusta.
 //
-// Contratto con main.js: avvia({ radice, palco, opere, immagineRiserva, suApri }) → { sospendi(bool), ferma() }
-import { rigaCartellino } from './testi.js?v=3';
+// Dietro il nome sta il ritratto dell'artista (ritratto.js), che esce dal buio dove passa la stessa luce.
+//
+// Contratto con main.js: avvia({ radice, palco, opere, immagineRiserva, ritratto, nome, suApri }) → { sospendi(bool), ferma() }
+import { rigaCartellino } from './testi.js?v=5';
+import { creaRitratto } from './ritratto.js?v=5';
 
 const PERMANENZA = 9000;      // ms: quanto resta ogni opera prima di passare alla successiva
 const DOPO_COMANDO = 6000;    // ms in più dopo ‹ › o uno scorrimento del dito
 const DISSOLVENZA = 1200;     // ms: cambio d'opera senza WebGL, l'una sparisce e l'altra entra (vedi apertura.css)
 const SOGLIA_DITO = 50;       // px di scorrimento orizzontale per cambiare opera sul telefono
+const LATO_ANTEPRIMA = 900;   // px del lato lungo delle anteprime (come nel pannello)
 
 // Attributi del contesto WebGL: niente canale alfa né profondità (la scena è disegnata in ordine). L'MSAA solo dove
 // serve e costa poco: col mouse la parallasse inclina il quadro di ±2° e, a DPR < 1,5, il suo bordo contro il muro
@@ -57,7 +61,7 @@ function nuovaImmagine() {
   return img;
 }
 
-export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApri } = {}) {
+export function avvia({ radice, palco, opere = [], immagineRiserva = null, ritratto = null, nome = '', suApri } = {}) {
   const nulla = { sospendi() {}, ferma() {} };
   const riquadro = palco?.querySelector('[data-riquadro]');
   if (!radice || !riquadro) return nulla;
@@ -100,6 +104,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
   let mostrata = -1;           // opera nello strato statico e nel cartellino
   let attiva = imgA;           // <img> visibile
   let motore = null;           // motore WebGL, quando è acceso
+  const volto = creaRitratto({ radice, contenitore: radice.querySelector('[data-ritratto]'), immagine: ritratto, nome });
   let fermato = false;
   const rapporti = new Map();  // id opera → larghezza / altezza della foto
 
@@ -292,7 +297,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
     motore?.quiete(ferma || !automatico());
   }
 
-  function aggiornaDisegno() { motore?.attiva(disegnabile()); }
+  function aggiornaDisegno() { motore?.attiva(disegnabile()); volto?.attiva(disegnabile()); }
 
   // ---------------------------------------------------------------- cambio d'opera
 
@@ -364,11 +369,16 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
     if (!gl) return;
     const rilascia = () => { gl.getExtension('WEBGL_lose_context')?.loseContext(); tela.remove(); };
     radice.prepend(tela);
-    import('./apertura3d.js?v=3').then(({ creaMotore }) => {
+    import('./apertura3d.js?v=5').then(({ creaMotore }) => {
       if (fermato || ridotto.matches) { rilascia(); return; }
+      const dettaglio = matchMedia('(pointer: fine)').matches && innerWidth >= 900;
+      // la foto grande si scarica solo se il quadro, sullo schermo, ha più pixel dell'anteprima
+      // (il motore disegna al massimo a 1,5 pixel per pixel CSS)
+      const q = misura(rapporto(elenco[indice]));
+      const pixel = Math.max(q.w, q.h) * Math.min(window.devicePixelRatio || 1, 1.5);
       motore = creaMotore({
         radice, tela, contesto: gl, rettangolo, zonaTesto,
-        dettaglio: matchMedia('(pointer: fine)').matches && innerWidth >= 900,
+        dettaglio, grande: dettaglio && pixel > LATO_ANTEPRIMA * 1.25,
         ...callbackMotore,
       });
       motore.attiva(disegnabile());
@@ -476,6 +486,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
   // ---------------------------------------------------------------- partenza
 
   statoPausa();
+  volto?.attiva(disegnabile());
   const prima = elenco[0];
   imgA.src = prima.immagine.miniatura;
   imgA.classList.add('attiva');
@@ -512,6 +523,7 @@ export function avvia({ radice, palco, opere = [], immagineRiserva = null, suApr
       ascolto.abort();
       motore?.ferma();
       motore = null;
+      volto?.ferma();
     },
   };
 }

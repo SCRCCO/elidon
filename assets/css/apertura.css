@@ -1,7 +1,8 @@
 /* Prima schermata (hero): una parete scura e calda, il nome nella sua colonna, un'opera alla volta.
    L'impaginazione sta tutta qui: apertura.js legge il riquadro (.apertura__riquadro) e vi adatta l'opera
    come «contain», poi scrive il rettangolo del quadro in --qx --qy --qw --qh (px, rispetto al riquadro).
-   Il nome e il quadro stanno in zone diverse e non si sovrappongono mai. */
+   Il nome e il quadro stanno in zone diverse e non si sovrappongono mai.
+   Dietro il nome sta il ritratto dell'artista (.apertura__ritratto), al buio: esce dove passa la luce (ritratto.js). */
 
 .apertura {
   --muro: #121010;                            /* la parete WebGL (apertura3d.js) legge questo colore: devono coincidere */
@@ -12,14 +13,14 @@
   --ap-curva: cubic-bezier(.4, 0, .2, 1);
   --ap-fuoco: var(--fuoco-notte, #ece7de);     /* anello di fuoco chiaro sul buio (dal foglio del sito, se c'è) */
   position: relative; isolation: isolate; overflow: hidden;
-  display: grid; grid-template-columns: minmax(0, 1fr); align-content: start;
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr;   /* il testo (e il ritratto) fino in fondo */
   min-height: 100vh; min-height: 100svh;
   padding: var(--ap-alto) 0 44px;
   background: var(--muro); color: var(--ap-testo);
 }
 
 /* ---------- Il quadro: riquadro, strato statico (due <img> A/B), bottone trasparente ---------- */
-.apertura__palco { position: relative; grid-row: 1; min-width: 0; margin: 0 16px; }
+.apertura__palco { position: relative; grid-row: 1; grid-column: 1; min-width: 0; margin: 0 16px; }
 .apertura__palco[hidden] { display: none; }
 .apertura__riquadro {
   position: relative;
@@ -55,6 +56,36 @@
   pointer-events: none; opacity: 0; transition: opacity .9s ease;
 }
 .apertura__tela.accesa { opacity: 1; }
+
+/* ---------- Il ritratto: nel buio dietro il nome, esce dove passa la luce ----------
+   ritratto.js dispone la foto e scrive la lampada in --lx --ly (px, rispetto alla foto), --lr (raggio) e --buio
+   (quanto resta visibile senza luce). La maschera radiale è l'alfa della foto: dove la luce manca si vede la parete.
+   Tre misure descrivono la foto e vanno ritoccate se la si cambia (percentuali della foto):
+   --volto-x, --volto-y: il volto, dove riposa la luce; --sopra-testo: la riga che resta appena sopra il testo
+   (qui la punta dei pennelli: sotto quella riga la foto è scura e le parole si leggono). */
+.apertura__ritratto {
+  --volto-x: 74; --volto-y: 44; --sopra-testo: 46;
+  position: relative; z-index: 1; grid-row: 2; grid-column: 1; min-width: 0; margin-bottom: -44px;   /* fino al bordo della sezione */
+  overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%); mask-image: linear-gradient(to bottom, transparent, #000 30%);
+}
+.apertura__ritratto[hidden] { display: none; }
+.apertura__volto {
+  position: absolute; left: 0; top: 0; max-width: none;   /* misure e posizione le scrive ritratto.js */
+  filter: sepia(.14) contrast(1.06);            /* la lampada è calda: una stampa ai sali d'argento sotto il tungsteno */
+  -webkit-mask-image: radial-gradient(circle var(--lr, 420px) at var(--lx, 70%) var(--ly, 44%), #000, rgba(0, 0, 0, .9) 22%, rgba(0, 0, 0, .46) 56%, rgba(0, 0, 0, var(--buio, .12)));
+  mask-image: radial-gradient(circle var(--lr, 420px) at var(--lx, 70%) var(--ly, 44%), #000, rgba(0, 0, 0, .9) 22%, rgba(0, 0, 0, .46) 56%, rgba(0, 0, 0, var(--buio, .12)));
+  will-change: transform, opacity;
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+/* in basso la foto si spegne nella parete: i pulsanti restano leggibili anche con la luce addosso.
+   Sul telefono il nome sta accanto al volto: a sinistra, sotto le parole, la foto resta in ombra */
+.apertura__ritratto::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(18, 16, 16, 0) 62%, rgba(18, 16, 16, .82)),
+    linear-gradient(to right, rgba(18, 16, 16, .8), rgba(18, 16, 16, 0) 62%);
+}
 
 /* ---------- Cartellino: titolo, anno · tecnica · misure, contatore e comandi ---------- */
 .apertura__cartellino {
@@ -93,7 +124,7 @@
 /* ---------- Testo: professione, nome, frase; poi i pulsanti ----------
    Nel DOM i pulsanti vengono dopo il quadro: col tasto Tab si va dal nome al quadro, ai comandi, ai pulsanti,
    nello stesso ordine in cui si vedono (sul telefono il quadro sta in alto, sul desktop a destra). */
-.apertura__testo { position: relative; z-index: 2; grid-row: 2; min-width: 0; padding: 30px var(--margine) 0; }
+.apertura__testo { position: relative; z-index: 2; grid-row: 2; grid-column: 1; align-self: start; min-width: 0; padding: 30px var(--margine) 0; }
 .apertura__professione {
   margin: 0 0 12px; font: 500 11px/1.7 var(--sans); letter-spacing: .16em; text-transform: uppercase;
   color: var(--ap-grigio); text-wrap: balance;
@@ -119,6 +150,10 @@
 .apertura .bottone--chiaro { background: transparent; color: var(--ap-testo); border-color: rgba(236, 231, 222, .8); }
 .apertura .bottone--chiaro:hover { background: var(--ap-testo); color: var(--muro); border-color: var(--ap-testo); }
 .apertura :focus-visible { outline-color: var(--ap-fuoco); }
+/* col ritratto dietro: le parole staccano dalla foto anche quando la luce le raggiunge */
+.apertura--ritratto .apertura__professione { color: #c4bdb1; text-shadow: 0 0 12px var(--muro), 0 0 3px var(--muro); }
+.apertura--ritratto .apertura__nome { text-shadow: 0 2px 40px rgba(18, 16, 16, .6); }
+.apertura--ritratto .apertura__frase { text-shadow: 0 0 14px var(--muro); }
 
 /* ---------- Schermi larghi (e telefoni in orizzontale): il nome a sinistra, il quadro a destra ---------- */
 @media (min-width: 900px) and (min-aspect-ratio: 5/4), (min-width: 640px) and (orientation: landscape) and (max-height: 520px) {
@@ -131,7 +166,13 @@
     align-content: center;
     padding: var(--ap-alto) var(--margine) 48px;
   }
-  /* riquadro e cartellino diventano celle della griglia */
+  /* il ritratto occupa la metà sinistra a tutta altezza e sfuma nella parete prima del quadro */
+  .apertura__ritratto {
+    position: absolute; inset: 0 auto 0 0; width: calc(54vw - var(--margine)); grid-row: auto; grid-column: auto; margin: 0;
+    -webkit-mask-image: linear-gradient(to right, #000 86%, transparent); mask-image: linear-gradient(to right, #000 86%, transparent);
+  }
+  .apertura__ritratto::after { background: linear-gradient(to bottom, var(--muro), rgba(18, 16, 16, 0) 17%, rgba(18, 16, 16, 0) 74%, rgba(18, 16, 16, .78)); }
+  /* riquadro e cartellino diventano celle della griglia: il testo si allinea al piede del quadro */
   .apertura__palco { display: contents; }
   .apertura__riquadro { grid-row: 1 / 3; grid-column: 2; align-self: end; height: min(70vh, calc(100vh - var(--ap-alto) - 140px)); min-height: 300px; }
   /* il cartellino sta sotto il quadro, allineato al suo bordo sinistro; i comandi restano fermi a destra */
@@ -146,6 +187,8 @@
   .apertura__professione { font-size: 13px; letter-spacing: .3em; margin-bottom: 18px; }
   .apertura__azioni { grid-row: 2; grid-column: 1; align-self: end; max-width: min(44vw, 640px); margin-top: 34px; padding: 0; }
   .apertura__azioni .bottone { flex: none; }
+  /* accanto al volto la riga della professione va a capo, e non gli passa sopra */
+  .apertura--ritratto .apertura__professione { max-width: 24em; text-wrap: wrap; }
 }
 
 /* telefoni in orizzontale: poca altezza, si stringe tutto */
@@ -153,6 +196,12 @@
   .apertura { --ap-alto: 76px; padding-bottom: 20px; grid-template-columns: minmax(0, 1fr) 46vw; }
   .apertura__riquadro { height: calc(100vh - var(--ap-alto) - 110px); height: calc(100svh - var(--ap-alto) - 110px); min-height: 180px; }
   .apertura__cartellino { margin-top: 10px; }
+  .apertura__ritratto::after {
+    background:
+      linear-gradient(to bottom, rgba(18, 16, 16, 0) 62%, rgba(18, 16, 16, .82)),
+      linear-gradient(to right, rgba(18, 16, 16, .8), rgba(18, 16, 16, 0) 62%);
+  }
+  .apertura--ritratto .apertura__professione { max-width: none; }
   .apertura__didascalia, .apertura__comandi { grid-column: 1 / -1; }
   .apertura__comandi { grid-row: 2; }
   .apertura__conta { margin-right: auto; }
@@ -164,4 +213,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .apertura__quadro, .apertura__didascalia, .apertura__conta, .apertura__tela { transition: none; }
+  .apertura__volto { will-change: auto; }
 }
