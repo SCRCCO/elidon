@@ -1,5 +1,5 @@
 {
-  "_nota": "Descrive i campi modificabili dal pannello. Il pannello costruisce i moduli da qui e il server valida i dati salvati con le stesse regole. Le opzioni delle «scelte» compaiono così come sono sul sito (in inglese).",
+  "_nota": "Descrive i campi modificabili dal pannello. Il pannello costruisce i moduli da qui e il server valida i dati salvati con le stesse regole. Le opzioni delle «scelte» compaiono così come sono sul sito.",
   "sezioni": [
     {
       "chiave": "sito",
@@ -7,13 +7,60 @@
       "descrizione": "Nome, sottotitolo, testo per i motori di ricerca e piè di pagina.",
       "tipo": "oggetto",
       "campi": [
-        { "chiave": "nome", "etichetta": "Nome dell'artista", "tipo": "testo", "max": 120 },
-        { "chiave": "professione", "etichetta": "Sottotitolo", "tipo": "testo", "max": 160, "aiuto": "Es. «Painter · Visual Artist · Storyteller»" },
-        { "chiave": "frase_apertura", "etichetta": "Frase in apertura (facoltativa)", "tipo": "testo_lungo", "max": 400, "righe": 2, "aiuto": "Compare sotto il nome, nella prima schermata." },
-        { "chiave": "immagine_apertura", "etichetta": "Immagine della prima schermata", "tipo": "immagine", "aiuto": "Il tuo ritratto: sta nel buio dietro il nome ed esce dove passa la luce del mouse. Meglio una foto verticale, scura, col volto a destra. Serve anche per le anteprime sui social." },
-        { "chiave": "descrizione_seo", "etichetta": "Descrizione per Google", "tipo": "testo_lungo", "max": 300, "righe": 3, "aiuto": "Una o due frasi che riassumono chi sei. Google la mostra sotto il titolo del sito." },
-        { "chiave": "nota_piede", "etichetta": "Testo a piè di pagina", "tipo": "testo_lungo", "max": 1200, "righe": 4, "aiuto": "Diritti d'autore, nota sui cookie. Ogni riga va a capo." },
-        { "chiave": "colore_pareti", "etichetta": "Colore delle pareti nella galleria 3D", "tipo": "scelta", "opzioni": ["Bianco", "Grigio chiaro", "Antracite", "Terracotta"] }
+        {
+          "chiave": "nome",
+          "etichetta": "Nome dell'artista",
+          "tipo": "testo",
+          "max": 120
+        },
+        {
+          "chiave": "professione",
+          "etichetta": "Sottotitolo",
+          "tipo": "testo",
+          "max": 160,
+          "aiuto": "Es. «Painter · Visual Artist · Storyteller»"
+        },
+        {
+          "chiave": "frase_apertura",
+          "etichetta": "Frase in apertura (facoltativa)",
+          "tipo": "testo_lungo",
+          "max": 400,
+          "righe": 2,
+          "aiuto": "Compare sotto il nome, nella prima schermata."
+        },
+        {
+          "chiave": "immagine_apertura",
+          "etichetta": "Immagine della prima schermata",
+          "tipo": "immagine",
+          "aiuto": "Il tuo ritratto: sta nel buio dietro il nome ed esce dove passa la luce del mouse. Meglio una foto verticale, scura, col volto a destra. Serve anche per le anteprime sui social."
+        },
+        {
+          "chiave": "descrizione_seo",
+          "etichetta": "Descrizione per Google",
+          "tipo": "testo_lungo",
+          "max": 300,
+          "righe": 3,
+          "aiuto": "Una o due frasi che riassumono chi sei. Google la mostra sotto il titolo del sito."
+        },
+        {
+          "chiave": "nota_piede",
+          "etichetta": "Testo a piè di pagina",
+          "tipo": "testo_lungo",
+          "max": 1200,
+          "righe": 4,
+          "aiuto": "Diritti d'autore, nota sui cookie. Ogni riga va a capo."
+        },
+        {
+          "chiave": "colore_pareti",
+          "etichetta": "Colore delle pareti nella galleria 3D",
+          "tipo": "scelta",
+          "opzioni": [
+            "Bianco",
+            "Grigio chiaro",
+            "Antracite",
+            "Terracotta"
+          ]
+        }
       ]
     },
     {
@@ -22,9 +69,25 @@
       "descrizione": "La sezione «About».",
       "tipo": "oggetto",
       "campi": [
-        { "chiave": "sottotitolo", "etichetta": "Sottotitolo", "tipo": "testo", "max": 120 },
-        { "chiave": "foto", "etichetta": "Foto dell'artista (facoltativa)", "tipo": "immagine" },
-        { "chiave": "testo", "etichetta": "Testo della biografia", "tipo": "testo_lungo", "max": 20000, "righe": 14, "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo." }
+        {
+          "chiave": "sottotitolo",
+          "etichetta": "Sottotitolo",
+          "tipo": "testo",
+          "max": 120
+        },
+        {
+          "chiave": "foto",
+          "etichetta": "Foto dell'artista (facoltativa)",
+          "tipo": "immagine"
+        },
+        {
+          "chiave": "testo",
+          "etichetta": "Testo della biografia",
+          "tipo": "testo_lungo",
+          "max": 20000,
+          "righe": 14,
+          "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo."
+        }
       ]
     },
     {
@@ -33,11 +96,40 @@
       "descrizione": "La sezione «Artistic research».",
       "tipo": "oggetto",
       "campi": [
-        { "chiave": "testo", "etichetta": "Testo", "tipo": "testo_lungo", "max": 30000, "righe": 16, "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo." },
-        { "chiave": "citazione", "etichetta": "Citazione (facoltativa)", "tipo": "testo_lungo", "max": 600, "righe": 3 },
-        { "chiave": "autore_citazione", "etichetta": "Firma della citazione", "tipo": "testo", "max": 160 },
-        { "chiave": "dettaglio", "etichetta": "Foto di un dettaglio (facoltativa)", "tipo": "immagine", "aiuto": "Un particolare della superficie di un quadro (spatola, materia). Compare a tutta larghezza dopo il testo; se manca, la fascia non c'è." },
-        { "chiave": "didascalia_dettaglio", "etichetta": "Didascalia del dettaglio", "tipo": "testo", "max": 200, "aiuto": "Es. «Seme Lasciato Cadere, 2026». Il sito la fa precedere da «Detail»; scrivila in inglese, come il sito." }
+        {
+          "chiave": "testo",
+          "etichetta": "Testo",
+          "tipo": "testo_lungo",
+          "max": 30000,
+          "righe": 16,
+          "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo."
+        },
+        {
+          "chiave": "citazione",
+          "etichetta": "Citazione (facoltativa)",
+          "tipo": "testo_lungo",
+          "max": 600,
+          "righe": 3
+        },
+        {
+          "chiave": "autore_citazione",
+          "etichetta": "Firma della citazione",
+          "tipo": "testo",
+          "max": 160
+        },
+        {
+          "chiave": "dettaglio",
+          "etichetta": "Foto di un dettaglio (facoltativa)",
+          "tipo": "immagine",
+          "aiuto": "Un particolare della superficie di un quadro (spatola, materia). Compare a tutta larghezza dopo il testo; se manca, la fascia non c'è."
+        },
+        {
+          "chiave": "didascalia_dettaglio",
+          "etichetta": "Didascalia del dettaglio",
+          "tipo": "testo",
+          "max": 200,
+          "aiuto": "Es. «Seme Lasciato Cadere, 2026». Il sito la fa precedere da «Dettaglio»."
+        }
       ]
     },
     {
@@ -49,16 +141,80 @@
       "campo_titolo": "titolo",
       "campo_immagine": "immagine",
       "campi": [
-        { "chiave": "immagine", "etichetta": "Foto dell'opera", "tipo": "immagine" },
-        { "chiave": "titolo", "etichetta": "Titolo", "tipo": "testo", "max": 200 },
-        { "chiave": "anno", "etichetta": "Anno", "tipo": "testo", "max": 20, "aiuto": "Gli anni diventano i filtri della galleria. Lascialo vuoto per le opere dei primi anni: finiscono in «Earlier works»." },
-        { "chiave": "tecnica", "etichetta": "Tecnica", "tipo": "testo", "max": 200, "aiuto": "Es. «Olio su tela»." },
-        { "chiave": "dimensioni", "etichetta": "Dimensioni", "tipo": "testo", "max": 80, "aiuto": "Es. «200 × 150 cm». Servono anche a mostrare l'opera in scala reale nella galleria 3D." },
-        { "chiave": "descrizione", "etichetta": "Descrizione (facoltativa)", "tipo": "testo_lungo", "max": 4000, "righe": 4 },
-        { "chiave": "stato", "etichetta": "Stato", "tipo": "scelta", "opzioni": ["", "Available", "Sold", "Private collection", "Not for sale"] },
-        { "chiave": "selezionata", "etichetta": "Opera scelta («Selected works»)", "tipo": "si_no", "aiuto": "Le opere scelte sono la prima cosa che si vede nella galleria: la prima opera scelta è la prima immagine del sito; le prime 12 scorrono nella prima schermata." },
-        { "chiave": "in_galleria_3d", "etichetta": "Esponi nella galleria 3D", "tipo": "si_no", "predefinito": true },
-        { "chiave": "rilievo", "etichetta": "Rilievo nella luce radente", "tipo": "scelta", "opzioni": ["", "Leggero", "Nessuno"], "aiuto": "Lascialo vuoto. Scegli «Leggero» o «Nessuno» per le opere su carta, le velature lisce o le foto con riflessi: la luce radente della prima schermata e della galleria 3D inventerebbe un rilievo che non c'è." }
+        {
+          "chiave": "immagine",
+          "etichetta": "Foto dell'opera",
+          "tipo": "immagine"
+        },
+        {
+          "chiave": "titolo",
+          "etichetta": "Titolo",
+          "tipo": "testo",
+          "max": 200
+        },
+        {
+          "chiave": "anno",
+          "etichetta": "Anno",
+          "tipo": "testo",
+          "max": 20,
+          "aiuto": "Gli anni diventano i filtri della galleria. Lascialo vuoto per le opere dei primi anni: finiscono in «Earlier works»."
+        },
+        {
+          "chiave": "tecnica",
+          "etichetta": "Tecnica",
+          "tipo": "testo",
+          "max": 200,
+          "aiuto": "Es. «Olio su tela»."
+        },
+        {
+          "chiave": "dimensioni",
+          "etichetta": "Dimensioni",
+          "tipo": "testo",
+          "max": 80,
+          "aiuto": "Es. «200 × 150 cm». Servono anche a mostrare l'opera in scala reale nella galleria 3D."
+        },
+        {
+          "chiave": "descrizione",
+          "etichetta": "Descrizione (facoltativa)",
+          "tipo": "testo_lungo",
+          "max": 4000,
+          "righe": 4
+        },
+        {
+          "chiave": "stato",
+          "etichetta": "Stato",
+          "tipo": "scelta",
+          "opzioni": [
+            "",
+            "Disponibile",
+            "Venduta",
+            "Collezione privata",
+            "Non in vendita"
+          ]
+        },
+        {
+          "chiave": "selezionata",
+          "etichetta": "Opera scelta («Selected works»)",
+          "tipo": "si_no",
+          "aiuto": "Le opere scelte sono la prima cosa che si vede nella galleria: la prima opera scelta è la prima immagine del sito; le prime 12 scorrono nella prima schermata."
+        },
+        {
+          "chiave": "in_galleria_3d",
+          "etichetta": "Esponi nella galleria 3D",
+          "tipo": "si_no",
+          "predefinito": true
+        },
+        {
+          "chiave": "rilievo",
+          "etichetta": "Rilievo nella luce radente",
+          "tipo": "scelta",
+          "opzioni": [
+            "",
+            "Leggero",
+            "Nessuno"
+          ],
+          "aiuto": "Lascialo vuoto. Scegli «Leggero» o «Nessuno» per le opere su carta, le velature lisce o le foto con riflessi: la luce radente della prima schermata e della galleria 3D inventerebbe un rilievo che non c'è."
+        }
       ]
     },
     {
@@ -69,14 +225,62 @@
       "elemento": "voce",
       "campo_titolo": "titolo",
       "campi": [
-        { "chiave": "anno", "etichetta": "Anno", "tipo": "testo", "max": 20 },
-        { "chiave": "data", "etichetta": "Data (facoltativa)", "tipo": "testo", "max": 40, "aiuto": "Es. «25/04/2025». Serve anche a ordinare le voci dello stesso anno." },
-        { "chiave": "titolo", "etichetta": "Titolo", "tipo": "testo", "max": 240 },
-        { "chiave": "tipo", "etichetta": "Tipo", "tipo": "scelta", "opzioni": ["", "Solo exhibition", "Group exhibition", "Award", "Art fair", "Publication"] },
-        { "chiave": "luogo", "etichetta": "Luogo", "tipo": "testo", "max": 240, "aiuto": "Galleria, città" },
-        { "chiave": "descrizione", "etichetta": "Note (facoltative)", "tipo": "testo_lungo", "max": 1000, "righe": 2 },
-        { "chiave": "foto", "etichetta": "Foto della mostra (facoltative)", "tipo": "immagini" },
-        { "chiave": "link", "etichetta": "Link (facoltativo)", "tipo": "link" }
+        {
+          "chiave": "anno",
+          "etichetta": "Anno",
+          "tipo": "testo",
+          "max": 20
+        },
+        {
+          "chiave": "data",
+          "etichetta": "Data (facoltativa)",
+          "tipo": "testo",
+          "max": 40,
+          "aiuto": "Es. «25/04/2025». Serve anche a ordinare le voci dello stesso anno."
+        },
+        {
+          "chiave": "titolo",
+          "etichetta": "Titolo",
+          "tipo": "testo",
+          "max": 240
+        },
+        {
+          "chiave": "tipo",
+          "etichetta": "Tipo",
+          "tipo": "scelta",
+          "opzioni": [
+            "",
+            "Personale",
+            "Collettiva",
+            "Premio",
+            "Fiera",
+            "Pubblicazione"
+          ]
+        },
+        {
+          "chiave": "luogo",
+          "etichetta": "Luogo",
+          "tipo": "testo",
+          "max": 240,
+          "aiuto": "Galleria, città"
+        },
+        {
+          "chiave": "descrizione",
+          "etichetta": "Note (facoltative)",
+          "tipo": "testo_lungo",
+          "max": 1000,
+          "righe": 2
+        },
+        {
+          "chiave": "foto",
+          "etichetta": "Foto della mostra (facoltative)",
+          "tipo": "immagini"
+        },
+        {
+          "chiave": "link",
+          "etichetta": "Link (facoltativo)",
+          "tipo": "link"
+        }
       ]
     },
     {
@@ -88,16 +292,74 @@
       "campo_titolo": "titolo",
       "campo_immagine": "immagine",
       "campi": [
-        { "chiave": "immagine", "etichetta": "Immagine (facoltativa)", "tipo": "immagine" },
-        { "chiave": "titolo", "etichetta": "Titolo", "tipo": "testo", "max": 240 },
-        { "chiave": "frase", "etichetta": "Frase in evidenza (facoltativa)", "tipo": "testo_lungo", "max": 300, "righe": 2, "aiuto": "Una frase del testo, in inglese, da mostrare in grande (senza virgolette: le aggiunge il sito). Se è vuota, il testo compare come scheda." },
-        { "chiave": "autore", "etichetta": "Autore", "tipo": "testo", "max": 160 },
-        { "chiave": "tipo", "etichetta": "Tipo", "tipo": "scelta", "opzioni": ["Critical text", "Article", "Interview", "Video", "Catalogue"] },
-        { "chiave": "fonte", "etichetta": "Fonte", "tipo": "testo", "max": 200, "aiuto": "Testata, catalogo o occasione" },
-        { "chiave": "data", "etichetta": "Data", "tipo": "testo", "max": 60 },
-        { "chiave": "testo", "etichetta": "Testo (completo o estratto)", "tipo": "testo_lungo", "max": 60000, "righe": 12, "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo." },
-        { "chiave": "documento", "etichetta": "Articolo in PDF (facoltativo)", "tipo": "documento" },
-        { "chiave": "link", "etichetta": "Link all'articolo online (facoltativo)", "tipo": "link" }
+        {
+          "chiave": "immagine",
+          "etichetta": "Immagine (facoltativa)",
+          "tipo": "immagine"
+        },
+        {
+          "chiave": "titolo",
+          "etichetta": "Titolo",
+          "tipo": "testo",
+          "max": 240
+        },
+        {
+          "chiave": "frase",
+          "etichetta": "Frase in evidenza (facoltativa)",
+          "tipo": "testo_lungo",
+          "max": 300,
+          "righe": 2,
+          "aiuto": "Una frase del testo da mostrare in grande (senza virgolette: le aggiunge il sito). Se è vuota, il testo compare come scheda."
+        },
+        {
+          "chiave": "autore",
+          "etichetta": "Autore",
+          "tipo": "testo",
+          "max": 160
+        },
+        {
+          "chiave": "tipo",
+          "etichetta": "Tipo",
+          "tipo": "scelta",
+          "opzioni": [
+            "Testo critico",
+            "Articolo",
+            "Intervista",
+            "Video",
+            "Catalogo"
+          ]
+        },
+        {
+          "chiave": "fonte",
+          "etichetta": "Fonte",
+          "tipo": "testo",
+          "max": 200,
+          "aiuto": "Testata, catalogo o occasione"
+        },
+        {
+          "chiave": "data",
+          "etichetta": "Data",
+          "tipo": "testo",
+          "max": 60
+        },
+        {
+          "chiave": "testo",
+          "etichetta": "Testo (completo o estratto)",
+          "tipo": "testo_lungo",
+          "max": 60000,
+          "righe": 12,
+          "aiuto": "Lascia una riga vuota per iniziare un nuovo paragrafo."
+        },
+        {
+          "chiave": "documento",
+          "etichetta": "Articolo in PDF (facoltativo)",
+          "tipo": "documento"
+        },
+        {
+          "chiave": "link",
+          "etichetta": "Link all'articolo online (facoltativo)",
+          "tipo": "link"
+        }
       ]
     },
     {
@@ -109,12 +371,42 @@
       "campo_titolo": "titolo",
       "campo_immagine": "immagine",
       "campi": [
-        { "chiave": "link", "etichetta": "Link (post Instagram o pagina dell'evento)", "tipo": "link" },
-        { "chiave": "titolo", "etichetta": "Titolo (facoltativo per i post Instagram)", "tipo": "testo", "max": 240 },
-        { "chiave": "data", "etichetta": "Data", "tipo": "testo", "max": 60 },
-        { "chiave": "luogo", "etichetta": "Luogo", "tipo": "testo", "max": 240 },
-        { "chiave": "descrizione", "etichetta": "Descrizione", "tipo": "testo_lungo", "max": 2000, "righe": 3 },
-        { "chiave": "immagine", "etichetta": "Immagine (facoltativa)", "tipo": "immagine", "aiuto": "Se c'è un'immagine, l'evento compare come scheda con foto invece che come post Instagram." }
+        {
+          "chiave": "link",
+          "etichetta": "Link (post Instagram o pagina dell'evento)",
+          "tipo": "link"
+        },
+        {
+          "chiave": "titolo",
+          "etichetta": "Titolo (facoltativo per i post Instagram)",
+          "tipo": "testo",
+          "max": 240
+        },
+        {
+          "chiave": "data",
+          "etichetta": "Data",
+          "tipo": "testo",
+          "max": 60
+        },
+        {
+          "chiave": "luogo",
+          "etichetta": "Luogo",
+          "tipo": "testo",
+          "max": 240
+        },
+        {
+          "chiave": "descrizione",
+          "etichetta": "Descrizione",
+          "tipo": "testo_lungo",
+          "max": 2000,
+          "righe": 3
+        },
+        {
+          "chiave": "immagine",
+          "etichetta": "Immagine (facoltativa)",
+          "tipo": "immagine",
+          "aiuto": "Se c'è un'immagine, l'evento compare come scheda con foto invece che come post Instagram."
+        }
       ]
     },
     {
@@ -123,15 +415,56 @@
       "descrizione": "Recapiti, portfolio e profili social. I campi vuoti non compaiono sul sito.",
       "tipo": "oggetto",
       "campi": [
-        { "chiave": "invito", "etichetta": "Frase della sezione Contatti", "tipo": "testo_lungo", "max": 400, "righe": 2 },
-        { "chiave": "email", "etichetta": "Email", "tipo": "email" },
-        { "chiave": "telefono", "etichetta": "Telefono", "tipo": "testo", "max": 40 },
-        { "chiave": "studio", "etichetta": "Studio / indirizzo", "tipo": "testo", "max": 240 },
-        { "chiave": "portfolio", "etichetta": "Portfolio in PDF", "tipo": "documento" },
-        { "chiave": "portfolio_etichetta", "etichetta": "Testo del pulsante del portfolio", "tipo": "testo", "max": 80 },
-        { "chiave": "instagram", "etichetta": "Instagram (link completo)", "tipo": "link" },
-        { "chiave": "facebook", "etichetta": "Facebook (link completo)", "tipo": "link" },
-        { "chiave": "youtube", "etichetta": "YouTube (link completo)", "tipo": "link" }
+        {
+          "chiave": "invito",
+          "etichetta": "Frase della sezione Contatti",
+          "tipo": "testo_lungo",
+          "max": 400,
+          "righe": 2
+        },
+        {
+          "chiave": "email",
+          "etichetta": "Email",
+          "tipo": "email"
+        },
+        {
+          "chiave": "telefono",
+          "etichetta": "Telefono",
+          "tipo": "testo",
+          "max": 40
+        },
+        {
+          "chiave": "studio",
+          "etichetta": "Studio / indirizzo",
+          "tipo": "testo",
+          "max": 240
+        },
+        {
+          "chiave": "portfolio",
+          "etichetta": "Portfolio in PDF",
+          "tipo": "documento"
+        },
+        {
+          "chiave": "portfolio_etichetta",
+          "etichetta": "Testo del pulsante del portfolio",
+          "tipo": "testo",
+          "max": 80
+        },
+        {
+          "chiave": "instagram",
+          "etichetta": "Instagram (link completo)",
+          "tipo": "link"
+        },
+        {
+          "chiave": "facebook",
+          "etichetta": "Facebook (link completo)",
+          "tipo": "link"
+        },
+        {
+          "chiave": "youtube",
+          "etichetta": "YouTube (link completo)",
+          "tipo": "link"
+        }
       ]
     }
   ]
